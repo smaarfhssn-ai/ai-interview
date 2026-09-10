@@ -104,13 +104,111 @@
       color: #666;
     }
 
+    /* =========================
+       INTERVIEW PAGE
+    ========================= */
+
+    #interviewPage {
+      display: none;
+    }
+
+    .question-box {
+      background: #f4f7fb;
+      border-radius: 18px;
+      padding: 25px;
+      margin-top: 25px;
+    }
+
+    .question-label {
+      font-size: 14px;
+      color: #1261c9;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .question {
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+
+    #startAnswer {
+      background: #1261c9;
+      color: white;
+    }
+
+    #stopAnswer {
+      background: #d93025;
+      color: white;
+      display: none;
+    }
+
+    .recording {
+      color: #d93025;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .transcript-box {
+      margin-top: 25px;
+    }
+
+    .transcript-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #transcript {
+      width: 100%;
+      min-height: 180px;
+      padding: 18px;
+      border: 2px solid #e1e6ee;
+      border-radius: 16px;
+      font-size: 17px;
+      line-height: 1.5;
+      resize: vertical;
+      font-family: Arial, sans-serif;
+    }
+
+    .timer {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        margin: 15px;
+        padding: 20px;
+      }
+
+      .status-container {
+        flex-direction: column;
+      }
+
+      .question {
+        font-size: 20px;
+      }
+
+    }
+
   </style>
 
 </head>
 
 <body>
 
-<div class="container">
+
+<!-- =========================
+     CAMERA & MICROPHONE
+========================= -->
+
+<div class="container" id="devicePage">
 
   <h1>🎥 Camera & Microphone</h1>
 
@@ -123,31 +221,43 @@
   <div class="status-container">
 
     <div class="status">
+
       📷 Camera:
+
       <span id="cameraStatus" class="failed">
         Not Ready
       </span>
+
     </div>
 
     <div class="status">
+
       🎙️ Microphone:
+
       <span id="micStatus" class="failed">
         Not Ready
       </span>
+
     </div>
 
   </div>
 
   <button id="startBtn" onclick="startDevices()">
+
     🎬 Test Camera & Microphone
+
   </button>
 
   <button id="stopBtn" onclick="stopDevices()">
+
     ⏹️ Stop
+
   </button>
 
   <button id="continueBtn" onclick="continueInterview()">
+
     Continue →
+
   </button>
 
   <p id="message" class="message"></p>
@@ -155,14 +265,104 @@
 </div>
 
 
+<!-- =========================
+     INTERVIEW PAGE
+========================= -->
+
+<div class="container" id="interviewPage">
+
+  <h1>🎤 AI Interview</h1>
+
+  <p class="subtitle">
+
+    Jawab soalan berikut menggunakan suara anda.
+
+  </p>
+
+
+  <div class="question-box">
+
+    <div class="question-label">
+
+      QUESTION 1
+
+    </div>
+
+    <div class="question">
+
+      Tell me about yourself.
+
+    </div>
+
+  </div>
+
+
+  <div class="timer">
+
+    ⏱️ <span id="timer">00:00</span>
+
+  </div>
+
+
+  <div id="recordingStatus" class="recording">
+
+    🔴 Listening...
+
+  </div>
+
+
+  <button id="startAnswer" onclick="startAnswer()">
+
+    🎙️ Start Answer
+
+  </button>
+
+
+  <button id="stopAnswer" onclick="stopAnswer()">
+
+    ⏹️ Stop Answer
+
+  </button>
+
+
+  <div class="transcript-box">
+
+    <div class="transcript-title">
+
+      📝 Your Answer
+
+    </div>
+
+    <textarea
+      id="transcript"
+      placeholder="Transcript jawapan anda akan muncul di sini..."
+      readonly>
+    </textarea>
+
+  </div>
+
+
+  <button
+    id="nextQuestion"
+    onclick="nextQuestion()"
+    style="display:none; background:#16803c; color:white;">
+
+    Next Question →
+
+  </button>
+
+</div>
+
+
 <script>
+
+
+/* =========================
+   CAMERA & MICROPHONE
+========================= */
 
 let stream = null;
 
-
-// ==========================
-// START CAMERA & MICROPHONE
-// ==========================
 
 async function startDevices() {
 
@@ -185,80 +385,87 @@ async function startDevices() {
   cameraStatus.textContent = "Checking...";
   micStatus.textContent = "Checking...";
 
-  cameraStatus.className = "";
-  micStatus.className = "";
-
 
   try {
 
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    });
+    stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video: true,
+        audio: true
+
+      });
 
 
-    // Paparkan camera
     video.srcObject = stream;
 
-
-    // 🔇 MUTE AUDIO PLAYBACK
-    // Microphone masih aktif tetapi
-    // suaranya tidak dimainkan melalui speaker.
     video.muted = true;
     video.volume = 0;
 
 
-    // Camera berjaya
-    cameraStatus.textContent = "✓ Ready";
-    cameraStatus.className = "ready";
+    cameraStatus.textContent =
+      "✓ Ready";
+
+    cameraStatus.className =
+      "ready";
 
 
-    // Microphone berjaya
-    micStatus.textContent = "✓ Ready";
-    micStatus.className = "ready";
+    micStatus.textContent =
+      "✓ Ready";
+
+    micStatus.className =
+      "ready";
 
 
     message.textContent =
       "Camera dan microphone berjaya diaktifkan.";
 
 
-    continueBtn.style.display = "block";
+    continueBtn.style.display =
+      "block";
+
+  }
 
 
-  } catch (error) {
+  catch (error) {
 
     console.error(error);
 
 
-    cameraStatus.textContent = "✗ Failed";
-    cameraStatus.className = "failed";
+    cameraStatus.textContent =
+      "✗ Failed";
+
+    cameraStatus.className =
+      "failed";
 
 
-    micStatus.textContent = "✗ Failed";
-    micStatus.className = "failed";
+    micStatus.textContent =
+      "✗ Failed";
+
+    micStatus.className =
+      "failed";
 
 
     message.textContent =
       "Sila benarkan akses camera dan microphone pada browser.";
-
-
-    continueBtn.style.display = "none";
 
   }
 
 }
 
 
-// ==========================
-// STOP CAMERA & MICROPHONE
-// ==========================
+/* =========================
+   STOP DEVICES
+========================= */
 
 function stopDevices() {
 
   if (stream) {
 
     stream.getTracks().forEach(track => {
+
       track.stop();
+
     });
 
     stream = null;
@@ -266,10 +473,8 @@ function stopDevices() {
   }
 
 
-  const video =
-    document.getElementById("video");
-
-  video.srcObject = null;
+  document.getElementById("video").srcObject =
+    null;
 
 
   document.getElementById("cameraStatus").textContent =
@@ -296,22 +501,290 @@ function stopDevices() {
 }
 
 
-// ==========================
-// CONTINUE
-// ==========================
+/* =========================
+   GO TO INTERVIEW
+========================= */
 
 function continueInterview() {
 
   if (!stream) {
 
-    alert("Sila aktifkan camera dan microphone dahulu.");
+    alert(
+      "Sila aktifkan camera dan microphone dahulu."
+    );
 
     return;
 
   }
 
 
-  alert("Camera & microphone berjaya! 🎉");
+  document.getElementById("devicePage").style.display =
+    "none";
+
+
+  document.getElementById("interviewPage").style.display =
+    "block";
+
+}
+
+
+/* =========================
+   SPEECH RECOGNITION
+========================= */
+
+let recognition = null;
+
+let isListening = false;
+
+let finalTranscript = "";
+
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+  recognition =
+    new SpeechRecognition();
+
+
+  recognition.continuous = true;
+
+  recognition.interimResults = true;
+
+  recognition.lang = "en-US";
+
+
+  recognition.onresult =
+    function(event) {
+
+      let interimTranscript = "";
+
+
+      for (
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ) {
+
+        const transcript =
+          event.results[i][0].transcript;
+
+
+        if (event.results[i].isFinal) {
+
+          finalTranscript +=
+            transcript + " ";
+
+        }
+
+        else {
+
+          interimTranscript +=
+            transcript;
+
+        }
+
+      }
+
+
+      document.getElementById("transcript").value =
+        finalTranscript + interimTranscript;
+
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      console.error(
+        "Speech recognition error:",
+        event.error
+      );
+
+    };
+
+
+  recognition.onend =
+    function() {
+
+      if (isListening) {
+
+        try {
+
+          recognition.start();
+
+        }
+
+        catch (error) {
+
+          console.log(error);
+
+        }
+
+      }
+
+    };
+
+}
+
+
+/* =========================
+   START ANSWER
+========================= */
+
+let startTime = null;
+
+let timerInterval = null;
+
+
+function startAnswer() {
+
+  if (!recognition) {
+
+    alert(
+      "Speech-to-Text tidak disokong oleh browser ini. Cuba Google Chrome."
+    );
+
+    return;
+
+  }
+
+
+  finalTranscript = "";
+
+  document.getElementById("transcript").value =
+    "";
+
+
+  startTime =
+    Date.now();
+
+
+  timerInterval =
+    setInterval(updateTimer, 1000);
+
+
+  isListening = true;
+
+
+  try {
+
+    recognition.start();
+
+  }
+
+  catch (error) {
+
+    console.log(error);
+
+  }
+
+
+  document.getElementById("startAnswer").style.display =
+    "none";
+
+
+  document.getElementById("stopAnswer").style.display =
+    "block";
+
+
+  document.getElementById("recordingStatus").style.display =
+    "block";
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function updateTimer() {
+
+  if (!startTime) return;
+
+
+  const elapsed =
+    Math.floor(
+      (Date.now() - startTime) / 1000
+    );
+
+
+  const minutes =
+    Math.floor(elapsed / 60);
+
+
+  const seconds =
+    elapsed % 60;
+
+
+  document.getElementById("timer").textContent =
+
+    String(minutes).padStart(2, "0")
+    + ":" +
+    String(seconds).padStart(2, "0");
+
+}
+
+
+/* =========================
+   STOP ANSWER
+========================= */
+
+function stopAnswer() {
+
+  isListening = false;
+
+
+  if (recognition) {
+
+    try {
+
+      recognition.stop();
+
+    }
+
+    catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+
+
+  clearInterval(timerInterval);
+
+
+  document.getElementById("startAnswer").style.display =
+    "block";
+
+
+  document.getElementById("stopAnswer").style.display =
+    "none";
+
+
+  document.getElementById("recordingStatus").style.display =
+    "none";
+
+
+  document.getElementById("nextQuestion").style.display =
+    "block";
+
+}
+
+
+/* =========================
+   NEXT QUESTION
+========================= */
+
+function nextQuestion() {
+
+  alert(
+    "Transcript berjaya direkodkan! 🎉"
+  );
 
 }
 

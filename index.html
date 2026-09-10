@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Interview</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    video {
+      width: 100%;
+      max-height: 450px;
+      object-fit: cover;
+      background: #111;
+      border-radius: 18px;
+      display: block;
+    }
+
+    .status-container {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .status {
+      flex: 1;
+      padding: 18px;
+      background: #f4f7fb;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .ready {
+      color: #16803c;
+    }
+
+    .failed {
+      color: #d93025;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #startBtn {
+      background: #1261c9;
+      color: white;
+    }
+
+    #stopBtn {
+      background: #e9eef5;
+      color: #222;
+    }
+
+    #continueBtn {
+      background: #16803c;
+      color: white;
+      display: none;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🎥 Camera & Microphone</h1>
+
+  <p class="subtitle">
+    Pastikan camera dan microphone anda berfungsi sebelum memulakan interview.
+  </p>
+
+  <video id="video" autoplay playsinline></video>
+
+  <div class="status-container">
+
+    <div class="status">
+      📷 Camera:
+      <span id="cameraStatus" class="failed">
+        Not Ready
+      </span>
+    </div>
+
+    <div class="status">
+      🎙️ Microphone:
+      <span id="micStatus" class="failed">
+        Not Ready
+      </span>
+    </div>
+
+  </div>
+
+  <button id="startBtn" onclick="startDevices()">
+    🎬 Test Camera & Microphone
+  </button>
+
+  <button id="stopBtn" onclick="stopDevices()">
+    ⏹️ Stop
+  </button>
+
+  <button id="continueBtn" onclick="continueInterview()">
+    Continue →
+  </button>
+
+  <p id="message" class="message"></p>
+
+</div>
+
+
+<script>
+
+let stream = null;
+
+async function startDevices() {
+
+  const cameraStatus = document.getElementById("cameraStatus");
+  const micStatus = document.getElementById("micStatus");
+  const message = document.getElementById("message");
+  const video = document.getElementById("video");
+  const continueBtn = document.getElementById("continueBtn");
+
+  cameraStatus.textContent = "Checking...";
+  micStatus.textContent = "Checking...";
+
+  cameraStatus.className = "";
+  micStatus.className = "";
+
+  try {
+
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    });
+
+    video.srcObject = stream;
+
+    cameraStatus.textContent = "✓ Ready";
+    cameraStatus.className = "ready";
+
+    micStatus.textContent = "✓ Ready";
+    micStatus.className = "ready";
+
+    message.textContent =
+      "Camera dan microphone berjaya diaktifkan.";
+
+    continueBtn.style.display = "block";
+
+  } catch (error) {
+
+    console.error(error);
+
+    cameraStatus.textContent = "✗ Failed";
+    cameraStatus.className = "failed";
+
+    micStatus.textContent = "✗ Failed";
+    micStatus.className = "failed";
+
+    message.textContent =
+      "Sila benarkan akses camera dan microphone pada browser.";
+
+  }
+
+}
+
+
+function stopDevices() {
+
+  if (stream) {
+
+    stream.getTracks().forEach(track => {
+      track.stop();
+    });
+
+    stream = null;
+
+  }
+
+  document.getElementById("video").srcObject = null;
+
+  document.getElementById("cameraStatus").textContent =
+    "Not Ready";
+
+  document.getElementById("micStatus").textContent =
+    "Not Ready";
+
+  document.getElementById("cameraStatus").className =
+    "failed";
+
+  document.getElementById("micStatus").className =
+    "failed";
+
+  document.getElementById("continueBtn").style.display =
+    "none";
+
+  document.getElementById("message").textContent =
+    "Camera dan microphone dihentikan.";
+
+}
+
+
+function continueInterview() {
+
+  alert("Camera & microphone berjaya! 🎉");
+
+}
+
+</script>
+
+</body>
+</html>

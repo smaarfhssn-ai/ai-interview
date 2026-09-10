@@ -118,7 +118,7 @@
     Pastikan camera dan microphone anda berfungsi sebelum memulakan interview.
   </p>
 
-  <video id="video" autoplay playsinline></video>
+  <video id="video" autoplay playsinline muted></video>
 
   <div class="status-container">
 
@@ -159,19 +159,35 @@
 
 let stream = null;
 
+
+// ==========================
+// START CAMERA & MICROPHONE
+// ==========================
+
 async function startDevices() {
 
-  const cameraStatus = document.getElementById("cameraStatus");
-  const micStatus = document.getElementById("micStatus");
-  const message = document.getElementById("message");
-  const video = document.getElementById("video");
-  const continueBtn = document.getElementById("continueBtn");
+  const cameraStatus =
+    document.getElementById("cameraStatus");
+
+  const micStatus =
+    document.getElementById("micStatus");
+
+  const message =
+    document.getElementById("message");
+
+  const video =
+    document.getElementById("video");
+
+  const continueBtn =
+    document.getElementById("continueBtn");
+
 
   cameraStatus.textContent = "Checking...";
   micStatus.textContent = "Checking...";
 
   cameraStatus.className = "";
   micStatus.className = "";
+
 
   try {
 
@@ -180,36 +196,62 @@ async function startDevices() {
       audio: true
     });
 
+
+    // Paparkan camera
     video.srcObject = stream;
 
+
+    // 🔇 MUTE AUDIO PLAYBACK
+    // Microphone masih aktif tetapi
+    // suaranya tidak dimainkan melalui speaker.
+    video.muted = true;
+    video.volume = 0;
+
+
+    // Camera berjaya
     cameraStatus.textContent = "✓ Ready";
     cameraStatus.className = "ready";
 
+
+    // Microphone berjaya
     micStatus.textContent = "✓ Ready";
     micStatus.className = "ready";
+
 
     message.textContent =
       "Camera dan microphone berjaya diaktifkan.";
 
+
     continueBtn.style.display = "block";
+
 
   } catch (error) {
 
     console.error(error);
 
+
     cameraStatus.textContent = "✗ Failed";
     cameraStatus.className = "failed";
+
 
     micStatus.textContent = "✗ Failed";
     micStatus.className = "failed";
 
+
     message.textContent =
       "Sila benarkan akses camera dan microphone pada browser.";
+
+
+    continueBtn.style.display = "none";
 
   }
 
 }
 
+
+// ==========================
+// STOP CAMERA & MICROPHONE
+// ==========================
 
 function stopDevices() {
 
@@ -223,7 +265,12 @@ function stopDevices() {
 
   }
 
-  document.getElementById("video").srcObject = null;
+
+  const video =
+    document.getElementById("video");
+
+  video.srcObject = null;
+
 
   document.getElementById("cameraStatus").textContent =
     "Not Ready";
@@ -231,14 +278,17 @@ function stopDevices() {
   document.getElementById("micStatus").textContent =
     "Not Ready";
 
+
   document.getElementById("cameraStatus").className =
     "failed";
 
   document.getElementById("micStatus").className =
     "failed";
 
+
   document.getElementById("continueBtn").style.display =
     "none";
+
 
   document.getElementById("message").textContent =
     "Camera dan microphone dihentikan.";
@@ -246,7 +296,20 @@ function stopDevices() {
 }
 
 
+// ==========================
+// CONTINUE
+// ==========================
+
 function continueInterview() {
+
+  if (!stream) {
+
+    alert("Sila aktifkan camera dan microphone dahulu.");
+
+    return;
+
+  }
+
 
   alert("Camera & microphone berjaya! 🎉");
 

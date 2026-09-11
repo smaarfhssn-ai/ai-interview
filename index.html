@@ -1,507 +1,362 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>AI Interview</title>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #222;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 30px;
-    }
-
-
-    /* =========================
-       CAMERA
-    ========================= */
-
-    video {
-      width: 100%;
-      max-height: 500px;
-      object-fit: cover;
-      background: #111;
-      border-radius: 18px;
-      display: block;
-      transform: scaleX(-1);
-    }
-
-
-    /* =========================
-       STATUS
-    ========================= */
-
-    .status-container {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .status {
-      flex: 1;
-      padding: 18px;
-      background: #f4f7fb;
-      border-radius: 14px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .ready {
-      color: #16803c;
-    }
-
-    .failed {
-      color: #d93025;
-    }
-
-
-    /* =========================
-       BUTTON
-    ========================= */
-
-    button {
-      width: 100%;
-      padding: 16px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #startBtn {
-      background: #1261c9;
-      color: white;
-    }
-
-    #stopBtn {
-      background: #e9eef5;
-      color: #222;
-    }
-
-    #continueBtn {
-      background: #16803c;
-      color: white;
-      display: none;
-    }
-
-
-    /* =========================
-       MESSAGE
-    ========================= */
-
-    .message {
-      text-align: center;
-      margin-top: 20px;
-      color: #666;
-    }
-
-
-    /* =========================
-       INTERVIEW PAGE
-    ========================= */
-
-    #interviewPage {
-      display: none;
-    }
-
-
-    /* =========================
-       QUESTION
-    ========================= */
-
-    .question-box {
-      background: #f4f7fb;
-      border-radius: 18px;
-      padding: 25px;
-      margin-top: 25px;
-    }
-
-    .question-label {
-      font-size: 14px;
-      color: #1261c9;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .question {
-      font-size: 24px;
-      font-weight: bold;
-      line-height: 1.4;
-    }
-
-
-    /* =========================
-       CAMERA TITLE
-    ========================= */
-
-    .camera-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 25px;
-      margin-bottom: 10px;
-    }
-
-
-    /* =========================
-       TIMER
-    ========================= */
-
-    .timer {
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-
-    /* =========================
-       LISTENING
-    ========================= */
-
-    .recording {
-      color: #d93025;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 15px;
-      display: none;
-    }
-
-
-    /* =========================
-       ANSWER BUTTONS
-    ========================= */
-
-    #startAnswer {
-      background: #1261c9;
-      color: white;
-    }
-
-    #stopAnswer {
-      background: #d93025;
-      color: white;
-      display: none;
-    }
-
-
-    /* =========================
-       TRANSCRIPT
-    ========================= */
-
-    .transcript-box {
-      margin-top: 25px;
-    }
-
-    .transcript-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    #transcript {
-      width: 100%;
-      min-height: 180px;
-      padding: 18px;
-      border: 2px solid #e1e6ee;
-      border-radius: 16px;
-      font-size: 17px;
-      line-height: 1.5;
-      resize: vertical;
-      font-family: Arial, sans-serif;
-    }
-
-
-    /* =========================
-       NEXT QUESTION
-    ========================= */
-
-    #nextQuestion {
-      display: none;
-      background: #16803c;
-      color: white;
-    }
-
-
-    /* =========================
-       FINISH
-    ========================= */
-
-    #finishPage {
-      display: none;
-      text-align: center;
-    }
-
-    .finish-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-
-
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 600px) {
-
-      .container {
-        margin: 15px;
-        padding: 20px;
-      }
-
-      .status-container {
-        flex-direction: column;
-      }
-
-      .question {
-        font-size: 20px;
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Interview</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #dcecff, #f5f9ff);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+h1 {
+  margin-top: 0;
+  color: #123b63;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* CAMERA */
+
+video {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 15px;
+  background: #111;
+  transform: scaleX(-1);
+  margin-bottom: 20px;
+}
+
+/* STATUS */
+
+.status-container {
+  margin-bottom: 20px;
+}
+
+.status {
+  margin: 10px;
+  font-size: 16px;
+}
+
+.ready {
+  color: green;
+  font-weight: bold;
+}
+
+.failed {
+  color: red;
+  font-weight: bold;
+}
+
+/* BUTTON */
+
+button {
+  border: none;
+  padding: 13px 22px;
+  margin: 6px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  background: #1769aa;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#stopBtn,
+#stopAnswer {
+  background: #d9534f;
+}
+
+#continueBtn,
+#nextQuestion {
+  background: #198754;
+}
+
+#continueBtn {
+  display: none;
+}
+
+/* MESSAGE */
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* INTERVIEW */
+
+#interviewPage {
+  display: none;
+}
+
+.question-box {
+  background: #eef6ff;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+
+.question-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #1769aa;
+  margin-bottom: 10px;
+}
+
+.question {
+  font-size: 22px;
+  font-weight: bold;
+  color: #123b63;
+}
+
+.camera-title {
+  text-align: left;
+  font-weight: bold;
+  margin: 15px 0 8px;
+  color: #333;
+}
+
+#cameraContainer video {
+  margin-bottom: 10px;
+}
+
+/* TIMER */
+
+.timer {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px;
+  color: #123b63;
+}
+
+/* RECORDING */
+
+.recording {
+  color: #d9534f;
+  font-weight: bold;
+  margin: 10px;
+}
+
+/* TRANSCRIPT */
+
+.transcript-box {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.transcript-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 15px;
+}
+
+/* NEXT */
+
+#nextQuestion {
+  display: none;
+  width: 90%;
+}
+
+/* FINISH */
+
+#finishPage {
+  display: none;
+}
+
+.finish-icon {
+  font-size: 60px;
+}
+
+/* SAVED ANSWERS */
+
+.answer-result {
+  text-align: left;
+  background: #f5f9ff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+
+.answer-result strong {
+  color: #123b63;
+}
+
+.answer-text {
+  margin-top: 8px;
+  color: #444;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .container {
+    padding: 20px;
+  }
+
+  .question {
+    font-size: 18px;
+  }
+
+  button {
+    width: 90%;
+  }
+
+}
+
+</style>
 </head>
 
 
 <body>
 
 
-<!-- =====================================================
-     DEVICE CHECK PAGE
-===================================================== -->
+<!-- ========================= -->
+<!-- DEVICE PAGE -->
+<!-- ========================= -->
 
 <div class="container" id="devicePage">
 
   <h1>🎥 Camera & Microphone</h1>
 
   <p class="subtitle">
-
-    Pastikan camera dan microphone anda berfungsi
-    sebelum memulakan interview.
-
+    Pastikan camera dan microphone anda berfungsi sebelum memulakan interview.
   </p>
 
-
-  <video
-    id="video"
-    autoplay
-    playsinline
-    muted>
-  </video>
-
+  <video id="video" autoplay playsinline muted></video>
 
   <div class="status-container">
 
     <div class="status">
-
       📷 Camera:
-
-      <span
-        id="cameraStatus"
-        class="failed">
-
+      <span id="cameraStatus" class="failed">
         Not Ready
-
       </span>
-
     </div>
 
-
     <div class="status">
-
       🎙️ Microphone:
-
-      <span
-        id="micStatus"
-        class="failed">
-
+      <span id="micStatus" class="failed">
         Not Ready
-
       </span>
-
     </div>
 
   </div>
 
-
-  <button
-    id="startBtn"
-    onclick="startDevices()">
-
+  <button id="startBtn" onclick="startDevices()">
     🎬 Test Camera & Microphone
-
   </button>
 
-
-  <button
-    id="stopBtn"
-    onclick="stopDevices()">
-
+  <button id="stopBtn" onclick="stopDevices()">
     ⏹️ Stop
-
   </button>
 
-
-  <button
-    id="continueBtn"
-    onclick="continueInterview()">
-
+  <button id="continueBtn" onclick="continueInterview()">
     Continue →
-
   </button>
 
-
-  <p
-    id="message"
-    class="message">
-  </p>
+  <p id="message" class="message"></p>
 
 </div>
 
 
 
-<!-- =====================================================
-     INTERVIEW PAGE
-===================================================== -->
+<!-- ========================= -->
+<!-- INTERVIEW PAGE -->
+<!-- ========================= -->
 
-<div
-  class="container"
-  id="interviewPage">
-
+<div class="container" id="interviewPage">
 
   <h1>🎤 AI Interview</h1>
 
-
   <p class="subtitle">
-
     Jawab soalan berikut menggunakan suara anda.
-
   </p>
 
 
-  <!-- QUESTION -->
-
   <div class="question-box">
 
-    <div
-      class="question-label"
-      id="questionLabel">
-
+    <div class="question-label" id="questionLabel">
       QUESTION 1
-
     </div>
 
-
-    <div
-      class="question"
-      id="questionText">
-
+    <div class="question" id="questionText">
       Tell me about yourself.
-
     </div>
 
   </div>
 
-
-  <!-- CAMERA -->
 
   <div class="camera-title">
-
     📹 Your Camera
-
   </div>
-
 
   <div id="cameraContainer"></div>
 
 
-  <!-- TIMER -->
-
   <div class="timer">
-
-    ⏱️
-
-    <span id="timer">
-
-      00:00
-
-    </span>
-
+    ⏱️ <span id="timer">00:00</span>
   </div>
 
 
-  <!-- LISTENING -->
-
-  <div
-    id="recordingStatus"
-    class="recording">
-
-    🔴 Listening...
-
+  <div id="recordingStatus" class="recording">
+    ⚪ Not Listening
   </div>
 
 
-  <!-- START ANSWER -->
-
-  <button
-    id="startAnswer"
-    onclick="startAnswer()">
-
+  <button id="startAnswer" onclick="startAnswer()">
     🎙️ Start Answer
-
   </button>
 
-
-  <!-- STOP ANSWER -->
-
-  <button
-    id="stopAnswer"
-    onclick="stopAnswer()">
-
+  <button id="stopAnswer" onclick="stopAnswer()">
     ⏹️ Stop Answer
-
   </button>
 
-
-  <!-- TRANSCRIPT -->
 
   <div class="transcript-box">
 
     <div class="transcript-title">
-
       📝 Your Answer
-
     </div>
-
 
     <textarea
       id="transcript"
@@ -512,47 +367,33 @@
   </div>
 
 
-  <!-- NEXT QUESTION -->
-
-  <button
-    id="nextQuestion"
-    onclick="nextQuestion()">
-
+  <button id="nextQuestion" onclick="nextQuestion()">
     Next Question →
-
   </button>
 
 </div>
 
 
 
-<!-- =====================================================
-     FINISH PAGE
-===================================================== -->
+<!-- ========================= -->
+<!-- FINISH PAGE -->
+<!-- ========================= -->
 
-<div
-  class="container"
-  id="finishPage">
+<div class="container" id="finishPage">
 
   <div class="finish-icon">
-
     🎉
-
   </div>
 
-
   <h1>
-
     Interview Completed!
-
   </h1>
 
-
   <p class="subtitle">
-
     Tahniah! Anda telah melengkapkan semua soalan interview.
-
   </p>
+
+  <div id="results"></div>
 
 </div>
 
@@ -560,10 +401,9 @@
 
 <script>
 
-
-/* =====================================================
-   GLOBAL VARIABLES
-===================================================== */
+/* ========================= */
+/* VARIABLES */
+/* ========================= */
 
 let stream = null;
 
@@ -571,19 +411,18 @@ let recognition = null;
 
 let isListening = false;
 
-let finalTranscript = "";
-
-let startTime = null;
-
 let timerInterval = null;
+
+let seconds = 0;
+
+let finalTranscript = "";
 
 let currentQuestion = 0;
 
 
-
-/* =====================================================
-   INTERVIEW QUESTIONS
-===================================================== */
+/* ========================= */
+/* QUESTIONS */
+/* ========================= */
 
 const questions = [
 
@@ -600,106 +439,83 @@ const questions = [
 ];
 
 
+/* ========================= */
+/* ANSWERS STORAGE */
+/* ========================= */
 
-/* =====================================================
-   START CAMERA + MICROPHONE
-===================================================== */
+let answers = [];
+
+
+/*
+  Contoh data:
+
+  answers = [
+    {
+      question: "...",
+      answer: "...",
+      duration: 25
+    }
+  ]
+*/
+
+
+/* ========================= */
+/* START CAMERA + MIC */
+/* ========================= */
 
 async function startDevices() {
 
-  const video =
-    document.getElementById("video");
-
-  const cameraStatus =
-    document.getElementById("cameraStatus");
-
-  const micStatus =
-    document.getElementById("micStatus");
-
-  const message =
-    document.getElementById("message");
-
-  const continueBtn =
-    document.getElementById("continueBtn");
-
-
-  cameraStatus.textContent =
-    "Checking...";
-
-  micStatus.textContent =
-    "Checking...";
-
-
   try {
 
-    stream =
-      await navigator.mediaDevices.getUserMedia({
+    stream = await navigator.mediaDevices.getUserMedia({
 
-        video: true,
+      video: true,
 
-        audio: true
+      audio: true
 
-      });
-
-
-    video.srcObject =
-      stream;
+    });
 
 
-    /* Prevent microphone echo */
-
-    video.muted =
-      true;
-
-    video.volume =
-      0;
+    const video =
+      document.getElementById("video");
 
 
-    cameraStatus.textContent =
-      "✓ Ready";
+    video.srcObject = stream;
 
-    cameraStatus.className =
+    video.muted = true;
+
+    video.volume = 0;
+
+
+    document.getElementById("cameraStatus").textContent =
+      "Ready ✓";
+
+    document.getElementById("cameraStatus").className =
       "ready";
 
 
-    micStatus.textContent =
-      "✓ Ready";
+    document.getElementById("micStatus").textContent =
+      "Ready ✓";
 
-    micStatus.className =
+    document.getElementById("micStatus").className =
       "ready";
 
 
-    message.textContent =
-      "Camera dan microphone berjaya diaktifkan.";
+    document.getElementById("continueBtn").style.display =
+      "inline-block";
 
 
-    continueBtn.style.display =
-      "block";
-
-  }
+    document.getElementById("message").textContent =
+      "Camera dan microphone berjaya diaktifkan!";
 
 
-  catch (error) {
+  } catch (error) {
 
     console.error(error);
 
 
-    cameraStatus.textContent =
-      "✗ Failed";
-
-    cameraStatus.className =
-      "failed";
-
-
-    micStatus.textContent =
-      "✗ Failed";
-
-    micStatus.className =
-      "failed";
-
-
-    message.textContent =
-      "Sila benarkan akses camera dan microphone.";
+    document.getElementById("message").textContent =
+      "Tidak dapat mengakses camera atau microphone. Sila benarkan permission.";
 
   }
 
@@ -707,132 +523,80 @@ async function startDevices() {
 
 
 
-/* =====================================================
-   STOP DEVICES
-===================================================== */
+/* ========================= */
+/* STOP DEVICES */
+/* ========================= */
 
 function stopDevices() {
 
   if (stream) {
 
-    stream.getTracks().forEach(
-      track => track.stop()
-    );
+    stream.getTracks().forEach(track => {
+
+      track.stop();
+
+    });
 
     stream = null;
 
   }
 
 
-  document.getElementById(
-    "video"
-  ).srcObject = null;
-
-
-  document.getElementById(
-    "cameraStatus"
-  ).textContent =
+  document.getElementById("cameraStatus").textContent =
     "Not Ready";
 
-
-  document.getElementById(
-    "micStatus"
-  ).textContent =
-    "Not Ready";
-
-
-  document.getElementById(
-    "cameraStatus"
-  ).className =
+  document.getElementById("cameraStatus").className =
     "failed";
 
 
-  document.getElementById(
-    "micStatus"
-  ).className =
+  document.getElementById("micStatus").textContent =
+    "Not Ready";
+
+  document.getElementById("micStatus").className =
     "failed";
 
 
-  document.getElementById(
-    "continueBtn"
-  ).style.display =
+  document.getElementById("continueBtn").style.display =
     "none";
-
-
-  document.getElementById(
-    "message"
-  ).textContent =
-    "Camera dan microphone dihentikan.";
 
 }
 
 
 
-/* =====================================================
-   CONTINUE TO INTERVIEW
-===================================================== */
+/* ========================= */
+/* CONTINUE TO INTERVIEW */
+/* ========================= */
 
 function continueInterview() {
 
-  if (!stream) {
-
-    alert(
-      "Sila aktifkan camera dan microphone dahulu."
-    );
-
-    return;
-
-  }
-
-
-  /* Hide device page */
-
-  document.getElementById(
-    "devicePage"
-  ).style.display =
+  document.getElementById("devicePage").style.display =
     "none";
 
-
-  /* Show interview */
-
-  document.getElementById(
-    "interviewPage"
-  ).style.display =
+  document.getElementById("interviewPage").style.display =
     "block";
 
-
-  /* Move SAME video */
 
   const video =
     document.getElementById("video");
 
-
   const cameraContainer =
-    document.getElementById(
-      "cameraContainer"
-    );
+    document.getElementById("cameraContainer");
 
 
-  cameraContainer.appendChild(
-    video
-  );
+  /*
+    Move camera yang sama
+    ke interview page.
+  */
+
+  cameraContainer.appendChild(video);
 
 
-  /* Keep stream */
+  video.srcObject = stream;
 
-  video.srcObject =
-    stream;
+  video.muted = true;
 
+  video.volume = 0;
 
-  video.muted =
-    true;
-
-
-  video.volume =
-    0;
-
-
-  /* Load first question */
 
   showQuestion();
 
@@ -840,156 +604,133 @@ function continueInterview() {
 
 
 
-/* =====================================================
-   SHOW QUESTION
-===================================================== */
+/* ========================= */
+/* SHOW QUESTION */
+/* ========================= */
 
 function showQuestion() {
 
-  document.getElementById(
-    "questionLabel"
-  ).textContent =
-
-    "QUESTION " +
-    (currentQuestion + 1);
+  document.getElementById("questionLabel").textContent =
+    "QUESTION " + (currentQuestion + 1);
 
 
-  document.getElementById(
-    "questionText"
-  ).textContent =
-
+  document.getElementById("questionText").textContent =
     questions[currentQuestion];
+
+
+  document.getElementById("transcript").value =
+    "";
+
+
+  document.getElementById("nextQuestion").style.display =
+    "none";
+
+
+  document.getElementById("recordingStatus").textContent =
+    "⚪ Not Listening";
 
 }
 
 
 
-/* =====================================================
-   SPEECH RECOGNITION
-===================================================== */
+/* ========================= */
+/* SPEECH RECOGNITION */
+/* ========================= */
 
 const SpeechRecognition =
   window.SpeechRecognition ||
   window.webkitSpeechRecognition;
 
 
-
 if (SpeechRecognition) {
 
-  recognition =
-    new SpeechRecognition();
+  recognition = new SpeechRecognition();
+
+  recognition.continuous = true;
+
+  recognition.interimResults = true;
+
+  recognition.lang = "en-US";
 
 
-  recognition.continuous =
-    true;
+  recognition.onresult = function(event) {
+
+    let interimTranscript = "";
 
 
-  recognition.interimResults =
-    true;
+    for (
+      let i = event.resultIndex;
+      i < event.results.length;
+      i++
+    ) {
+
+      const transcript =
+        event.results[i][0].transcript;
 
 
-  recognition.lang =
-    "en-US";
+      if (event.results[i].isFinal) {
 
+        finalTranscript +=
+          transcript + " ";
 
-  /* Speech detected */
+      } else {
 
-  recognition.onresult =
-    function(event) {
-
-      let interimTranscript =
-        "";
-
-
-      for (
-        let i = event.resultIndex;
-        i < event.results.length;
-        i++
-      ) {
-
-        const transcript =
-          event.results[i][0].transcript;
-
-
-        if (
-          event.results[i].isFinal
-        ) {
-
-          finalTranscript +=
-            transcript + " ";
-
-        }
-
-        else {
-
-          interimTranscript +=
-            transcript;
-
-        }
+        interimTranscript +=
+          transcript;
 
       }
 
-
-      document.getElementById(
-        "transcript"
-      ).value =
-
-        finalTranscript +
-        interimTranscript;
-
-    };
+    }
 
 
-  /* Error */
+    document.getElementById("transcript").value =
+      finalTranscript + interimTranscript;
 
-  recognition.onerror =
-    function(event) {
-
-      console.error(
-        "Speech recognition error:",
-        event.error
-      );
-
-    };
+  };
 
 
-  /* Automatically restart */
+  recognition.onerror = function(event) {
 
-  recognition.onend =
-    function() {
+    console.error(
+      "Speech recognition error:",
+      event.error
+    );
 
-      if (isListening) {
+  };
 
-        try {
 
-          recognition.start();
+  recognition.onend = function() {
 
-        }
+    if (isListening) {
 
-        catch (error) {
+      try {
 
-          console.log(error);
+        recognition.start();
 
-        }
+      } catch (error) {
+
+        console.log(error);
 
       }
 
-    };
+    }
+
+  };
 
 }
 
 
 
-/* =====================================================
-   START ANSWER
-===================================================== */
+/* ========================= */
+/* START ANSWER */
+/* ========================= */
 
 function startAnswer() {
 
   if (!recognition) {
 
     alert(
-      "Speech-to-Text tidak disokong. Sila guna Google Chrome."
+      "Speech Recognition tidak disokong oleh browser ini."
     );
 
     return;
@@ -997,154 +738,74 @@ function startAnswer() {
   }
 
 
-  /* Clear transcript */
+  finalTranscript = "";
 
-  finalTranscript =
-    "";
-
-
-  document.getElementById(
-    "transcript"
-  ).value =
-    "";
+  seconds = 0;
 
 
-  /* Reset timer */
-
-  startTime =
-    Date.now();
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
+  document.getElementById("timer").textContent =
     "00:00";
 
 
-  clearInterval(
-    timerInterval
-  );
+  document.getElementById("transcript").value =
+    "";
 
 
-  timerInterval =
-    setInterval(
-      updateTimer,
-      1000
-    );
+  isListening = true;
 
 
-  /* Start listening */
+  document.getElementById("recordingStatus").textContent =
+    "🔴 Listening...";
 
-  isListening =
-    true;
+
+  document.getElementById("nextQuestion").style.display =
+    "none";
 
 
   try {
 
     recognition.start();
 
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.log(error);
 
   }
 
 
-  /* Buttons */
+  timerInterval = setInterval(function() {
 
-  document.getElementById(
-    "startAnswer"
-  ).style.display =
-    "none";
+    seconds++;
 
 
-  document.getElementById(
-    "stopAnswer"
-  ).style.display =
-    "block";
+    const minutes =
+      Math.floor(seconds / 60);
+
+    const remainingSeconds =
+      seconds % 60;
 
 
-  /* Listening status */
+    document.getElementById("timer").textContent =
 
-  document.getElementById(
-    "recordingStatus"
-  ).style.display =
-    "block";
+      String(minutes).padStart(2, "0")
+      + ":"
+      +
+      String(remainingSeconds).padStart(2, "0");
 
 
-  /* Hide next button */
-
-  document.getElementById(
-    "nextQuestion"
-  ).style.display =
-    "none";
+  }, 1000);
 
 }
 
 
 
-/* =====================================================
-   TIMER
-===================================================== */
-
-function updateTimer() {
-
-  if (!startTime) {
-
-    return;
-
-  }
-
-
-  const elapsed =
-    Math.floor(
-      (Date.now() - startTime) /
-      1000
-    );
-
-
-  const minutes =
-    Math.floor(
-      elapsed / 60
-    );
-
-
-  const seconds =
-    elapsed % 60;
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-
-    String(minutes).padStart(
-      2,
-      "0"
-    )
-
-    + ":"
-
-    +
-
-    String(seconds).padStart(
-      2,
-      "0"
-    );
-
-}
-
-
-
-/* =====================================================
-   STOP ANSWER
-===================================================== */
+/* ========================= */
+/* STOP ANSWER */
+/* ========================= */
 
 function stopAnswer() {
 
-  isListening =
-    false;
+  isListening = false;
 
 
   if (recognition) {
@@ -1153,9 +814,7 @@ function stopAnswer() {
 
       recognition.stop();
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
       console.log(error);
 
@@ -1164,60 +823,77 @@ function stopAnswer() {
   }
 
 
-  clearInterval(
-    timerInterval
-  );
+  clearInterval(timerInterval);
 
 
-  /* Buttons */
-
-  document.getElementById(
-    "startAnswer"
-  ).style.display =
-    "block";
+  document.getElementById("recordingStatus").textContent =
+    "⏹️ Answer Recorded";
 
 
-  document.getElementById(
-    "stopAnswer"
-  ).style.display =
-    "none";
-
-
-  /* Hide listening */
-
-  document.getElementById(
-    "recordingStatus"
-  ).style.display =
-    "none";
-
-
-  /* Show next */
-
-  document.getElementById(
-    "nextQuestion"
-  ).style.display =
-    "block";
+  document.getElementById("nextQuestion").style.display =
+    "inline-block";
 
 }
 
 
 
-/* =====================================================
-   NEXT QUESTION
-===================================================== */
+/* ========================= */
+/* SAVE CURRENT ANSWER */
+/* ========================= */
+
+function saveCurrentAnswer() {
+
+  const answer =
+    document.getElementById("transcript").value.trim();
+
+
+  const answerData = {
+
+    question: questions[currentQuestion],
+
+    answer: answer,
+
+    duration: seconds
+
+  };
+
+
+  answers.push(answerData);
+
+
+  console.log(
+    "ANSWER SAVED:",
+    answerData
+  );
+
+
+  console.log(
+    "ALL ANSWERS:",
+    answers
+  );
+
+}
+
+
+
+/* ========================= */
+/* NEXT QUESTION */
+/* ========================= */
 
 function nextQuestion() {
 
-  /* Move to next */
+  /*
+    Simpan jawapan semasa
+    sebelum pergi ke soalan seterusnya.
+  */
+
+  saveCurrentAnswer();
+
 
   currentQuestion++;
 
 
-  /* Check if finished */
-
-  if (
-    currentQuestion >= questions.length
-  ) {
+  if (currentQuestion >= questions.length) {
 
     finishInterview();
 
@@ -1226,44 +902,18 @@ function nextQuestion() {
   }
 
 
-  /* Reset transcript */
-
-  finalTranscript =
-    "";
+  seconds = 0;
 
 
-  document.getElementById(
-    "transcript"
-  ).value =
-    "";
+  clearInterval(timerInterval);
 
 
-  /* Reset timer */
-
-  clearInterval(
-    timerInterval
-  );
+  finalTranscript = "";
 
 
-  startTime =
-    null;
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
+  document.getElementById("timer").textContent =
     "00:00";
 
-
-  /* Hide next */
-
-  document.getElementById(
-    "nextQuestion"
-  ).style.display =
-    "none";
-
-
-  /* Show new question */
 
   showQuestion();
 
@@ -1271,35 +921,101 @@ function nextQuestion() {
 
 
 
-/* =====================================================
-   FINISH INTERVIEW
-===================================================== */
+/* ========================= */
+/* FINISH INTERVIEW */
+/* ========================= */
 
 function finishInterview() {
 
-  /* Hide interview */
+  clearInterval(timerInterval);
 
-  document.getElementById(
-    "interviewPage"
-  ).style.display =
+
+  isListening = false;
+
+
+  if (recognition) {
+
+    try {
+
+      recognition.stop();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+
+
+  document.getElementById("interviewPage").style.display =
     "none";
 
 
-  /* Show finish page */
-
-  document.getElementById(
-    "finishPage"
-  ).style.display =
+  document.getElementById("finishPage").style.display =
     "block";
 
 
-  /* Stop camera */
+  /*
+    Paparkan semua jawapan
+    untuk testing.
+  */
+
+  const results =
+    document.getElementById("results");
+
+
+  results.innerHTML = "";
+
+
+  answers.forEach(function(item, index) {
+
+    const div =
+      document.createElement("div");
+
+
+    div.className =
+      "answer-result";
+
+
+    div.innerHTML = `
+
+      <strong>
+        Question ${index + 1}
+      </strong>
+
+      <div style="margin-top:6px;">
+        ${item.question}
+      </div>
+
+      <div class="answer-text">
+        <strong>Answer:</strong><br>
+        ${item.answer || "(No answer detected)"}
+      </div>
+
+      <div style="margin-top:8px;">
+        ⏱️ ${item.duration} seconds
+      </div>
+
+    `;
+
+
+    results.appendChild(div);
+
+  });
+
+
+  /*
+    Stop camera selepas interview selesai.
+  */
 
   if (stream) {
 
-    stream.getTracks().forEach(
-      track => track.stop()
-    );
+    stream.getTracks().forEach(track => {
+
+      track.stop();
+
+    });
 
     stream = null;
 

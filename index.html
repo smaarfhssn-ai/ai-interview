@@ -13,9 +13,9 @@
 
 <style>
 
-/* =========================================
+/* =====================================================
    GENERAL
-========================================= */
+===================================================== */
 
 * {
   box-sizing: border-box;
@@ -86,9 +86,9 @@ h1 {
 }
 
 
-/* =========================================
+/* =====================================================
    CAMERA
-========================================= */
+===================================================== */
 
 video {
 
@@ -114,9 +114,9 @@ video {
 }
 
 
-/* =========================================
+/* =====================================================
    STATUS
-========================================= */
+===================================================== */
 
 .status-container {
 
@@ -152,9 +152,9 @@ video {
 }
 
 
-/* =========================================
+/* =====================================================
    BUTTONS
-========================================= */
+===================================================== */
 
 button {
 
@@ -216,9 +216,9 @@ button:disabled {
 }
 
 
-/* =========================================
+/* =====================================================
    MESSAGE
-========================================= */
+===================================================== */
 
 .message {
 
@@ -229,9 +229,9 @@ button:disabled {
 }
 
 
-/* =========================================
+/* =====================================================
    INTERVIEW
-========================================= */
+===================================================== */
 
 #interviewPage {
 
@@ -290,9 +290,9 @@ button:disabled {
 }
 
 
-/* =========================================
+/* =====================================================
    TIMER
-========================================= */
+===================================================== */
 
 .timer {
 
@@ -307,9 +307,9 @@ button:disabled {
 }
 
 
-/* =========================================
+/* =====================================================
    RECORDING
-========================================= */
+===================================================== */
 
 .recording {
 
@@ -322,9 +322,9 @@ button:disabled {
 }
 
 
-/* =========================================
+/* =====================================================
    TRANSCRIPT
-========================================= */
+===================================================== */
 
 .transcript-box {
 
@@ -363,9 +363,9 @@ textarea {
 }
 
 
-/* =========================================
+/* =====================================================
    NEXT
-========================================= */
+===================================================== */
 
 #nextQuestion {
 
@@ -376,9 +376,9 @@ textarea {
 }
 
 
-/* =========================================
+/* =====================================================
    FINISH
-========================================= */
+===================================================== */
 
 #finishPage {
 
@@ -407,9 +407,9 @@ textarea {
 }
 
 
-/* =========================================
+/* =====================================================
    RESULTS
-========================================= */
+===================================================== */
 
 .answer-result {
 
@@ -444,9 +444,9 @@ textarea {
 }
 
 
-/* =========================================
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
 
 @media (max-width: 600px) {
 
@@ -790,11 +790,11 @@ textarea {
 ===================================================== */
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbx_6J2uxaIl-lnPYj3leeFI6PhyXLWsvNGF5JN4yQ2bcS4y_TBY3iveqPzCIKRFTarcoQ/exec";
+  "https://script.google.com/macros/s/AKfycbxCjEhVR5dXxH9it8M9EHhpuxqg4YYNknTjann1DINsT9q6__6jOa5pfBKlpK6fS5rnsw/exec";
 
 
 /* =====================================================
-   TEST EMAIL
+   USER EMAIL
 ===================================================== */
 
 const USER_EMAIL =
@@ -819,6 +819,27 @@ let finalTranscript = "";
 
 let currentQuestion = 0;
 
+let answers = [];
+
+
+/* =====================================================
+   INTERVIEW ID
+===================================================== */
+
+const interviewID =
+
+  "INT" +
+
+  Date.now()
+    .toString(36)
+    .toUpperCase();
+
+
+console.log(
+  "Interview ID:",
+  interviewID
+);
+
 
 /* =====================================================
    QUESTIONS
@@ -840,38 +861,12 @@ const questions = [
 
 
 /* =====================================================
-   ANSWERS
-===================================================== */
-
-let answers = [];
-
-
-/* =====================================================
-   INTERVIEW ID
-===================================================== */
-
-const interviewID =
-
-  "INT" +
-  Date.now()
-    .toString(36)
-    .toUpperCase();
-
-
-console.log(
-  "Interview ID:",
-  interviewID
-);
-
-
-/* =====================================================
    START CAMERA + MICROPHONE
 ===================================================== */
 
 async function startDevices() {
 
   try {
-
 
     stream =
       await navigator.mediaDevices
@@ -902,7 +897,6 @@ async function startDevices() {
       0;
 
 
-
     /* CAMERA STATUS */
 
     document.getElementById(
@@ -917,7 +911,6 @@ async function startDevices() {
       "ready";
 
 
-
     /* MICROPHONE STATUS */
 
     document.getElementById(
@@ -930,7 +923,6 @@ async function startDevices() {
       "micStatus"
     ).className =
       "ready";
-
 
 
     /* CONTINUE */
@@ -950,7 +942,6 @@ async function startDevices() {
   }
 
   catch (error) {
-
 
     console.error(
       "Device error:",
@@ -975,9 +966,7 @@ async function startDevices() {
 
 function stopDevices() {
 
-
   if (stream) {
-
 
     stream
       .getTracks()
@@ -1035,7 +1024,6 @@ function stopDevices() {
 ===================================================== */
 
 function continueInterview() {
-
 
   if (!stream) {
 
@@ -1105,7 +1093,6 @@ function continueInterview() {
 
 function showQuestion() {
 
-
   document.getElementById(
     "questionLabel"
   ).textContent =
@@ -1165,7 +1152,6 @@ const SpeechRecognition =
 
 if (SpeechRecognition) {
 
-
   recognition =
     new SpeechRecognition();
 
@@ -1182,10 +1168,8 @@ if (SpeechRecognition) {
     "en-US";
 
 
-
   recognition.onresult =
     function(event) {
-
 
       let interimTranscript =
         "";
@@ -1203,7 +1187,6 @@ if (SpeechRecognition) {
 
       ) {
 
-
         const transcript =
           event.results[i][0]
             .transcript;
@@ -1213,15 +1196,12 @@ if (SpeechRecognition) {
           event.results[i].isFinal
         ) {
 
-
           finalTranscript +=
             transcript + " ";
-
 
         }
 
         else {
-
 
           interimTranscript +=
             transcript;
@@ -1241,7 +1221,6 @@ if (SpeechRecognition) {
     };
 
 
-
   recognition.onerror =
     function(event) {
 
@@ -1253,13 +1232,10 @@ if (SpeechRecognition) {
     };
 
 
-
   recognition.onend =
     function() {
 
-
       if (isListening) {
-
 
         try {
 
@@ -1289,14 +1265,11 @@ if (SpeechRecognition) {
 
 function startAnswer() {
 
-
   if (!recognition) {
-
 
     alert(
       "Speech Recognition tidak disokong oleh browser ini."
     );
-
 
     return;
 
@@ -1359,10 +1332,10 @@ function startAnswer() {
 
 
   timerInterval =
+
     setInterval(
 
       function() {
-
 
         seconds++;
 
@@ -1391,7 +1364,6 @@ function startAnswer() {
           String(remainingSeconds)
             .padStart(2, "0");
 
-
       },
 
       1000
@@ -1407,13 +1379,11 @@ function startAnswer() {
 
 function stopAnswer() {
 
-
   isListening =
     false;
 
 
   if (recognition) {
-
 
     try {
 
@@ -1461,7 +1431,6 @@ function stopAnswer() {
 
 function saveCurrentAnswer() {
 
-
   const answer =
 
     document.getElementById(
@@ -1508,7 +1477,6 @@ function saveCurrentAnswer() {
 
 function nextQuestion() {
 
-
   /*
      Simpan jawapan semasa.
   */
@@ -1520,7 +1488,7 @@ function nextQuestion() {
 
 
   /*
-     Kalau sudah habis 5 soalan.
+     Kalau sudah habis semua soalan.
   */
 
   if (
@@ -1528,9 +1496,7 @@ function nextQuestion() {
     questions.length
   ) {
 
-
     finishInterview();
-
 
     return;
 
@@ -1561,7 +1527,6 @@ function nextQuestion() {
 
 function finishInterview() {
 
-
   clearInterval(
     timerInterval
   );
@@ -1572,7 +1537,6 @@ function finishInterview() {
 
 
   if (recognition) {
-
 
     try {
 
@@ -1594,7 +1558,6 @@ function finishInterview() {
   */
 
   if (stream) {
-
 
     stream
       .getTracks()
@@ -1653,7 +1616,6 @@ function finishInterview() {
 
 function displayResults() {
 
-
   const results =
     document.getElementById(
       "results"
@@ -1667,7 +1629,6 @@ function displayResults() {
   answers.forEach(
 
     function(item, index) {
-
 
       const div =
         document.createElement(
@@ -1731,8 +1692,7 @@ function displayResults() {
    SEND INTERVIEW TO GOOGLE SHEETS
 ===================================================== */
 
-function sendInterviewToSheet() {
-
+async function sendInterviewToSheet() {
 
   const status =
     document.getElementById(
@@ -1741,7 +1701,7 @@ function sendInterviewToSheet() {
 
 
   status.textContent =
-    "💾 Saving interview data...";
+    "💾 Sending interview data...";
 
 
   status.style.background =
@@ -1770,133 +1730,129 @@ function sendInterviewToSheet() {
 
 
   console.log(
-    "DATA TO SEND:",
+    "================================="
+  );
+
+  console.log(
+    "DATA TO SEND"
+  );
+
+  console.log(
     data
   );
 
-
-  /*
-     Create hidden iframe.
-  */
-
-  const iframe =
-    document.createElement(
-      "iframe"
-    );
-
-
-  iframe.name =
-    "saveFrame";
-
-
-  iframe.style.display =
-    "none";
-
-
-  document.body.appendChild(
-    iframe
+  console.log(
+    "INTERVIEW ID:",
+    interviewID
   );
-
-
-  /*
-     Create hidden form.
-  */
-
-  const form =
-    document.createElement(
-      "form"
-    );
-
-
-  form.method =
-    "POST";
-
-
-  form.action =
-    SCRIPT_URL;
-
-
-  form.target =
-    "saveFrame";
-
-
-  form.style.display =
-    "none";
-
-
-  /*
-     Create payload.
-  */
-
-  const input =
-    document.createElement(
-      "input"
-    );
-
-
-  input.type =
-    "hidden";
-
-
-  input.name =
-    "payload";
-
-
-  input.value =
-    JSON.stringify(data);
-
-
-  form.appendChild(
-    input
-  );
-
-
-  document.body.appendChild(
-    form
-  );
-
-
-  /*
-     Submit kepada Apps Script.
-  */
-
-  form.submit();
-
 
   console.log(
-    "Interview data submitted to Apps Script."
+    "EMAIL:",
+    USER_EMAIL
+  );
+
+  console.log(
+    "ANSWERS:",
+    answers
+  );
+
+  console.log(
+    "================================="
   );
 
 
-  /*
-     Paparkan status.
-  */
+  try {
 
-  status.textContent =
-    "✅ Interview data dihantar ke Google Sheets!";
+    /*
+       Gunakan application/x-www-form-urlencoded.
+
+       Ini penting kerana Apps Script
+       boleh baca data melalui:
+
+       e.parameter.payload
+    */
+
+    const formData =
+      new URLSearchParams();
 
 
-  status.style.background =
-    "#d1e7dd";
+    formData.append(
+      "payload",
+      JSON.stringify(data)
+    );
 
 
-  /*
-     Bersihkan form dan iframe.
-  */
+    /*
+       no-cors mengelakkan browser
+       daripada menyekat request cross-origin.
 
-  setTimeout(
+       Apps Script tetap menerima POST.
+    */
 
-    function() {
+    await fetch(
 
-      form.remove();
+      SCRIPT_URL,
 
-      iframe.remove();
+      {
 
-    },
+        method: "POST",
 
-    5000
+        mode: "no-cors",
 
-  );
+        headers: {
+
+          "Content-Type":
+            "application/x-www-form-urlencoded;charset=UTF-8"
+
+        },
+
+        body:
+          formData.toString()
+
+      }
+
+    );
+
+
+    console.log(
+      "POST request sent successfully."
+    );
+
+
+    /*
+       Browser tidak boleh membaca response
+       kerana no-cors.
+
+       Jadi mesej ini bermaksud request
+       telah dihantar, bukan membaca response server.
+    */
+
+    status.textContent =
+      "✅ Interview data telah dihantar!";
+
+
+    status.style.background =
+      "#d1e7dd";
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "SEND ERROR:",
+      error
+    );
+
+
+    status.textContent =
+      "❌ Gagal menghantar data. Sila cuba lagi.";
+
+
+    status.style.background =
+      "#f8d7da";
+
+  }
 
 }
 
@@ -1906,7 +1862,6 @@ function sendInterviewToSheet() {
 ===================================================== */
 
 function escapeHTML(text) {
-
 
   const div =
     document.createElement(
@@ -1923,6 +1878,7 @@ function escapeHTML(text) {
 }
 
 </script>
+
 
 </body>
 

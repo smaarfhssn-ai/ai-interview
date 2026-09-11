@@ -308,7 +308,7 @@ button:disabled {
 
 
 /* =========================================
-   RECORDING STATUS
+   RECORDING
 ========================================= */
 
 .recording {
@@ -364,7 +364,7 @@ textarea {
 
 
 /* =========================================
-   NEXT BUTTON
+   NEXT
 ========================================= */
 
 #nextQuestion {
@@ -377,7 +377,7 @@ textarea {
 
 
 /* =========================================
-   FINISH PAGE
+   FINISH
 ========================================= */
 
 #finishPage {
@@ -398,11 +398,11 @@ textarea {
 
   margin-top: 20px;
 
-  font-weight: bold;
-
   padding: 12px;
 
   border-radius: 10px;
+
+  font-weight: bold;
 
 }
 
@@ -475,7 +475,6 @@ textarea {
 </style>
 
 </head>
-
 
 
 <body>
@@ -660,7 +659,7 @@ textarea {
 
 
 
-  <!-- LISTENING STATUS -->
+  <!-- RECORDING STATUS -->
 
   <div
     id="recordingStatus"
@@ -719,7 +718,7 @@ textarea {
 
 
 
-  <!-- NEXT QUESTION -->
+  <!-- NEXT -->
 
   <button
     id="nextQuestion"
@@ -798,13 +797,6 @@ const SCRIPT_URL =
    TEST EMAIL
 ===================================================== */
 
-/*
-   Buat sementara kita guna email testing.
-
-   Nanti kita sambungkan kepada
-   email user yang login.
-*/
-
 const USER_EMAIL =
   "test@example.com";
 
@@ -855,7 +847,7 @@ let answers = [];
 
 
 /* =====================================================
-   GENERATE INTERVIEW ID
+   INTERVIEW ID
 ===================================================== */
 
 const interviewID =
@@ -882,17 +874,20 @@ async function startDevices() {
 
 
     stream =
-      await navigator.mediaDevices.getUserMedia({
+      await navigator.mediaDevices
+        .getUserMedia({
 
-        video: true,
+          video: true,
 
-        audio: true
+          audio: true
 
-      });
+        });
 
 
     const video =
-      document.getElementById("video");
+      document.getElementById(
+        "video"
+      );
 
 
     video.srcObject =
@@ -908,7 +903,7 @@ async function startDevices() {
 
 
 
-    /* CAMERA */
+    /* CAMERA STATUS */
 
     document.getElementById(
       "cameraStatus"
@@ -923,7 +918,7 @@ async function startDevices() {
 
 
 
-    /* MICROPHONE */
+    /* MICROPHONE STATUS */
 
     document.getElementById(
       "micStatus"
@@ -938,7 +933,7 @@ async function startDevices() {
 
 
 
-    /* CONTINUE BUTTON */
+    /* CONTINUE */
 
     document.getElementById(
       "continueBtn"
@@ -987,11 +982,13 @@ function stopDevices() {
     stream
       .getTracks()
       .forEach(
+
         function(track) {
 
           track.stop();
 
         }
+
       );
 
 
@@ -1034,7 +1031,7 @@ function stopDevices() {
 
 
 /* =====================================================
-   CONTINUE TO INTERVIEW
+   CONTINUE INTERVIEW
 ===================================================== */
 
 function continueInterview() {
@@ -1064,7 +1061,9 @@ function continueInterview() {
 
 
   const video =
-    document.getElementById("video");
+    document.getElementById(
+      "video"
+    );
 
 
   const cameraContainer =
@@ -1217,6 +1216,7 @@ if (SpeechRecognition) {
 
           finalTranscript +=
             transcript + " ";
+
 
         }
 
@@ -1381,7 +1381,6 @@ function startAnswer() {
           "timer"
         ).textContent =
 
-
           String(minutes)
             .padStart(2, "0")
 
@@ -1511,8 +1510,7 @@ function nextQuestion() {
 
 
   /*
-     Simpan jawapan semasa
-     sebelum bergerak ke soalan seterusnya.
+     Simpan jawapan semasa.
   */
 
   saveCurrentAnswer();
@@ -1522,7 +1520,7 @@ function nextQuestion() {
 
 
   /*
-     Kalau sudah habis semua soalan.
+     Kalau sudah habis 5 soalan.
   */
 
   if (
@@ -1592,7 +1590,7 @@ function finishInterview() {
 
 
   /*
-     Stop camera.
+     Stop camera selepas interview.
   */
 
   if (stream) {
@@ -1601,11 +1599,13 @@ function finishInterview() {
     stream
       .getTracks()
       .forEach(
+
         function(track) {
 
           track.stop();
 
         }
+
       );
 
 
@@ -1616,7 +1616,7 @@ function finishInterview() {
 
 
   /*
-     Tukar page.
+     Tukar kepada finish page.
   */
 
   document.getElementById(
@@ -1639,7 +1639,7 @@ function finishInterview() {
 
 
   /*
-     Hantar ke Google Sheets.
+     Hantar data ke Google Sheets.
   */
 
   sendInterviewToSheet();
@@ -1728,7 +1728,7 @@ function displayResults() {
 
 
 /* =====================================================
-   SEND INTERVIEW TO APPS SCRIPT
+   SEND INTERVIEW TO GOOGLE SHEETS
 ===================================================== */
 
 function sendInterviewToSheet() {
@@ -1776,81 +1776,125 @@ function sendInterviewToSheet() {
 
 
   /*
-     Hantar kepada Apps Script.
-
-     Kita sengaja TIDAK letakkan
-     Content-Type: application/json
-     supaya browser tidak buat
-     CORS preflight request.
+     Create hidden iframe.
   */
 
-  fetch(
+  const iframe =
+    document.createElement(
+      "iframe"
+    );
 
-    SCRIPT_URL,
 
-    {
+  iframe.name =
+    "saveFrame";
 
-      method:
-        "POST",
 
-      mode:
-        "no-cors",
+  iframe.style.display =
+    "none";
 
-      body:
-        JSON.stringify(data)
 
-    }
+  document.body.appendChild(
+    iframe
+  );
 
-  )
 
-  .then(
+  /*
+     Create hidden form.
+  */
+
+  const form =
+    document.createElement(
+      "form"
+    );
+
+
+  form.method =
+    "POST";
+
+
+  form.action =
+    SCRIPT_URL;
+
+
+  form.target =
+    "saveFrame";
+
+
+  form.style.display =
+    "none";
+
+
+  /*
+     Create payload.
+  */
+
+  const input =
+    document.createElement(
+      "input"
+    );
+
+
+  input.type =
+    "hidden";
+
+
+  input.name =
+    "payload";
+
+
+  input.value =
+    JSON.stringify(data);
+
+
+  form.appendChild(
+    input
+  );
+
+
+  document.body.appendChild(
+    form
+  );
+
+
+  /*
+     Submit kepada Apps Script.
+  */
+
+  form.submit();
+
+
+  console.log(
+    "Interview data submitted to Apps Script."
+  );
+
+
+  /*
+     Paparkan status.
+  */
+
+  status.textContent =
+    "✅ Interview data dihantar ke Google Sheets!";
+
+
+  status.style.background =
+    "#d1e7dd";
+
+
+  /*
+     Bersihkan form dan iframe.
+  */
+
+  setTimeout(
 
     function() {
 
+      form.remove();
 
-      /*
-         Dengan no-cors, browser tidak
-         boleh membaca response Apps Script.
+      iframe.remove();
 
-         Tetapi request sudah dihantar.
-      */
+    },
 
-      console.log(
-        "Interview data sent to Apps Script."
-      );
-
-
-      status.textContent =
-        "✅ Interview data telah dihantar!";
-
-
-      status.style.background =
-        "#d1e7dd";
-
-
-    }
-
-  )
-
-  .catch(
-
-    function(error) {
-
-
-      console.error(
-        "SAVE ERROR:",
-        error
-      );
-
-
-      status.textContent =
-        "❌ Gagal menghantar data.";
-
-
-      status.style.background =
-        "#f8d7da";
-
-    }
+    5000
 
   );
 

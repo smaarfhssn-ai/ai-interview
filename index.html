@@ -39,7 +39,10 @@
       margin-bottom: 30px;
     }
 
-    /* CAMERA */
+
+    /* =========================
+       CAMERA
+    ========================= */
 
     video {
       width: 100%;
@@ -51,7 +54,10 @@
       transform: scaleX(-1);
     }
 
-    /* STATUS */
+
+    /* =========================
+       STATUS
+    ========================= */
 
     .status-container {
       display: flex;
@@ -76,7 +82,10 @@
       color: #d93025;
     }
 
-    /* BUTTON */
+
+    /* =========================
+       BUTTON
+    ========================= */
 
     button {
       width: 100%;
@@ -105,7 +114,10 @@
       display: none;
     }
 
-    /* MESSAGE */
+
+    /* =========================
+       MESSAGE
+    ========================= */
 
     .message {
       text-align: center;
@@ -113,11 +125,19 @@
       color: #666;
     }
 
-    /* INTERVIEW */
+
+    /* =========================
+       INTERVIEW PAGE
+    ========================= */
 
     #interviewPage {
       display: none;
     }
+
+
+    /* =========================
+       QUESTION
+    ========================= */
 
     .question-box {
       background: #f4f7fb;
@@ -139,6 +159,11 @@
       line-height: 1.4;
     }
 
+
+    /* =========================
+       CAMERA TITLE
+    ========================= */
+
     .camera-title {
       font-size: 18px;
       font-weight: bold;
@@ -146,7 +171,10 @@
       margin-bottom: 10px;
     }
 
-    /* TIMER */
+
+    /* =========================
+       TIMER
+    ========================= */
 
     .timer {
       text-align: center;
@@ -155,7 +183,10 @@
       margin-top: 20px;
     }
 
-    /* LISTENING */
+
+    /* =========================
+       LISTENING
+    ========================= */
 
     .recording {
       color: #d93025;
@@ -165,7 +196,10 @@
       display: none;
     }
 
-    /* ANSWER BUTTONS */
+
+    /* =========================
+       ANSWER BUTTONS
+    ========================= */
 
     #startAnswer {
       background: #1261c9;
@@ -178,7 +212,10 @@
       display: none;
     }
 
-    /* TRANSCRIPT */
+
+    /* =========================
+       TRANSCRIPT
+    ========================= */
 
     .transcript-box {
       margin-top: 25px;
@@ -202,13 +239,36 @@
       font-family: Arial, sans-serif;
     }
 
+
+    /* =========================
+       NEXT QUESTION
+    ========================= */
+
     #nextQuestion {
       display: none;
       background: #16803c;
       color: white;
     }
 
-    /* MOBILE */
+
+    /* =========================
+       FINISH
+    ========================= */
+
+    #finishPage {
+      display: none;
+      text-align: center;
+    }
+
+    .finish-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 600px) {
 
@@ -231,12 +291,13 @@
 
 </head>
 
+
 <body>
 
 
-<!-- =========================================
-     DEVICE CHECK
-========================================= -->
+<!-- =====================================================
+     DEVICE CHECK PAGE
+===================================================== -->
 
 <div class="container" id="devicePage">
 
@@ -249,8 +310,6 @@
 
   </p>
 
-
-  <!-- SATU-SATUNYA VIDEO -->
 
   <video
     id="video"
@@ -330,9 +389,9 @@
 
 
 
-<!-- =========================================
+<!-- =====================================================
      INTERVIEW PAGE
-========================================= -->
+===================================================== -->
 
 <div
   class="container"
@@ -353,14 +412,18 @@
 
   <div class="question-box">
 
-    <div class="question-label">
+    <div
+      class="question-label"
+      id="questionLabel">
 
       QUESTION 1
 
     </div>
 
 
-    <div class="question">
+    <div
+      class="question"
+      id="questionText">
 
       Tell me about yourself.
 
@@ -377,11 +440,6 @@
 
   </div>
 
-
-  <!--
-    VIDEO AKAN DIPINDAHKAN KE SINI
-    MENGGUNAKAN JAVASCRIPT
-  -->
 
   <div id="cameraContainer"></div>
 
@@ -454,7 +512,7 @@
   </div>
 
 
-  <!-- NEXT -->
+  <!-- NEXT QUESTION -->
 
   <button
     id="nextQuestion"
@@ -468,12 +526,44 @@
 
 
 
+<!-- =====================================================
+     FINISH PAGE
+===================================================== -->
+
+<div
+  class="container"
+  id="finishPage">
+
+  <div class="finish-icon">
+
+    🎉
+
+  </div>
+
+
+  <h1>
+
+    Interview Completed!
+
+  </h1>
+
+
+  <p class="subtitle">
+
+    Tahniah! Anda telah melengkapkan semua soalan interview.
+
+  </p>
+
+</div>
+
+
+
 <script>
 
 
-/* =========================================
-   VARIABLES
-========================================= */
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
 
 let stream = null;
 
@@ -487,10 +577,33 @@ let startTime = null;
 
 let timerInterval = null;
 
+let currentQuestion = 0;
 
-/* =========================================
+
+
+/* =====================================================
+   INTERVIEW QUESTIONS
+===================================================== */
+
+const questions = [
+
+  "Tell me about yourself.",
+
+  "Why are you interested in this career?",
+
+  "What are your strengths?",
+
+  "What is one challenge you have faced and how did you overcome it?",
+
+  "Why should we choose you for this position?"
+
+];
+
+
+
+/* =====================================================
    START CAMERA + MICROPHONE
-========================================= */
+===================================================== */
 
 async function startDevices() {
 
@@ -510,9 +623,14 @@ async function startDevices() {
     document.getElementById("continueBtn");
 
 
-  try {
+  cameraStatus.textContent =
+    "Checking...";
 
-    /* Request camera + mic */
+  micStatus.textContent =
+    "Checking...";
+
+
+  try {
 
     stream =
       await navigator.mediaDevices.getUserMedia({
@@ -524,13 +642,11 @@ async function startDevices() {
       });
 
 
-    /* Attach stream */
-
     video.srcObject =
       stream;
 
 
-    /* Mute playback */
+    /* Prevent microphone echo */
 
     video.muted =
       true;
@@ -539,16 +655,12 @@ async function startDevices() {
       0;
 
 
-    /* Camera ready */
-
     cameraStatus.textContent =
       "✓ Ready";
 
     cameraStatus.className =
       "ready";
 
-
-    /* Microphone ready */
 
     micStatus.textContent =
       "✓ Ready";
@@ -560,8 +672,6 @@ async function startDevices() {
     message.textContent =
       "Camera dan microphone berjaya diaktifkan.";
 
-
-    /* Show continue */
 
     continueBtn.style.display =
       "block";
@@ -597,9 +707,9 @@ async function startDevices() {
 
 
 
-/* =========================================
-   STOP CAMERA + MICROPHONE
-========================================= */
+/* =====================================================
+   STOP DEVICES
+===================================================== */
 
 function stopDevices() {
 
@@ -614,12 +724,9 @@ function stopDevices() {
   }
 
 
-  const video =
-    document.getElementById("video");
-
-
-  video.srcObject =
-    null;
+  document.getElementById(
+    "video"
+  ).srcObject = null;
 
 
   document.getElementById(
@@ -661,9 +768,9 @@ function stopDevices() {
 
 
 
-/* =========================================
-   CONTINUE
-========================================= */
+/* =====================================================
+   CONTINUE TO INTERVIEW
+===================================================== */
 
 function continueInterview() {
 
@@ -678,7 +785,7 @@ function continueInterview() {
   }
 
 
-  /* Hide device check */
+  /* Hide device page */
 
   document.getElementById(
     "devicePage"
@@ -694,14 +801,7 @@ function continueInterview() {
     "block";
 
 
-  /*
-    🔥 PENTING
-
-    Kita TIDAK buat camera baru.
-
-    Kita ambil VIDEO yang sama
-    dan pindahkan ke interview.
-  */
+  /* Move SAME video */
 
   const video =
     document.getElementById("video");
@@ -718,7 +818,7 @@ function continueInterview() {
   );
 
 
-  /* Pastikan camera kekal ON */
+  /* Keep stream */
 
   video.srcObject =
     stream;
@@ -727,17 +827,51 @@ function continueInterview() {
   video.muted =
     true;
 
+
+  video.volume =
+    0;
+
+
+  /* Load first question */
+
+  showQuestion();
+
 }
 
 
 
-/* =========================================
+/* =====================================================
+   SHOW QUESTION
+===================================================== */
+
+function showQuestion() {
+
+  document.getElementById(
+    "questionLabel"
+  ).textContent =
+
+    "QUESTION " +
+    (currentQuestion + 1);
+
+
+  document.getElementById(
+    "questionText"
+  ).textContent =
+
+    questions[currentQuestion];
+
+}
+
+
+
+/* =====================================================
    SPEECH RECOGNITION
-========================================= */
+===================================================== */
 
 const SpeechRecognition =
   window.SpeechRecognition ||
   window.webkitSpeechRecognition;
+
 
 
 if (SpeechRecognition) {
@@ -757,6 +891,8 @@ if (SpeechRecognition) {
   recognition.lang =
     "en-US";
 
+
+  /* Speech detected */
 
   recognition.onresult =
     function(event) {
@@ -804,6 +940,8 @@ if (SpeechRecognition) {
     };
 
 
+  /* Error */
+
   recognition.onerror =
     function(event) {
 
@@ -814,6 +952,8 @@ if (SpeechRecognition) {
 
     };
 
+
+  /* Automatically restart */
 
   recognition.onend =
     function() {
@@ -840,9 +980,9 @@ if (SpeechRecognition) {
 
 
 
-/* =========================================
+/* =====================================================
    START ANSWER
-========================================= */
+===================================================== */
 
 function startAnswer() {
 
@@ -857,7 +997,7 @@ function startAnswer() {
   }
 
 
-  /* Clear previous */
+  /* Clear transcript */
 
   finalTranscript =
     "";
@@ -869,10 +1009,21 @@ function startAnswer() {
     "";
 
 
-  /* Start timer */
+  /* Reset timer */
 
   startTime =
     Date.now();
+
+
+  document.getElementById(
+    "timer"
+  ).textContent =
+    "00:00";
+
+
+  clearInterval(
+    timerInterval
+  );
 
 
   timerInterval =
@@ -915,20 +1066,28 @@ function startAnswer() {
     "block";
 
 
-  /* Status */
+  /* Listening status */
 
   document.getElementById(
     "recordingStatus"
   ).style.display =
     "block";
 
+
+  /* Hide next button */
+
+  document.getElementById(
+    "nextQuestion"
+  ).style.display =
+    "none";
+
 }
 
 
 
-/* =========================================
+/* =====================================================
    TIMER
-========================================= */
+===================================================== */
 
 function updateTimer() {
 
@@ -978,9 +1137,9 @@ function updateTimer() {
 
 
 
-/* =========================================
+/* =====================================================
    STOP ANSWER
-========================================= */
+===================================================== */
 
 function stopAnswer() {
 
@@ -1010,6 +1169,8 @@ function stopAnswer() {
   );
 
 
+  /* Buttons */
+
   document.getElementById(
     "startAnswer"
   ).style.display =
@@ -1022,11 +1183,15 @@ function stopAnswer() {
     "none";
 
 
+  /* Hide listening */
+
   document.getElementById(
     "recordingStatus"
   ).style.display =
     "none";
 
+
+  /* Show next */
 
   document.getElementById(
     "nextQuestion"
@@ -1037,15 +1202,108 @@ function stopAnswer() {
 
 
 
-/* =========================================
+/* =====================================================
    NEXT QUESTION
-========================================= */
+===================================================== */
 
 function nextQuestion() {
 
-  alert(
-    "Jawapan berjaya direkodkan! 🎉"
+  /* Move to next */
+
+  currentQuestion++;
+
+
+  /* Check if finished */
+
+  if (
+    currentQuestion >= questions.length
+  ) {
+
+    finishInterview();
+
+    return;
+
+  }
+
+
+  /* Reset transcript */
+
+  finalTranscript =
+    "";
+
+
+  document.getElementById(
+    "transcript"
+  ).value =
+    "";
+
+
+  /* Reset timer */
+
+  clearInterval(
+    timerInterval
   );
+
+
+  startTime =
+    null;
+
+
+  document.getElementById(
+    "timer"
+  ).textContent =
+    "00:00";
+
+
+  /* Hide next */
+
+  document.getElementById(
+    "nextQuestion"
+  ).style.display =
+    "none";
+
+
+  /* Show new question */
+
+  showQuestion();
+
+}
+
+
+
+/* =====================================================
+   FINISH INTERVIEW
+===================================================== */
+
+function finishInterview() {
+
+  /* Hide interview */
+
+  document.getElementById(
+    "interviewPage"
+  ).style.display =
+    "none";
+
+
+  /* Show finish page */
+
+  document.getElementById(
+    "finishPage"
+  ).style.display =
+    "block";
+
+
+  /* Stop camera */
+
+  if (stream) {
+
+    stream.getTracks().forEach(
+      track => track.stop()
+    );
+
+    stream = null;
+
+  }
 
 }
 

@@ -2,12 +2,14 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
 <title>AI Interview</title>
+
 
 <style>
 
@@ -43,6 +45,7 @@ body {
   padding: 20px;
 }
 
+
 .container {
 
   width: 100%;
@@ -62,35 +65,44 @@ body {
   text-align: center;
 }
 
+
 h1 {
 
   margin-top: 0;
 
   color: #123b63;
+
 }
+
 
 .subtitle {
 
   color: #666;
 
   margin-bottom: 25px;
+
 }
 
 
 /* =====================================================
-   AUTH PAGE
+   AUTH
 ===================================================== */
 
 #authPage {
+
   display: block;
+
 }
+
 
 .auth-icon {
 
   font-size: 60px;
 
   margin-bottom: 10px;
+
 }
+
 
 .auth-tabs {
 
@@ -99,7 +111,9 @@ h1 {
   gap: 8px;
 
   margin-bottom: 20px;
+
 }
+
 
 .auth-tab {
 
@@ -116,27 +130,34 @@ h1 {
   font-weight: bold;
 
   cursor: pointer;
+
 }
+
 
 .auth-tab.active {
 
   background: #1769aa;
 
   color: white;
+
 }
+
 
 .auth-form {
 
   display: none;
+
 }
+
 
 .auth-form.active {
 
   display: block;
+
 }
 
-input,
-select {
+
+input {
 
   width: 100%;
 
@@ -149,7 +170,13 @@ select {
   font-size: 15px;
 
   margin-bottom: 12px;
+
 }
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
 
 button {
 
@@ -168,33 +195,61 @@ button {
   background: #1769aa;
 
   color: white;
+
 }
+
 
 button:hover {
 
   opacity: 0.9;
+
 }
+
 
 button:disabled {
 
   opacity: 0.5;
 
   cursor: not-allowed;
+
 }
 
-.success {
 
-  color: green;
+#stopBtn,
+#stopAnswer {
 
-  font-weight: bold;
+  background: #d9534f;
+
 }
 
-.error {
 
-  color: red;
+#continueBtn,
+#nextQuestion {
 
-  font-weight: bold;
+  background: #198754;
+
 }
+
+
+#continueBtn {
+
+  display: none;
+
+}
+
+
+#nextQuestion {
+
+  display: none;
+
+  width: 90%;
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
 
 .message {
 
@@ -203,6 +258,34 @@ button:disabled {
   font-weight: bold;
 
   min-height: 22px;
+
+}
+
+
+.success {
+
+  color: green;
+
+}
+
+
+.error {
+
+  color: red;
+
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+#devicePage,
+#interviewPage,
+#finishPage {
+
+  display: none;
+
 }
 
 
@@ -223,66 +306,83 @@ video {
   transform: scaleX(-1);
 
   margin-bottom: 20px;
+
 }
+
 
 #cameraContainer video {
 
   margin-bottom: 10px;
+
 }
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 .status-container {
 
   margin-bottom: 20px;
+
 }
+
 
 .status {
 
   margin: 10px;
 
   font-size: 16px;
+
 }
+
 
 .ready {
 
   color: green;
 
   font-weight: bold;
+
 }
+
 
 .failed {
 
   color: red;
 
   font-weight: bold;
-}
 
-#stopBtn {
-
-  background: #d9534f;
-}
-
-#continueBtn {
-
-  background: #198754;
-
-  display: none;
 }
 
 
 /* =====================================================
-   PAGE DISPLAY
+   AUTO LANGUAGE
 ===================================================== */
 
-#devicePage,
-#interviewPage,
-#finishPage {
+.language-box {
 
-  display: none;
+  margin-bottom: 18px;
+
+}
+
+
+.auto-language {
+
+  background: #eef6ff;
+
+  padding: 13px;
+
+  border-radius: 10px;
+
+  color: #1769aa;
+
+  font-weight: bold;
+
 }
 
 
 /* =====================================================
-   INTERVIEW
+   QUESTION
 ===================================================== */
 
 .question-box {
@@ -294,7 +394,9 @@ video {
   border-radius: 15px;
 
   margin-bottom: 20px;
+
 }
+
 
 .question-label {
 
@@ -305,7 +407,9 @@ video {
   color: #1769aa;
 
   margin-bottom: 10px;
+
 }
+
 
 .question {
 
@@ -314,7 +418,9 @@ video {
   font-weight: bold;
 
   color: #123b63;
+
 }
+
 
 .camera-title {
 
@@ -325,29 +431,7 @@ video {
   margin: 15px 0 8px;
 
   color: #333;
-}
 
-
-/* =====================================================
-   LANGUAGE
-===================================================== */
-
-.language-box {
-
-  text-align: left;
-
-  margin-bottom: 15px;
-}
-
-.language-box label {
-
-  display: block;
-
-  font-weight: bold;
-
-  margin-bottom: 7px;
-
-  color: #333;
 }
 
 
@@ -364,6 +448,7 @@ video {
   margin: 15px;
 
   color: #123b63;
+
 }
 
 
@@ -378,6 +463,7 @@ video {
   font-weight: bold;
 
   margin: 10px;
+
 }
 
 
@@ -390,14 +476,18 @@ video {
   margin-top: 20px;
 
   text-align: left;
+
 }
+
 
 .transcript-title {
 
   font-weight: bold;
 
   margin-bottom: 8px;
+
 }
+
 
 textarea {
 
@@ -414,20 +504,7 @@ textarea {
   padding: 15px;
 
   font-size: 15px;
-}
 
-
-/* =====================================================
-   NEXT
-===================================================== */
-
-#nextQuestion {
-
-  display: none;
-
-  width: 90%;
-
-  background: #198754;
 }
 
 
@@ -438,7 +515,9 @@ textarea {
 .finish-icon {
 
   font-size: 60px;
+
 }
+
 
 #saveStatus {
 
@@ -449,6 +528,7 @@ textarea {
   border-radius: 10px;
 
   font-weight: bold;
+
 }
 
 
@@ -467,12 +547,16 @@ textarea {
   border-radius: 12px;
 
   margin-top: 15px;
+
 }
+
 
 .answer-result strong {
 
   color: #123b63;
+
 }
+
 
 .answer-text {
 
@@ -481,6 +565,7 @@ textarea {
   color: #444;
 
   line-height: 1.5;
+
 }
 
 
@@ -493,21 +578,28 @@ textarea {
   .container {
 
     padding: 20px;
+
   }
+
 
   .question {
 
     font-size: 18px;
+
   }
+
 
   button {
 
     width: 90%;
+
   }
+
 
   .auth-tabs {
 
     flex-direction: column;
+
   }
 
 }
@@ -528,22 +620,32 @@ textarea {
   class="container"
   id="authPage">
 
+
   <div class="auth-icon">
+
     🤖
+
   </div>
 
+
   <h1>
+
     AI Interview
+
   </h1>
 
+
   <p class="subtitle">
+
     Practice your interview skills with AI
+
   </p>
 
 
-  <!-- TABS -->
+  <!-- AUTH TABS -->
 
   <div class="auth-tabs">
+
 
     <div
       id="loginTab"
@@ -554,6 +656,7 @@ textarea {
 
     </div>
 
+
     <div
       id="registerTab"
       class="auth-tab"
@@ -562,6 +665,7 @@ textarea {
       Register
 
     </div>
+
 
   </div>
 
@@ -572,11 +676,13 @@ textarea {
     id="loginForm"
     class="auth-form active">
 
+
     <input
       type="email"
       id="loginEmail"
       placeholder="Enter your email"
       autocomplete="email">
+
 
     <button
       id="loginBtn"
@@ -586,10 +692,13 @@ textarea {
 
     </button>
 
+
     <p
       id="loginMessage"
       class="message">
+
     </p>
+
 
   </div>
 
@@ -600,11 +709,13 @@ textarea {
     id="registerForm"
     class="auth-form">
 
+
     <input
       type="email"
       id="registerEmail"
       placeholder="Enter your email"
       autocomplete="email">
+
 
     <button
       id="registerBtn"
@@ -614,12 +725,16 @@ textarea {
 
     </button>
 
+
     <p
       id="registerMessage"
       class="message">
+
     </p>
 
+
   </div>
+
 
 </div>
 
@@ -633,13 +748,19 @@ textarea {
   class="container"
   id="devicePage">
 
+
   <h1>
+
     🎥 Camera & Microphone
+
   </h1>
 
+
   <p class="subtitle">
+
     Pastikan camera dan microphone anda
     berfungsi sebelum memulakan interview.
+
   </p>
 
 
@@ -652,6 +773,7 @@ textarea {
 
 
   <div class="status-container">
+
 
     <div class="status">
 
@@ -681,6 +803,7 @@ textarea {
       </span>
 
     </div>
+
 
   </div>
 
@@ -715,7 +838,9 @@ textarea {
   <p
     id="deviceMessage"
     class="message">
+
   </p>
+
 
 </div>
 
@@ -729,9 +854,13 @@ textarea {
   class="container"
   id="interviewPage">
 
+
   <h1>
+
     🎤 AI Interview
+
   </h1>
+
 
   <p class="subtitle">
 
@@ -741,31 +870,15 @@ textarea {
   </p>
 
 
-  <!-- LANGUAGE -->
+  <!-- AUTO LANGUAGE -->
 
   <div class="language-box">
 
-    <label for="languageSelect">
+    <div class="auto-language">
 
-      🌐 Interview Language
+      🌐 Auto Detect: Bahasa Melayu + English
 
-    </label>
-
-    <select id="languageSelect">
-
-      <option value="en-US">
-
-        🇬🇧 English
-
-      </option>
-
-      <option value="ms-MY">
-
-        🇲🇾 Bahasa Melayu
-
-      </option>
-
-    </select>
+    </div>
 
   </div>
 
@@ -773,6 +886,7 @@ textarea {
   <!-- QUESTION -->
 
   <div class="question-box">
+
 
     <div
       class="question-label"
@@ -790,6 +904,7 @@ textarea {
       Tell me about yourself.
 
     </div>
+
 
   </div>
 
@@ -823,7 +938,7 @@ textarea {
   </div>
 
 
-  <!-- RECORDING STATUS -->
+  <!-- RECORDING -->
 
   <div
     id="recordingStatus"
@@ -834,7 +949,7 @@ textarea {
   </div>
 
 
-  <!-- START -->
+  <!-- START ANSWER -->
 
   <button
     id="startAnswer"
@@ -845,11 +960,12 @@ textarea {
   </button>
 
 
-  <!-- STOP -->
+  <!-- STOP ANSWER -->
 
   <button
     id="stopAnswer"
-    onclick="stopAnswer()">
+    onclick="stopAnswer()"
+    disabled>
 
     ⏹️ Stop Answer
 
@@ -859,6 +975,7 @@ textarea {
   <!-- TRANSCRIPT -->
 
   <div class="transcript-box">
+
 
     <div class="transcript-title">
 
@@ -873,6 +990,7 @@ textarea {
       readonly>
     </textarea>
 
+
   </div>
 
 
@@ -886,6 +1004,7 @@ textarea {
 
   </button>
 
+
 </div>
 
 
@@ -897,6 +1016,7 @@ textarea {
 <div
   class="container"
   id="finishPage">
+
 
   <div class="finish-icon">
 
@@ -930,6 +1050,7 @@ textarea {
   <div id="results">
 
   </div>
+
 
 </div>
 
@@ -983,7 +1104,9 @@ let answerStartTime = null;
 ===================================================== */
 
 const interviewID =
+
   "INT" +
+
   Date.now()
     .toString(36)
     .toUpperCase();
@@ -1018,13 +1141,16 @@ function hideAllPages() {
     "authPage"
   ).style.display = "none";
 
+
   document.getElementById(
     "devicePage"
   ).style.display = "none";
 
+
   document.getElementById(
     "interviewPage"
   ).style.display = "none";
+
 
   document.getElementById(
     "finishPage"
@@ -1043,6 +1169,7 @@ function showLogin() {
     "loginTab"
   ).classList.add("active");
 
+
   document.getElementById(
     "registerTab"
   ).classList.remove("active");
@@ -1051,6 +1178,7 @@ function showLogin() {
   document.getElementById(
     "loginForm"
   ).classList.add("active");
+
 
   document.getElementById(
     "registerForm"
@@ -1069,6 +1197,7 @@ function showRegister() {
     "registerTab"
   ).classList.add("active");
 
+
   document.getElementById(
     "loginTab"
   ).classList.remove("active");
@@ -1077,6 +1206,7 @@ function showRegister() {
   document.getElementById(
     "registerForm"
   ).classList.add("active");
+
 
   document.getElementById(
     "loginForm"
@@ -1107,17 +1237,27 @@ function jsonpRequest(
   callback
 ) {
 
+
   const callbackName =
+
     "jsonpCallback_" +
+
     Date.now() +
+
     "_" +
+
     Math.floor(
       Math.random() * 100000
     );
 
 
+  let script = null;
+
+
   window[callbackName] =
+
     function(data) {
+
 
       try {
 
@@ -1127,11 +1267,16 @@ function jsonpRequest(
 
       finally {
 
+
         delete window[
           callbackName
         ];
 
-        if (script.parentNode) {
+
+        if (
+          script &&
+          script.parentNode
+        ) {
 
           script.parentNode.removeChild(
             script
@@ -1144,34 +1289,52 @@ function jsonpRequest(
     };
 
 
-  const script =
-    document.createElement("script");
+  script =
+    document.createElement(
+      "script"
+    );
 
 
   script.src =
+
     SCRIPT_URL +
+
     "?action=" +
+
     encodeURIComponent(action) +
+
     "&email=" +
+
     encodeURIComponent(email) +
+
     "&callback=" +
-    encodeURIComponent(callbackName);
+
+    encodeURIComponent(
+      callbackName
+    );
 
 
   script.onerror =
+
     function() {
+
 
       delete window[
         callbackName
       ];
 
-      if (script.parentNode) {
+
+      if (
+        script &&
+        script.parentNode
+      ) {
 
         script.parentNode.removeChild(
           script
         );
 
       }
+
 
       callback({
 
@@ -1185,7 +1348,9 @@ function jsonpRequest(
     };
 
 
-  document.body.appendChild(script);
+  document.body.appendChild(
+    script
+  );
 
 }
 
@@ -1196,21 +1361,27 @@ function jsonpRequest(
 
 function login() {
 
+
   const email =
+
     document
-      .getElementById("loginEmail")
+      .getElementById(
+        "loginEmail"
+      )
       .value
       .trim()
       .toLowerCase();
 
 
   const message =
+
     document.getElementById(
       "loginMessage"
     );
 
 
   const button =
+
     document.getElementById(
       "loginBtn"
     );
@@ -1230,6 +1401,7 @@ function login() {
     );
 
     return;
+
   }
 
 
@@ -1243,6 +1415,7 @@ function login() {
     );
 
     return;
+
   }
 
 
@@ -1251,14 +1424,19 @@ function login() {
   button.textContent =
     "⏳ Checking...";
 
+
   message.textContent =
     "Sedang menyemak email...";
 
 
   jsonpRequest(
+
     "login",
+
     email,
+
     function(data) {
+
 
       button.disabled = false;
 
@@ -1268,8 +1446,10 @@ function login() {
 
       if (data.success) {
 
+
         USER_EMAIL =
           data.email;
+
 
         USER_ID =
           data.userID || "";
@@ -1278,27 +1458,33 @@ function login() {
         message.textContent =
           "✅ Login berjaya!";
 
+
         message.classList.add(
           "success"
         );
 
 
         setTimeout(
+
           function() {
 
             openDevicePage();
 
           },
+
           700
+
         );
 
       }
 
       else {
 
+
         message.textContent =
           "❌ " +
           data.message;
+
 
         message.classList.add(
           "error"
@@ -1307,6 +1493,7 @@ function login() {
       }
 
     }
+
   );
 
 }
@@ -1318,21 +1505,27 @@ function login() {
 
 function register() {
 
+
   const email =
+
     document
-      .getElementById("registerEmail")
+      .getElementById(
+        "registerEmail"
+      )
       .value
       .trim()
       .toLowerCase();
 
 
   const message =
+
     document.getElementById(
       "registerMessage"
     );
 
 
   const button =
+
     document.getElementById(
       "registerBtn"
     );
@@ -1352,6 +1545,7 @@ function register() {
     );
 
     return;
+
   }
 
 
@@ -1365,6 +1559,7 @@ function register() {
     );
 
     return;
+
   }
 
 
@@ -1373,14 +1568,19 @@ function register() {
   button.textContent =
     "⏳ Registering...";
 
+
   message.textContent =
     "Sedang mendaftarkan email...";
 
 
   jsonpRequest(
+
     "register",
+
     email,
+
     function(data) {
+
 
       button.disabled = false;
 
@@ -1390,8 +1590,10 @@ function register() {
 
       if (data.success) {
 
+
         USER_EMAIL =
           data.email;
+
 
         USER_ID =
           data.userID || "";
@@ -1400,27 +1602,33 @@ function register() {
         message.textContent =
           "✅ Pendaftaran berjaya!";
 
+
         message.classList.add(
           "success"
         );
 
 
         setTimeout(
+
           function() {
 
             openDevicePage();
 
           },
+
           700
+
         );
 
       }
 
       else {
 
+
         message.textContent =
           "❌ " +
           data.message;
+
 
         message.classList.add(
           "error"
@@ -1429,6 +1637,7 @@ function register() {
       }
 
     }
+
   );
 
 }
@@ -1442,22 +1651,27 @@ function openDevicePage() {
 
   hideAllPages();
 
+
   document.getElementById(
     "devicePage"
-  ).style.display = "block";
+  ).style.display =
+    "block";
 
 }
 
 
 /* =====================================================
-   START CAMERA + MICROPHONE
+   START DEVICES
 ===================================================== */
 
 async function startDevices() {
 
+
   try {
 
+
     stream =
+
       await navigator.mediaDevices
         .getUserMedia({
 
@@ -1469,6 +1683,7 @@ async function startDevices() {
 
 
     const video =
+
       document.getElementById(
         "video"
       );
@@ -1477,8 +1692,10 @@ async function startDevices() {
     video.srcObject =
       stream;
 
+
     video.muted =
       true;
+
 
     video.volume =
       0;
@@ -1490,6 +1707,7 @@ async function startDevices() {
       "cameraStatus"
     ).textContent =
       "Ready ✓";
+
 
     document.getElementById(
       "cameraStatus"
@@ -1503,6 +1721,7 @@ async function startDevices() {
       "micStatus"
     ).textContent =
       "Ready ✓";
+
 
     document.getElementById(
       "micStatus"
@@ -1523,6 +1742,7 @@ async function startDevices() {
     ).textContent =
       "Camera dan microphone berjaya diaktifkan!";
 
+
     document.getElementById(
       "deviceMessage"
     ).className =
@@ -1531,7 +1751,9 @@ async function startDevices() {
 
   }
 
+
   catch(error) {
+
 
     console.error(
       "Device error:",
@@ -1543,6 +1765,7 @@ async function startDevices() {
       "deviceMessage"
     ).textContent =
       "❌ Tidak dapat mengakses camera atau microphone. Sila benarkan permission.";
+
 
     document.getElementById(
       "deviceMessage"
@@ -1560,30 +1783,31 @@ async function startDevices() {
 
 function stopDevices() {
 
+
   if (stream) {
+
 
     stream
       .getTracks()
       .forEach(
+
         function(track) {
 
           track.stop();
 
         }
+
       );
+
 
     stream = null;
 
   }
 
 
-  const video =
-    document.getElementById(
-      "video"
-    );
-
-
-  video.srcObject = null;
+  document.getElementById(
+    "video"
+  ).srcObject = null;
 
 
   document.getElementById(
@@ -1624,6 +1848,7 @@ function stopDevices() {
 
 function continueInterview() {
 
+
   if (!stream) {
 
     alert(
@@ -1646,7 +1871,9 @@ function continueInterview() {
 
   setupInterviewCamera();
 
+
   showQuestion();
+
 
   setupSpeechRecognition();
 
@@ -1659,7 +1886,9 @@ function continueInterview() {
 
 function setupInterviewCamera() {
 
+
   const container =
+
     document.getElementById(
       "cameraContainer"
     );
@@ -1669,6 +1898,7 @@ function setupInterviewCamera() {
 
 
   const video =
+
     document.createElement(
       "video"
     );
@@ -1697,7 +1927,9 @@ function setupInterviewCamera() {
 
 function showQuestion() {
 
+
   const question =
+
     questions[
       currentQuestion
     ];
@@ -1706,6 +1938,7 @@ function showQuestion() {
   document.getElementById(
     "questionLabel"
   ).textContent =
+
     "QUESTION " +
     (currentQuestion + 1);
 
@@ -1718,8 +1951,7 @@ function showQuestion() {
 
   document.getElementById(
     "transcript"
-  ).value =
-    "";
+  ).value = "";
 
 
   document.getElementById(
@@ -1757,17 +1989,23 @@ function showQuestion() {
 
 function setupSpeechRecognition() {
 
+
   const SpeechRecognition =
+
     window.SpeechRecognition ||
+
     window.webkitSpeechRecognition;
 
 
   if (!SpeechRecognition) {
 
+
     document.getElementById(
       "recordingStatus"
     ).textContent =
-      "❌ Speech Recognition tidak disokong oleh browser ini.";
+
+      "❌ Speech Recognition tidak disokong. Gunakan Google Chrome.";
+
 
     return;
 
@@ -1790,20 +2028,40 @@ function setupSpeechRecognition() {
     1;
 
 
+  /*
+     Primary recognition language.
+
+     Browser SpeechRecognition
+     masih memerlukan satu language.
+
+     AI boleh analyse transcript
+     sebagai BM / English / Mixed
+     pada langkah AI analysis nanti.
+  */
+
+  recognition.lang =
+    "en-US";
+
+
   recognition.onstart =
+
     function() {
 
+
       isListening = true;
+
 
       document.getElementById(
         "recordingStatus"
       ).textContent =
         "🔴 Listening...";
 
+
       document.getElementById(
         "startAnswer"
       ).disabled =
         true;
+
 
       document.getElementById(
         "stopAnswer"
@@ -1814,34 +2072,53 @@ function setupSpeechRecognition() {
 
 
   recognition.onresult =
+
     function(event) {
+
 
       let interimTranscript =
         "";
 
 
       for (
-        let i = event.resultIndex;
-        i < event.results.length;
+
+        let i =
+          event.resultIndex;
+
+        i <
+          event.results.length;
+
         i++
+
       ) {
 
+
         const transcript =
-          event.results[i][0].transcript;
+
+          event.results[i][0]
+            .transcript;
 
 
         if (
-          event.results[i].isFinal
+
+          event.results[i]
+            .isFinal
+
         ) {
 
+
           finalTranscript +=
-            transcript + " ";
+
+            transcript +
+            " ";
 
         }
 
         else {
 
+
           interimTranscript +=
+
             transcript;
 
         }
@@ -1852,6 +2129,7 @@ function setupSpeechRecognition() {
       document.getElementById(
         "transcript"
       ).value =
+
         finalTranscript +
         interimTranscript;
 
@@ -1859,30 +2137,41 @@ function setupSpeechRecognition() {
 
 
   recognition.onerror =
+
     function(event) {
 
+
       console.error(
+
         "Speech recognition error:",
+
         event.error
+
       );
 
 
       if (
-        event.error === "not-allowed"
+        event.error ===
+        "not-allowed"
       ) {
+
 
         document.getElementById(
           "recordingStatus"
         ).textContent =
+
           "❌ Microphone permission denied.";
 
       }
 
+
       else {
+
 
         document.getElementById(
           "recordingStatus"
         ).textContent =
+
           "⚠️ Speech recognition error: " +
           event.error;
 
@@ -1892,9 +2181,12 @@ function setupSpeechRecognition() {
 
 
   recognition.onend =
+
     function() {
 
+
       if (isListening) {
+
 
         try {
 
@@ -1923,11 +2215,16 @@ function setupSpeechRecognition() {
 
 function startAnswer() {
 
+
   if (!recognition) {
 
+
     alert(
+
       "Speech Recognition tidak disokong. Gunakan Google Chrome."
+
     );
+
 
     return;
 
@@ -1942,19 +2239,20 @@ function startAnswer() {
   ).value = "";
 
 
-  /* GET SELECTED LANGUAGE */
+  /*
+     Use English as the browser
+     recognition language.
 
-  const language =
-    document.getElementById(
-      "languageSelect"
-    ).value;
-
+     Mixed BM + English will be
+     handled by AI later.
+  */
 
   recognition.lang =
-    language;
+    "en-US";
 
 
   seconds = 0;
+
 
   answerStartTime =
     Date.now();
@@ -1964,7 +2262,9 @@ function startAnswer() {
 
 
   timerInterval =
+
     setInterval(
+
       function() {
 
         seconds++;
@@ -1972,7 +2272,9 @@ function startAnswer() {
         updateTimer();
 
       },
+
       1000
+
     );
 
 
@@ -2002,10 +2304,12 @@ function startAnswer() {
 
 function stopAnswer() {
 
+
   isListening = false;
 
 
   if (recognition) {
+
 
     try {
 
@@ -2030,6 +2334,7 @@ function stopAnswer() {
 
 
   const answer =
+
     document
       .getElementById(
         "transcript"
@@ -2056,8 +2361,6 @@ function stopAnswer() {
     true;
 
 
-  /* SAVE CURRENT ANSWER */
-
   answers.push({
 
     question:
@@ -2074,8 +2377,6 @@ function stopAnswer() {
   });
 
 
-  /* NEXT BUTTON */
-
   document.getElementById(
     "nextQuestion"
   ).style.display =
@@ -2090,13 +2391,16 @@ function stopAnswer() {
 
 function updateTimer() {
 
+
   const minutes =
+
     Math.floor(
       seconds / 60
     );
 
 
   const secs =
+
     seconds % 60;
 
 
@@ -2121,6 +2425,7 @@ function updateTimer() {
 
 function resetTimer() {
 
+
   clearInterval(
     timerInterval
   );
@@ -2143,15 +2448,20 @@ function resetTimer() {
 
 function nextQuestion() {
 
+
   currentQuestion++;
 
 
   if (
+
     currentQuestion >=
     questions.length
+
   ) {
 
+
     finishInterview();
+
 
     return;
 
@@ -2169,6 +2479,7 @@ function nextQuestion() {
 
 function finishInterview() {
 
+
   isListening = false;
 
 
@@ -2178,6 +2489,7 @@ function finishInterview() {
 
 
   if (recognition) {
+
 
     try {
 
@@ -2213,7 +2525,9 @@ function finishInterview() {
 
 function displayResults() {
 
+
   const results =
+
     document.getElementById(
       "results"
     );
@@ -2223,9 +2537,12 @@ function displayResults() {
 
 
   answers.forEach(
+
     function(item, index) {
 
+
       const box =
+
         document.createElement(
           "div"
         );
@@ -2238,15 +2555,21 @@ function displayResults() {
       box.innerHTML =
 
         "<strong>" +
+
         "Question " +
+
         (index + 1) +
+
         "</strong>" +
 
         "<div class='answer-text'>" +
 
         (
+
           item.answer ||
+
           "No answer recorded."
+
         ) +
 
         "</div>" +
@@ -2254,7 +2577,9 @@ function displayResults() {
         "<small>" +
 
         "Duration: " +
+
         item.duration +
+
         " seconds" +
 
         "</small>";
@@ -2265,6 +2590,7 @@ function displayResults() {
       );
 
     }
+
   );
 
 }
@@ -2276,7 +2602,9 @@ function displayResults() {
 
 function saveInterview() {
 
+
   const saveStatus =
+
     document.getElementById(
       "saveStatus"
     );
@@ -2284,8 +2612,14 @@ function saveInterview() {
 
   if (!USER_EMAIL) {
 
+
     saveStatus.textContent =
       "❌ User email tidak dijumpai.";
+
+
+    saveStatus.className =
+      "error";
+
 
     return;
 
@@ -2298,14 +2632,18 @@ function saveInterview() {
 
   const payload = {
 
+
     action:
       "saveInterview",
+
 
     interviewID:
       interviewID,
 
+
     email:
       USER_EMAIL,
+
 
     answers:
       answers
@@ -2313,20 +2651,19 @@ function saveInterview() {
   };
 
 
-  /*
-     We use no-cors here because
-     Apps Script POST can receive
-     the data even though the browser
-     cannot read the response.
-  */
-
   fetch(
+
     SCRIPT_URL,
+
     {
 
-      method: "POST",
+      method:
+        "POST",
 
-      mode: "no-cors",
+
+      mode:
+        "no-cors",
+
 
       headers: {
 
@@ -2335,41 +2672,59 @@ function saveInterview() {
 
       },
 
+
       body:
+
         "payload=" +
+
         encodeURIComponent(
-          JSON.stringify(payload)
+
+          JSON.stringify(
+            payload
+          )
+
         )
 
     }
+
   )
 
   .then(
+
     function() {
+
 
       saveStatus.textContent =
         "✅ Interview berjaya disimpan!";
+
 
       saveStatus.className =
         "success";
 
     }
+
   )
 
   .catch(
+
     function(error) {
+
 
       console.error(
         error
       );
 
+
       saveStatus.textContent =
+
         "⚠️ Data mungkin telah disimpan. Sila semak Google Sheets.";
+
 
       saveStatus.className =
         "error";
 
     }
+
   );
 
 }
@@ -2380,10 +2735,14 @@ function saveInterview() {
 ===================================================== */
 
 window.addEventListener(
+
   "load",
+
   function() {
 
+
     hideAllPages();
+
 
     document.getElementById(
       "authPage"
@@ -2391,6 +2750,7 @@ window.addEventListener(
       "block";
 
   }
+
 );
 
 </script>

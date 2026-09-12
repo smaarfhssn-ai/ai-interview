@@ -2,14 +2,12 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
 <title>AI Interview</title>
-
 
 <style>
 
@@ -43,9 +41,7 @@ body {
   align-items: center;
 
   padding: 20px;
-
 }
-
 
 .container {
 
@@ -64,25 +60,20 @@ body {
     rgba(0,0,0,0.1);
 
   text-align: center;
-
 }
-
 
 h1 {
 
   margin-top: 0;
 
   color: #123b63;
-
 }
-
 
 .subtitle {
 
   color: #666;
 
   margin-bottom: 25px;
-
 }
 
 
@@ -91,60 +82,61 @@ h1 {
 ===================================================== */
 
 #authPage {
-
   display: block;
-
 }
 
+.auth-icon {
+
+  font-size: 60px;
+
+  margin-bottom: 10px;
+}
 
 .auth-tabs {
 
   display: flex;
 
-  gap: 10px;
+  gap: 8px;
 
   margin-bottom: 20px;
-
 }
 
-
-.auth-tabs button {
+.auth-tab {
 
   flex: 1;
 
-  margin: 0;
+  padding: 12px;
 
-}
+  border-radius: 10px;
 
+  background: #eef6ff;
 
-.auth-tab-active {
-
-  background: #123b63 !important;
-
-}
-
-
-.auth-form {
-
-  text-align: left;
-
-}
-
-
-.auth-form label {
-
-  display: block;
+  color: #1769aa;
 
   font-weight: bold;
 
-  margin-bottom: 8px;
-
-  color: #333;
-
+  cursor: pointer;
 }
 
+.auth-tab.active {
 
-.auth-form input {
+  background: #1769aa;
+
+  color: white;
+}
+
+.auth-form {
+
+  display: none;
+}
+
+.auth-form.active {
+
+  display: block;
+}
+
+input,
+select {
 
   width: 100%;
 
@@ -154,30 +146,63 @@ h1 {
 
   border-radius: 10px;
 
-  font-size: 16px;
+  font-size: 15px;
 
-  margin-bottom: 15px;
-
+  margin-bottom: 12px;
 }
 
+button {
 
-.auth-form button {
+  border: none;
 
-  width: 100%;
+  padding: 13px 22px;
 
-  margin: 0;
+  margin: 6px;
 
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  background: #1769aa;
+
+  color: white;
 }
 
+button:hover {
 
-.auth-message {
+  opacity: 0.9;
+}
+
+button:disabled {
+
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.success {
+
+  color: green;
+
+  font-weight: bold;
+}
+
+.error {
+
+  color: red;
+
+  font-weight: bold;
+}
+
+.message {
 
   margin-top: 15px;
 
   font-weight: bold;
 
-  min-height: 20px;
-
+  min-height: 22px;
 }
 
 
@@ -198,149 +223,67 @@ video {
   transform: scaleX(-1);
 
   margin-bottom: 20px;
-
 }
-
 
 #cameraContainer video {
 
   margin-bottom: 10px;
-
 }
-
-
-/* =====================================================
-   STATUS
-===================================================== */
 
 .status-container {
 
   margin-bottom: 20px;
-
 }
-
 
 .status {
 
   margin: 10px;
 
   font-size: 16px;
-
 }
-
 
 .ready {
 
   color: green;
 
   font-weight: bold;
-
 }
-
 
 .failed {
 
   color: red;
 
   font-weight: bold;
-
 }
 
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-button {
-
-  border: none;
-
-  padding: 13px 22px;
-
-  margin: 6px;
-
-  border-radius: 10px;
-
-  font-size: 15px;
-
-  cursor: pointer;
-
-  background: #1769aa;
-
-  color: white;
-
-}
-
-
-button:hover {
-
-  opacity: 0.9;
-
-}
-
-
-button:disabled {
-
-  opacity: 0.5;
-
-  cursor: not-allowed;
-
-}
-
-
-#stopBtn,
-#stopAnswer {
+#stopBtn {
 
   background: #d9534f;
-
 }
-
-
-#continueBtn,
-#nextQuestion {
-
-  background: #198754;
-
-}
-
 
 #continueBtn {
 
-  display: none;
+  background: #198754;
 
+  display: none;
 }
 
 
 /* =====================================================
-   MESSAGE
+   PAGE DISPLAY
 ===================================================== */
 
-.message {
+#devicePage,
+#interviewPage,
+#finishPage {
 
-  margin-top: 15px;
-
-  font-weight: bold;
-
+  display: none;
 }
 
 
 /* =====================================================
    INTERVIEW
 ===================================================== */
-
-#devicePage {
-
-  display: none;
-
-}
-
-
-#interviewPage {
-
-  display: none;
-
-}
-
 
 .question-box {
 
@@ -351,9 +294,7 @@ button:disabled {
   border-radius: 15px;
 
   margin-bottom: 20px;
-
 }
-
 
 .question-label {
 
@@ -364,9 +305,7 @@ button:disabled {
   color: #1769aa;
 
   margin-bottom: 10px;
-
 }
-
 
 .question {
 
@@ -375,9 +314,7 @@ button:disabled {
   font-weight: bold;
 
   color: #123b63;
-
 }
-
 
 .camera-title {
 
@@ -388,7 +325,29 @@ button:disabled {
   margin: 15px 0 8px;
 
   color: #333;
+}
 
+
+/* =====================================================
+   LANGUAGE
+===================================================== */
+
+.language-box {
+
+  text-align: left;
+
+  margin-bottom: 15px;
+}
+
+.language-box label {
+
+  display: block;
+
+  font-weight: bold;
+
+  margin-bottom: 7px;
+
+  color: #333;
 }
 
 
@@ -405,7 +364,6 @@ button:disabled {
   margin: 15px;
 
   color: #123b63;
-
 }
 
 
@@ -420,7 +378,6 @@ button:disabled {
   font-weight: bold;
 
   margin: 10px;
-
 }
 
 
@@ -433,18 +390,14 @@ button:disabled {
   margin-top: 20px;
 
   text-align: left;
-
 }
-
 
 .transcript-title {
 
   font-weight: bold;
 
   margin-bottom: 8px;
-
 }
-
 
 textarea {
 
@@ -461,7 +414,6 @@ textarea {
   padding: 15px;
 
   font-size: 15px;
-
 }
 
 
@@ -475,6 +427,7 @@ textarea {
 
   width: 90%;
 
+  background: #198754;
 }
 
 
@@ -482,19 +435,10 @@ textarea {
    FINISH
 ===================================================== */
 
-#finishPage {
-
-  display: none;
-
-}
-
-
 .finish-icon {
 
   font-size: 60px;
-
 }
-
 
 #saveStatus {
 
@@ -505,7 +449,6 @@ textarea {
   border-radius: 10px;
 
   font-weight: bold;
-
 }
 
 
@@ -524,16 +467,12 @@ textarea {
   border-radius: 12px;
 
   margin-top: 15px;
-
 }
-
 
 .answer-result strong {
 
   color: #123b63;
-
 }
-
 
 .answer-text {
 
@@ -542,37 +481,6 @@ textarea {
   color: #444;
 
   line-height: 1.5;
-
-}
-
-
-/* =====================================================
-   USER INFO
-===================================================== */
-
-.user-info {
-
-  background: #eef6ff;
-
-  padding: 10px;
-
-  border-radius: 10px;
-
-  margin-bottom: 20px;
-
-  font-size: 14px;
-
-  color: #123b63;
-
-}
-
-
-.logout-btn {
-
-  background: #6c757d;
-
-  font-size: 13px;
-
 }
 
 
@@ -585,28 +493,21 @@ textarea {
   .container {
 
     padding: 20px;
-
   }
-
 
   .question {
 
     font-size: 18px;
-
   }
-
 
   button {
 
     width: 90%;
-
   }
 
+  .auth-tabs {
 
-  .auth-tabs button {
-
-    width: 50%;
-
+    flex-direction: column;
   }
 
 }
@@ -627,39 +528,40 @@ textarea {
   class="container"
   id="authPage">
 
+  <div class="auth-icon">
+    🤖
+  </div>
 
   <h1>
-    🤖 AI Interview
+    AI Interview
   </h1>
 
-
   <p class="subtitle">
-
-    Practice your interview skills
-    with AI-powered feedback.
-
+    Practice your interview skills with AI
   </p>
 
 
+  <!-- TABS -->
+
   <div class="auth-tabs">
 
-    <button
+    <div
       id="loginTab"
-      class="auth-tab-active"
+      class="auth-tab active"
       onclick="showLogin()">
 
       Login
 
-    </button>
+    </div>
 
-
-    <button
+    <div
       id="registerTab"
+      class="auth-tab"
       onclick="showRegister()">
 
       Register
 
-    </button>
+    </div>
 
   </div>
 
@@ -668,13 +570,7 @@ textarea {
 
   <div
     id="loginForm"
-    class="auth-form">
-
-
-    <label>
-      Email
-    </label>
-
+    class="auth-form active">
 
     <input
       type="email"
@@ -682,14 +578,18 @@ textarea {
       placeholder="Enter your email"
       autocomplete="email">
 
-
     <button
+      id="loginBtn"
       onclick="login()">
 
-      🔑 Login
+      🔐 Login
 
     </button>
 
+    <p
+      id="loginMessage"
+      class="message">
+    </p>
 
   </div>
 
@@ -698,14 +598,7 @@ textarea {
 
   <div
     id="registerForm"
-    class="auth-form"
-    style="display:none;">
-
-
-    <label>
-      Email
-    </label>
-
+    class="auth-form">
 
     <input
       type="email"
@@ -713,23 +606,20 @@ textarea {
       placeholder="Enter your email"
       autocomplete="email">
 
-
     <button
+      id="registerBtn"
       onclick="register()">
 
-      📝 Create Account
+      📝 Register
 
     </button>
 
+    <p
+      id="registerMessage"
+      class="message">
+    </p>
 
   </div>
-
-
-  <div
-    id="authMessage"
-    class="auth-message">
-  </div>
-
 
 </div>
 
@@ -743,38 +633,13 @@ textarea {
   class="container"
   id="devicePage">
 
-
   <h1>
     🎥 Camera & Microphone
   </h1>
 
-
-  <div
-    class="user-info">
-
-    Logged in as:
-
-    <strong id="loggedInEmail">
-    </strong>
-
-    <br>
-
-    <button
-      class="logout-btn"
-      onclick="logout()">
-
-      Logout
-
-    </button>
-
-  </div>
-
-
   <p class="subtitle">
-
     Pastikan camera dan microphone anda
     berfungsi sebelum memulakan interview.
-
   </p>
 
 
@@ -787,7 +652,6 @@ textarea {
 
 
   <div class="status-container">
-
 
     <div class="status">
 
@@ -817,7 +681,6 @@ textarea {
       </span>
 
     </div>
-
 
   </div>
 
@@ -850,10 +713,9 @@ textarea {
 
 
   <p
-    id="message"
+    id="deviceMessage"
     class="message">
   </p>
-
 
 </div>
 
@@ -867,22 +729,9 @@ textarea {
   class="container"
   id="interviewPage">
 
-
   <h1>
     🎤 AI Interview
   </h1>
-
-
-  <div
-    class="user-info">
-
-    👤
-
-    <span id="interviewEmail">
-    </span>
-
-  </div>
-
 
   <p class="subtitle">
 
@@ -892,10 +741,38 @@ textarea {
   </p>
 
 
+  <!-- LANGUAGE -->
+
+  <div class="language-box">
+
+    <label for="languageSelect">
+
+      🌐 Interview Language
+
+    </label>
+
+    <select id="languageSelect">
+
+      <option value="en-US">
+
+        🇬🇧 English
+
+      </option>
+
+      <option value="ms-MY">
+
+        🇲🇾 Bahasa Melayu
+
+      </option>
+
+    </select>
+
+  </div>
+
+
   <!-- QUESTION -->
 
   <div class="question-box">
-
 
     <div
       class="question-label"
@@ -914,7 +791,6 @@ textarea {
 
     </div>
 
-
   </div>
 
 
@@ -927,7 +803,9 @@ textarea {
   </div>
 
 
-  <div id="cameraContainer"></div>
+  <div id="cameraContainer">
+
+  </div>
 
 
   <!-- TIMER -->
@@ -937,7 +815,9 @@ textarea {
     ⏱️
 
     <span id="timer">
+
       00:00
+
     </span>
 
   </div>
@@ -954,7 +834,7 @@ textarea {
   </div>
 
 
-  <!-- START ANSWER -->
+  <!-- START -->
 
   <button
     id="startAnswer"
@@ -965,7 +845,7 @@ textarea {
   </button>
 
 
-  <!-- STOP ANSWER -->
+  <!-- STOP -->
 
   <button
     id="stopAnswer"
@@ -980,7 +860,6 @@ textarea {
 
   <div class="transcript-box">
 
-
     <div class="transcript-title">
 
       📝 Your Answer
@@ -993,7 +872,6 @@ textarea {
       placeholder="Transcript jawapan anda akan muncul di sini..."
       readonly>
     </textarea>
-
 
   </div>
 
@@ -1008,7 +886,6 @@ textarea {
 
   </button>
 
-
 </div>
 
 
@@ -1020,7 +897,6 @@ textarea {
 <div
   class="container"
   id="finishPage">
-
 
   <div class="finish-icon">
 
@@ -1044,38 +920,16 @@ textarea {
   </p>
 
 
-  <div
-    class="user-info">
-
-    Interview by:
-
-    <strong id="finishEmail">
-    </strong>
-
-  </div>
-
-
-  <!-- SAVE STATUS -->
-
   <div id="saveStatus">
 
-    💾 Preparing data...
+    💾 Saving interview...
 
   </div>
 
 
-  <!-- RESULTS -->
+  <div id="results">
 
-  <div id="results"></div>
-
-
-  <button
-    onclick="location.reload()">
-
-    🔄 Start Again
-
-  </button>
-
+  </div>
 
 </div>
 
@@ -1089,11 +943,11 @@ textarea {
 ===================================================== */
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbx_6J2uxaIl-lnPYj3leeFI6PhyXLWsvNGF5JN4yQ2bcS4y_TBY3iveqPzCIKRFTarcoQ/exec";
+"https://script.google.com/macros/s/AKfycbyxeGwTSAVMp4tNPEhJycItNy09jiHJSJrQxI-C1qdEUc5KndvwB9aUqFeJn1449xA9cw/exec";
 
 
 /* =====================================================
-   CURRENT USER
+   USER
 ===================================================== */
 
 let USER_EMAIL = "";
@@ -1121,24 +975,18 @@ let currentQuestion = 0;
 
 let answers = [];
 
+let answerStartTime = null;
+
 
 /* =====================================================
    INTERVIEW ID
 ===================================================== */
 
 const interviewID =
-
   "INT" +
-
   Date.now()
     .toString(36)
     .toUpperCase();
-
-
-console.log(
-  "Interview ID:",
-  interviewID
-);
 
 
 /* =====================================================
@@ -1161,135 +1009,304 @@ const questions = [
 
 
 /* =====================================================
-   AUTH TAB
+   PAGE CONTROL
 ===================================================== */
 
-function showLogin() {
+function hideAllPages() {
 
   document.getElementById(
-    "loginForm"
-  ).style.display = "block";
-
-
-  document.getElementById(
-    "registerForm"
+    "authPage"
   ).style.display = "none";
 
-
   document.getElementById(
-    "loginTab"
-  ).classList.add(
-    "auth-tab-active"
-  );
-
-
-  document.getElementById(
-    "registerTab"
-  ).classList.remove(
-    "auth-tab-active"
-  );
-
-
-  document.getElementById(
-    "authMessage"
-  ).textContent = "";
-
-}
-
-
-function showRegister() {
-
-  document.getElementById(
-    "loginForm"
+    "devicePage"
   ).style.display = "none";
 
+  document.getElementById(
+    "interviewPage"
+  ).style.display = "none";
 
   document.getElementById(
-    "registerForm"
-  ).style.display = "block";
-
-
-  document.getElementById(
-    "registerTab"
-  ).classList.add(
-    "auth-tab-active"
-  );
-
-
-  document.getElementById(
-    "loginTab"
-  ).classList.remove(
-    "auth-tab-active"
-  );
-
-
-  document.getElementById(
-    "authMessage"
-  ).textContent = "";
+    "finishPage"
+  ).style.display = "none";
 
 }
 
 
 /* =====================================================
-   SEND AUTH REQUEST
+   LOGIN TAB
 ===================================================== */
 
-async function sendAuthRequest(
+function showLogin() {
+
+  document.getElementById(
+    "loginTab"
+  ).classList.add("active");
+
+  document.getElementById(
+    "registerTab"
+  ).classList.remove("active");
+
+
+  document.getElementById(
+    "loginForm"
+  ).classList.add("active");
+
+  document.getElementById(
+    "registerForm"
+  ).classList.remove("active");
+
+}
+
+
+/* =====================================================
+   REGISTER TAB
+===================================================== */
+
+function showRegister() {
+
+  document.getElementById(
+    "registerTab"
+  ).classList.add("active");
+
+  document.getElementById(
+    "loginTab"
+  ).classList.remove("active");
+
+
+  document.getElementById(
+    "registerForm"
+  ).classList.add("active");
+
+  document.getElementById(
+    "loginForm"
+  ).classList.remove("active");
+
+}
+
+
+/* =====================================================
+   EMAIL VALIDATION
+===================================================== */
+
+function validEmail(email) {
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(email);
+
+}
+
+
+/* =====================================================
+   JSONP REQUEST
+===================================================== */
+
+function jsonpRequest(
   action,
-  email
+  email,
+  callback
 ) {
 
-  const formData =
-    new URLSearchParams();
+  const callbackName =
+    "jsonpCallback_" +
+    Date.now() +
+    "_" +
+    Math.floor(
+      Math.random() * 100000
+    );
 
 
-  const data = {
+  window[callbackName] =
+    function(data) {
 
-    action:
-      action,
+      try {
 
-    email:
-      email
+        callback(data);
 
-  };
+      }
+
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+        if (script.parentNode) {
+
+          script.parentNode.removeChild(
+            script
+          );
+
+        }
+
+      }
+
+    };
 
 
-  formData.append(
-    "payload",
-    JSON.stringify(data)
-  );
+  const script =
+    document.createElement("script");
 
 
-  /*
-   * no-cors digunakan supaya
-   * browser tidak block request.
-   *
-   * Tetapi response server tidak
-   * boleh dibaca secara langsung.
-   */
+  script.src =
+    SCRIPT_URL +
+    "?action=" +
+    encodeURIComponent(action) +
+    "&email=" +
+    encodeURIComponent(email) +
+    "&callback=" +
+    encodeURIComponent(callbackName);
 
-  await fetch(
 
-    SCRIPT_URL,
+  script.onerror =
+    function() {
 
-    {
+      delete window[
+        callbackName
+      ];
 
-      method: "POST",
+      if (script.parentNode) {
 
-      mode: "no-cors",
+        script.parentNode.removeChild(
+          script
+        );
 
-      headers: {
+      }
 
-        "Content-Type":
-          "application/x-www-form-urlencoded;charset=UTF-8"
+      callback({
 
-      },
+        success: false,
 
-      body:
-        formData.toString()
+        message:
+          "Tidak dapat berhubung dengan server."
+
+      });
+
+    };
+
+
+  document.body.appendChild(script);
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login() {
+
+  const email =
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const message =
+    document.getElementById(
+      "loginMessage"
+    );
+
+
+  const button =
+    document.getElementById(
+      "loginBtn"
+    );
+
+
+  message.className =
+    "message";
+
+
+  if (!email) {
+
+    message.textContent =
+      "❌ Sila masukkan email.";
+
+    message.classList.add(
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (!validEmail(email)) {
+
+    message.textContent =
+      "❌ Format email tidak sah.";
+
+    message.classList.add(
+      "error"
+    );
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "⏳ Checking...";
+
+  message.textContent =
+    "Sedang menyemak email...";
+
+
+  jsonpRequest(
+    "login",
+    email,
+    function(data) {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🔐 Login";
+
+
+      if (data.success) {
+
+        USER_EMAIL =
+          data.email;
+
+        USER_ID =
+          data.userID || "";
+
+
+        message.textContent =
+          "✅ Login berjaya!";
+
+        message.classList.add(
+          "success"
+        );
+
+
+        setTimeout(
+          function() {
+
+            openDevicePage();
+
+          },
+          700
+        );
+
+      }
+
+      else {
+
+        message.textContent =
+          "❌ " +
+          data.message;
+
+        message.classList.add(
+          "error"
+        );
+
+      }
 
     }
-
   );
 
 }
@@ -1299,24 +1316,30 @@ async function sendAuthRequest(
    REGISTER
 ===================================================== */
 
-async function register() {
+function register() {
 
-  const emailInput =
-    document.getElementById(
-      "registerEmail"
-    );
+  const email =
+    document
+      .getElementById("registerEmail")
+      .value
+      .trim()
+      .toLowerCase();
 
 
   const message =
     document.getElementById(
-      "authMessage"
+      "registerMessage"
     );
 
 
-  const email =
-    emailInput.value
-      .trim()
-      .toLowerCase();
+  const button =
+    document.getElementById(
+      "registerBtn"
+    );
+
+
+  message.className =
+    "message";
 
 
   if (!email) {
@@ -1324,253 +1347,89 @@ async function register() {
     message.textContent =
       "❌ Sila masukkan email.";
 
-    message.style.color =
-      "#d9534f";
-
-    return;
-
-  }
-
-
-  if (
-    !email.includes("@") ||
-    !email.includes(".")
-  ) {
-
-    message.textContent =
-      "❌ Sila masukkan email yang sah.";
-
-    message.style.color =
-      "#d9534f";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "⏳ Mendaftarkan...";
-
-  message.style.color =
-    "#1769aa";
-
-
-  try {
-
-    /*
-     * Simpan request ke Apps Script.
-     */
-
-    await sendAuthRequest(
-      "register",
-      email
+    message.classList.add(
+      "error"
     );
 
+    return;
+  }
 
-    /*
-     * Disebabkan no-cors,
-     * browser tidak boleh baca
-     * response Apps Script.
-     *
-     * Jadi kita tunggu sedikit
-     * kemudian cuba login.
-     */
 
-    await new Promise(
-      function(resolve) {
+  if (!validEmail(email)) {
+
+    message.textContent =
+      "❌ Format email tidak sah.";
+
+    message.classList.add(
+      "error"
+    );
+
+    return;
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "⏳ Registering...";
+
+  message.textContent =
+    "Sedang mendaftarkan email...";
+
+
+  jsonpRequest(
+    "register",
+    email,
+    function(data) {
+
+      button.disabled = false;
+
+      button.textContent =
+        "📝 Register";
+
+
+      if (data.success) {
+
+        USER_EMAIL =
+          data.email;
+
+        USER_ID =
+          data.userID || "";
+
+
+        message.textContent =
+          "✅ Pendaftaran berjaya!";
+
+        message.classList.add(
+          "success"
+        );
+
 
         setTimeout(
-          resolve,
-          1200
+          function() {
+
+            openDevicePage();
+
+          },
+          700
         );
 
       }
-    );
 
+      else {
 
-    /*
-     * Untuk prototype:
-     * selepas register berjaya,
-     * terus login menggunakan email
-     * yang sama.
-     */
+        message.textContent =
+          "❌ " +
+          data.message;
 
-    USER_EMAIL =
-      email;
+        message.classList.add(
+          "error"
+        );
 
+      }
 
-    USER_ID =
-      "";
-
-
-    localStorage.setItem(
-      "USER_EMAIL",
-      USER_EMAIL
-    );
-
-
-    localStorage.setItem(
-      "USER_ID",
-      USER_ID
-    );
-
-
-    message.textContent =
-      "✅ Pendaftaran berjaya!";
-
-    message.style.color =
-      "green";
-
-
-    setTimeout(
-      function() {
-
-        openDevicePage();
-
-      },
-      800
-    );
-
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "REGISTER ERROR:",
-      error
-    );
-
-
-    message.textContent =
-      "❌ Gagal mendaftar.";
-
-    message.style.color =
-      "#d9534f";
-
-  }
-
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-async function login() {
-
-  const emailInput =
-    document.getElementById(
-      "loginEmail"
-    );
-
-
-  const message =
-    document.getElementById(
-      "authMessage"
-    );
-
-
-  const email =
-    emailInput.value
-      .trim()
-      .toLowerCase();
-
-
-  if (!email) {
-
-    message.textContent =
-      "❌ Sila masukkan email.";
-
-    message.style.color =
-      "#d9534f";
-
-    return;
-
-  }
-
-
-  if (
-    !email.includes("@") ||
-    !email.includes(".")
-  ) {
-
-    message.textContent =
-      "❌ Sila masukkan email yang sah.";
-
-    message.style.color =
-      "#d9534f";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "⏳ Logging in...";
-
-  message.style.color =
-    "#1769aa";
-
-
-  try {
-
-    await sendAuthRequest(
-      "login",
-      email
-    );
-
-
-    /*
-     * Untuk prototype email-only,
-     * simpan email selepas request
-     * dihantar.
-     */
-
-    USER_EMAIL =
-      email;
-
-
-    localStorage.setItem(
-      "USER_EMAIL",
-      USER_EMAIL
-    );
-
-
-    message.textContent =
-      "✅ Login berjaya!";
-
-    message.style.color =
-      "green";
-
-
-    setTimeout(
-      function() {
-
-        openDevicePage();
-
-      },
-      600
-    );
-
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "LOGIN ERROR:",
-      error
-    );
-
-
-    message.textContent =
-      "❌ Gagal login.";
-
-    message.style.color =
-      "#d9534f";
-
-  }
+    }
+  );
 
 }
 
@@ -1581,105 +1440,13 @@ async function login() {
 
 function openDevicePage() {
 
-  document.getElementById(
-    "authPage"
-  ).style.display =
-    "none";
-
+  hideAllPages();
 
   document.getElementById(
     "devicePage"
-  ).style.display =
-    "block";
-
-
-  document.getElementById(
-    "loggedInEmail"
-  ).textContent =
-    USER_EMAIL;
+  ).style.display = "block";
 
 }
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-function logout() {
-
-  if (stream) {
-
-    stream
-      .getTracks()
-      .forEach(
-        function(track) {
-
-          track.stop();
-
-        }
-      );
-
-    stream = null;
-
-  }
-
-
-  USER_EMAIL = "";
-
-  USER_ID = "";
-
-
-  localStorage.removeItem(
-    "USER_EMAIL"
-  );
-
-
-  localStorage.removeItem(
-    "USER_ID"
-  );
-
-
-  location.reload();
-
-}
-
-
-/* =====================================================
-   CHECK SAVED LOGIN
-===================================================== */
-
-window.addEventListener(
-  "load",
-  function() {
-
-    const savedEmail =
-      localStorage.getItem(
-        "USER_EMAIL"
-      );
-
-
-    const savedUserID =
-      localStorage.getItem(
-        "USER_ID"
-      );
-
-
-    if (savedEmail) {
-
-      USER_EMAIL =
-        savedEmail;
-
-
-      USER_ID =
-        savedUserID || "";
-
-
-      openDevicePage();
-
-    }
-
-  }
-);
 
 
 /* =====================================================
@@ -1710,22 +1477,19 @@ async function startDevices() {
     video.srcObject =
       stream;
 
-
     video.muted =
       true;
-
 
     video.volume =
       0;
 
 
-    /* CAMERA STATUS */
+    /* CAMERA */
 
     document.getElementById(
       "cameraStatus"
     ).textContent =
       "Ready ✓";
-
 
     document.getElementById(
       "cameraStatus"
@@ -1733,13 +1497,12 @@ async function startDevices() {
       "ready";
 
 
-    /* MICROPHONE STATUS */
+    /* MICROPHONE */
 
     document.getElementById(
       "micStatus"
     ).textContent =
       "Ready ✓";
-
 
     document.getElementById(
       "micStatus"
@@ -1756,14 +1519,19 @@ async function startDevices() {
 
 
     document.getElementById(
-      "message"
+      "deviceMessage"
     ).textContent =
       "Camera dan microphone berjaya diaktifkan!";
+
+    document.getElementById(
+      "deviceMessage"
+    ).className =
+      "message success";
 
 
   }
 
-  catch (error) {
+  catch(error) {
 
     console.error(
       "Device error:",
@@ -1772,10 +1540,14 @@ async function startDevices() {
 
 
     document.getElementById(
-      "message"
+      "deviceMessage"
     ).textContent =
-
       "❌ Tidak dapat mengakses camera atau microphone. Sila benarkan permission.";
+
+    document.getElementById(
+      "deviceMessage"
+    ).className =
+      "message error";
 
   }
 
@@ -1793,20 +1565,25 @@ function stopDevices() {
     stream
       .getTracks()
       .forEach(
-
         function(track) {
 
           track.stop();
 
         }
-
       );
 
-
-    stream =
-      null;
+    stream = null;
 
   }
+
+
+  const video =
+    document.getElementById(
+      "video"
+    );
+
+
+  video.srcObject = null;
 
 
   document.getElementById(
@@ -1850,7 +1627,7 @@ function continueInterview() {
   if (!stream) {
 
     alert(
-      "Sila aktifkan camera dan microphone dahulu."
+      "Sila test camera dan microphone dahulu."
     );
 
     return;
@@ -1858,10 +1635,7 @@ function continueInterview() {
   }
 
 
-  document.getElementById(
-    "devicePage"
-  ).style.display =
-    "none";
+  hideAllPages();
 
 
   document.getElementById(
@@ -1870,47 +1644,49 @@ function continueInterview() {
     "block";
 
 
-  document.getElementById(
-    "interviewEmail"
-  ).textContent =
-    USER_EMAIL;
+  setupInterviewCamera();
+
+  showQuestion();
+
+  setupSpeechRecognition();
+
+}
 
 
-  const video =
-    document.getElementById(
-      "video"
-    );
+/* =====================================================
+   INTERVIEW CAMERA
+===================================================== */
 
+function setupInterviewCamera() {
 
-  const cameraContainer =
+  const container =
     document.getElementById(
       "cameraContainer"
     );
 
 
-  /*
-   * Pindahkan video yang sama
-   * ke interview page.
-   */
+  container.innerHTML = "";
 
-  cameraContainer.appendChild(
-    video
-  );
 
+  const video =
+    document.createElement(
+      "video"
+    );
+
+
+  video.autoplay = true;
+
+  video.playsInline = true;
+
+  video.muted = true;
 
   video.srcObject =
     stream;
 
 
-  video.muted =
-    true;
-
-
-  video.volume =
-    0;
-
-
-  showQuestion();
+  container.appendChild(
+    video
+  );
 
 }
 
@@ -1921,10 +1697,15 @@ function continueInterview() {
 
 function showQuestion() {
 
+  const question =
+    questions[
+      currentQuestion
+    ];
+
+
   document.getElementById(
     "questionLabel"
   ).textContent =
-
     "QUESTION " +
     (currentQuestion + 1);
 
@@ -1932,26 +1713,13 @@ function showQuestion() {
   document.getElementById(
     "questionText"
   ).textContent =
-
-    questions[currentQuestion];
+    question;
 
 
   document.getElementById(
     "transcript"
   ).value =
     "";
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-    "00:00";
-
-
-  document.getElementById(
-    "recordingStatus"
-  ).textContent =
-    "⚪ Not Listening";
 
 
   document.getElementById(
@@ -1965,6 +1733,21 @@ function showQuestion() {
   ).disabled =
     false;
 
+
+  document.getElementById(
+    "stopAnswer"
+  ).disabled =
+    true;
+
+
+  document.getElementById(
+    "recordingStatus"
+  ).textContent =
+    "⚪ Not Listening";
+
+
+  resetTimer();
+
 }
 
 
@@ -1972,13 +1755,24 @@ function showQuestion() {
    SPEECH RECOGNITION
 ===================================================== */
 
-const SpeechRecognition =
+function setupSpeechRecognition() {
 
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
 
-if (SpeechRecognition) {
+  if (!SpeechRecognition) {
+
+    document.getElementById(
+      "recordingStatus"
+    ).textContent =
+      "❌ Speech Recognition tidak disokong oleh browser ini.";
+
+    return;
+
+  }
+
 
   recognition =
     new SpeechRecognition();
@@ -1992,8 +1786,31 @@ if (SpeechRecognition) {
     true;
 
 
-  recognition.lang =
-    "en-US";
+  recognition.maxAlternatives =
+    1;
+
+
+  recognition.onstart =
+    function() {
+
+      isListening = true;
+
+      document.getElementById(
+        "recordingStatus"
+      ).textContent =
+        "🔴 Listening...";
+
+      document.getElementById(
+        "startAnswer"
+      ).disabled =
+        true;
+
+      document.getElementById(
+        "stopAnswer"
+      ).disabled =
+        false;
+
+    };
 
 
   recognition.onresult =
@@ -2004,20 +1821,13 @@ if (SpeechRecognition) {
 
 
       for (
-
-        let i =
-          event.resultIndex;
-
-        i <
-          event.results.length;
-
+        let i = event.resultIndex;
+        i < event.results.length;
         i++
-
       ) {
 
         const transcript =
-          event.results[i][0]
-            .transcript;
+          event.results[i][0].transcript;
 
 
         if (
@@ -2042,7 +1852,6 @@ if (SpeechRecognition) {
       document.getElementById(
         "transcript"
       ).value =
-
         finalTranscript +
         interimTranscript;
 
@@ -2056,6 +1865,28 @@ if (SpeechRecognition) {
         "Speech recognition error:",
         event.error
       );
+
+
+      if (
+        event.error === "not-allowed"
+      ) {
+
+        document.getElementById(
+          "recordingStatus"
+        ).textContent =
+          "❌ Microphone permission denied.";
+
+      }
+
+      else {
+
+        document.getElementById(
+          "recordingStatus"
+        ).textContent =
+          "⚠️ Speech recognition error: " +
+          event.error;
+
+      }
 
     };
 
@@ -2071,11 +1902,10 @@ if (SpeechRecognition) {
 
         }
 
-        catch (error) {
+        catch(error) {
 
           console.log(
-            "Recognition restart:",
-            error
+            "Recognition restart skipped."
           );
 
         }
@@ -2096,7 +1926,7 @@ function startAnswer() {
   if (!recognition) {
 
     alert(
-      "Speech Recognition tidak disokong oleh browser ini."
+      "Speech Recognition tidak disokong. Gunakan Google Chrome."
     );
 
     return;
@@ -2104,46 +1934,49 @@ function startAnswer() {
   }
 
 
-  finalTranscript =
-    "";
-
-
-  seconds =
-    0;
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-    "00:00";
+  finalTranscript = "";
 
 
   document.getElementById(
     "transcript"
-  ).value =
-    "";
+  ).value = "";
 
 
-  isListening =
-    true;
+  /* GET SELECTED LANGUAGE */
+
+  const language =
+    document.getElementById(
+      "languageSelect"
+    ).value;
 
 
-  document.getElementById(
-    "recordingStatus"
-  ).textContent =
-    "🔴 Listening...";
+  recognition.lang =
+    language;
 
 
-  document.getElementById(
-    "startAnswer"
-  ).disabled =
-    true;
+  seconds = 0;
+
+  answerStartTime =
+    Date.now();
 
 
-  document.getElementById(
-    "nextQuestion"
-  ).style.display =
-    "none";
+  updateTimer();
+
+
+  timerInterval =
+    setInterval(
+      function() {
+
+        seconds++;
+
+        updateTimer();
+
+      },
+      1000
+    );
+
+
+  isListening = true;
 
 
   try {
@@ -2152,51 +1985,13 @@ function startAnswer() {
 
   }
 
-  catch (error) {
+  catch(error) {
 
-    console.log(error);
+    console.log(
+      "Recognition already started."
+    );
 
   }
-
-
-  timerInterval =
-
-    setInterval(
-
-      function() {
-
-        seconds++;
-
-
-        const minutes =
-          Math.floor(
-            seconds / 60
-          );
-
-
-        const remainingSeconds =
-          seconds % 60;
-
-
-        document.getElementById(
-          "timer"
-        ).textContent =
-
-          String(minutes)
-            .padStart(2, "0")
-
-          + ":"
-
-          +
-
-          String(remainingSeconds)
-            .padStart(2, "0");
-
-      },
-
-      1000
-
-    );
 
 }
 
@@ -2207,8 +2002,7 @@ function startAnswer() {
 
 function stopAnswer() {
 
-  isListening =
-    false;
+  isListening = false;
 
 
   if (recognition) {
@@ -2219,9 +2013,11 @@ function stopAnswer() {
 
     }
 
-    catch (error) {
+    catch(error) {
 
-      console.log(error);
+      console.log(
+        "Recognition stop error."
+      );
 
     }
 
@@ -2233,17 +2029,52 @@ function stopAnswer() {
   );
 
 
+  const answer =
+    document
+      .getElementById(
+        "transcript"
+      )
+      .value
+      .trim();
+
+
   document.getElementById(
     "recordingStatus"
   ).textContent =
-    "⏹️ Answer Recorded";
+    "⚪ Answer Recorded";
 
 
   document.getElementById(
     "startAnswer"
   ).disabled =
-    false;
+    true;
 
+
+  document.getElementById(
+    "stopAnswer"
+  ).disabled =
+    true;
+
+
+  /* SAVE CURRENT ANSWER */
+
+  answers.push({
+
+    question:
+      questions[
+        currentQuestion
+      ],
+
+    answer:
+      answer,
+
+    duration:
+      seconds
+
+  });
+
+
+  /* NEXT BUTTON */
 
   document.getElementById(
     "nextQuestion"
@@ -2254,47 +2085,54 @@ function stopAnswer() {
 
 
 /* =====================================================
-   SAVE CURRENT ANSWER
+   TIMER
 ===================================================== */
 
-function saveCurrentAnswer() {
+function updateTimer() {
 
-  const answer =
-
-    document.getElementById(
-      "transcript"
-    ).value.trim();
-
-
-  const answerData = {
-
-    question:
-      questions[currentQuestion],
-
-    answer:
-      answer,
-
-    duration:
-      seconds
-
-  };
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
 
 
-  answers.push(
-    answerData
+  const secs =
+    seconds % 60;
+
+
+  document.getElementById(
+    "timer"
+  ).textContent =
+
+    String(minutes)
+      .padStart(2, "0") +
+
+    ":" +
+
+    String(secs)
+      .padStart(2, "0");
+
+}
+
+
+/* =====================================================
+   RESET TIMER
+===================================================== */
+
+function resetTimer() {
+
+  clearInterval(
+    timerInterval
   );
 
 
-  console.log(
-    "ANSWER SAVED:",
-    answerData
-  );
+  seconds = 0;
 
 
-  console.log(
-    "ALL ANSWERS:",
-    answers
-  );
+  document.getElementById(
+    "timer"
+  ).textContent =
+    "00:00";
 
 }
 
@@ -2305,30 +2143,8 @@ function saveCurrentAnswer() {
 
 function nextQuestion() {
 
-  /*
-   * Stop recording first.
-   */
-
-  if (isListening) {
-
-    stopAnswer();
-
-  }
-
-
-  /*
-   * Save current answer.
-   */
-
-  saveCurrentAnswer();
-
-
   currentQuestion++;
 
-
-  /*
-   * Kalau sudah habis semua soalan.
-   */
 
   if (
     currentQuestion >=
@@ -2342,19 +2158,6 @@ function nextQuestion() {
   }
 
 
-  clearInterval(
-    timerInterval
-  );
-
-
-  seconds =
-    0;
-
-
-  finalTranscript =
-    "";
-
-
   showQuestion();
 
 }
@@ -2366,13 +2169,12 @@ function nextQuestion() {
 
 function finishInterview() {
 
+  isListening = false;
+
+
   clearInterval(
     timerInterval
   );
-
-
-  isListening =
-    false;
 
 
   if (recognition) {
@@ -2383,48 +2185,12 @@ function finishInterview() {
 
     }
 
-    catch (error) {
-
-      console.log(error);
-
-    }
+    catch(error) {}
 
   }
 
 
-  /*
-   * Stop camera selepas interview.
-   */
-
-  if (stream) {
-
-    stream
-      .getTracks()
-      .forEach(
-
-        function(track) {
-
-          track.stop();
-
-        }
-
-      );
-
-
-    stream =
-      null;
-
-  }
-
-
-  /*
-   * Tukar kepada finish page.
-   */
-
-  document.getElementById(
-    "interviewPage"
-  ).style.display =
-    "none";
+  hideAllPages();
 
 
   document.getElementById(
@@ -2433,24 +2199,10 @@ function finishInterview() {
     "block";
 
 
-  document.getElementById(
-    "finishEmail"
-  ).textContent =
-    USER_EMAIL;
-
-
-  /*
-   * Paparkan jawapan.
-   */
-
   displayResults();
 
 
-  /*
-   * Hantar data ke Google Sheets.
-   */
-
-  sendInterviewToSheet();
+  saveInterview();
 
 }
 
@@ -2467,97 +2219,84 @@ function displayResults() {
     );
 
 
-  results.innerHTML =
-    "";
+  results.innerHTML = "";
 
 
   answers.forEach(
-
     function(item, index) {
 
-      const div =
+      const box =
         document.createElement(
           "div"
         );
 
 
-      div.className =
+      box.className =
         "answer-result";
 
 
-      div.innerHTML = `
+      box.innerHTML =
 
-        <strong>
-          Question ${index + 1}
-        </strong>
+        "<strong>" +
+        "Question " +
+        (index + 1) +
+        "</strong>" +
 
-        <div style="margin-top:6px;">
+        "<div class='answer-text'>" +
 
-          ${escapeHTML(item.question)}
+        (
+          item.answer ||
+          "No answer recorded."
+        ) +
 
-        </div>
+        "</div>" +
 
-        <div class="answer-text">
+        "<small>" +
 
-          <strong>
-            Answer:
-          </strong>
+        "Duration: " +
+        item.duration +
+        " seconds" +
 
-          <br>
-
-          ${
-            item.answer
-              ? escapeHTML(item.answer)
-              : "(No answer detected)"
-          }
-
-        </div>
-
-        <div style="margin-top:8px;">
-
-          ⏱️ ${item.duration} seconds
-
-        </div>
-
-      `;
+        "</small>";
 
 
       results.appendChild(
-        div
+        box
       );
 
     }
-
   );
 
 }
 
 
 /* =====================================================
-   SEND INTERVIEW TO GOOGLE SHEETS
+   SAVE INTERVIEW
 ===================================================== */
 
-async function sendInterviewToSheet() {
+function saveInterview() {
 
-  const status =
+  const saveStatus =
     document.getElementById(
       "saveStatus"
     );
 
 
-  status.textContent =
-    "💾 Sending interview data...";
+  if (!USER_EMAIL) {
+
+    saveStatus.textContent =
+      "❌ User email tidak dijumpai.";
+
+    return;
+
+  }
 
 
-  status.style.background =
-    "#fff3cd";
+  saveStatus.textContent =
+    "💾 Saving interview...";
 
 
-  /*
-   * Data yang akan dihantar.
-   */
-
-  const data = {
+  const payload = {
 
     action:
       "saveInterview",
@@ -2574,138 +2313,87 @@ async function sendInterviewToSheet() {
   };
 
 
-  console.log(
-    "================================="
+  /*
+     We use no-cors here because
+     Apps Script POST can receive
+     the data even though the browser
+     cannot read the response.
+  */
+
+  fetch(
+    SCRIPT_URL,
+    {
+
+      method: "POST",
+
+      mode: "no-cors",
+
+      headers: {
+
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+
+      },
+
+      body:
+        "payload=" +
+        encodeURIComponent(
+          JSON.stringify(payload)
+        )
+
+    }
+  )
+
+  .then(
+    function() {
+
+      saveStatus.textContent =
+        "✅ Interview berjaya disimpan!";
+
+      saveStatus.className =
+        "success";
+
+    }
+  )
+
+  .catch(
+    function(error) {
+
+      console.error(
+        error
+      );
+
+      saveStatus.textContent =
+        "⚠️ Data mungkin telah disimpan. Sila semak Google Sheets.";
+
+      saveStatus.className =
+        "error";
+
+    }
   );
-
-
-  console.log(
-    "DATA TO SEND"
-  );
-
-
-  console.log(
-    data
-  );
-
-
-  console.log(
-    "INTERVIEW ID:",
-    interviewID
-  );
-
-
-  console.log(
-    "EMAIL:",
-    USER_EMAIL
-  );
-
-
-  console.log(
-    "ANSWERS:",
-    answers
-  );
-
-
-  console.log(
-    "================================="
-  );
-
-
-  try {
-
-    const formData =
-      new URLSearchParams();
-
-
-    formData.append(
-      "payload",
-      JSON.stringify(data)
-    );
-
-
-    await fetch(
-
-      SCRIPT_URL,
-
-      {
-
-        method: "POST",
-
-        mode: "no-cors",
-
-        headers: {
-
-          "Content-Type":
-            "application/x-www-form-urlencoded;charset=UTF-8"
-
-        },
-
-        body:
-          formData.toString()
-
-      }
-
-    );
-
-
-    console.log(
-      "POST request sent successfully."
-    );
-
-
-    status.textContent =
-      "✅ Interview data telah dihantar!";
-
-
-    status.style.background =
-      "#d1e7dd";
-
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "SEND ERROR:",
-      error
-    );
-
-
-    status.textContent =
-      "❌ Gagal menghantar data. Sila cuba lagi.";
-
-
-    status.style.background =
-      "#f8d7da";
-
-  }
 
 }
 
 
 /* =====================================================
-   ESCAPE HTML
+   INITIAL PAGE
 ===================================================== */
 
-function escapeHTML(text) {
+window.addEventListener(
+  "load",
+  function() {
 
-  const div =
-    document.createElement(
-      "div"
-    );
+    hideAllPages();
 
+    document.getElementById(
+      "authPage"
+    ).style.display =
+      "block";
 
-  div.textContent =
-    text;
-
-
-  return div.innerHTML;
-
-}
+  }
+);
 
 </script>
-
 
 </body>
 

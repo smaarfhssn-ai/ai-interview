@@ -63,6 +63,17 @@ video{
   display:flex;flex-direction:column;gap:10px;max-width:430px;margin:20px auto
 }
 .selection-card button{font-size:17px;padding:16px}
+.language-options{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  margin:15px auto 25px
+}
+.language-option{
+  background:#eef6ff;color:#1769aa;border:2px solid transparent;
+  min-width:180px;font-weight:bold
+}
+.language-option.selected{
+  background:#1769aa;color:#fff;border-color:#123b63
+}
 .back-btn{background:#6c757d}
 .question-box{
   background:#eef6ff;padding:25px;border-radius:15px;margin-bottom:20px
@@ -128,7 +139,31 @@ textarea{
 <div class="container page" id="setupPage">
 
   <h1>🎯 Interview Setup</h1>
-  <p class="subtitle">Pilih jenis interview yang anda mahu practice.</p>
+  <p class="subtitle">Pilih bahasa dan jenis interview yang anda mahu practice.</p>
+
+  <h2>🌐 Interview Language</h2>
+
+  <div class="language-options">
+    <button
+      type="button"
+      id="malayLanguageBtn"
+      class="language-option selected"
+      onclick="selectLanguage('Malay')">
+      🇲🇾 Bahasa Melayu
+    </button>
+
+    <button
+      type="button"
+      id="englishLanguageBtn"
+      class="language-option"
+      onclick="selectLanguage('English')">
+      🇬🇧 English
+    </button>
+  </div>
+
+  <div id="selectedLanguageText" class="small-info">
+    Bahasa Melayu dipilih
+  </div>
 
   <div id="categorySelection">
     <h2>Choose Interview Type</h2>
@@ -216,8 +251,8 @@ textarea{
 
   <div id="selectedInterview" class="auto-language"></div>
 
-  <div class="auto-language">
-    🌐 Auto Detect: Bahasa Melayu + English
+  <div class="auto-language" id="languageDisplay">
+    🌐 Bahasa Melayu
   </div>
 
   <div class="question-box">
@@ -288,6 +323,7 @@ let USER_ID = "";
 let INTERVIEW_CATEGORY = "";
 let INTERVIEW_SUBCATEGORY = "";
 let INTERVIEW_CAREER = "";
+let INTERVIEW_LANGUAGE = "Malay";
 
 let questions = [];
 let currentQuestion = 0;
@@ -322,10 +358,24 @@ const interviewID =
 
 function generateQuestionsForCategory(){
 
+  const isMalay =
+    INTERVIEW_LANGUAGE === "Malay";
+
   if(
     INTERVIEW_CATEGORY === "Student" &&
     INTERVIEW_SUBCATEGORY === "University Scholarship"
   ){
+
+    if(isMalay){
+      return [
+        "Ceritakan tentang diri anda.",
+        "Mengapa anda memohon biasiswa ini?",
+        "Apakah pencapaian akademik anda?",
+        "Bagaimanakah biasiswa ini akan membantu anda mencapai matlamat anda?",
+        "Mengapa kami patut memilih anda untuk menerima biasiswa ini?"
+      ];
+    }
+
     return [
       "Tell me about yourself.",
       "Why are you applying for this scholarship?",
@@ -339,6 +389,17 @@ function generateQuestionsForCategory(){
     INTERVIEW_CATEGORY === "Student" &&
     INTERVIEW_SUBCATEGORY === "School Position"
   ){
+
+    if(isMalay){
+      return [
+        "Ceritakan tentang diri anda.",
+        "Mengapa anda mahu memohon jawatan ini?",
+        "Apakah kekuatan yang boleh anda sumbangkan kepada jawatan ini?",
+        "Ceritakan pengalaman anda bekerja dengan orang lain.",
+        "Mengapa kami patut memilih anda untuk jawatan ini?"
+      ];
+    }
+
     return [
       "Tell me about yourself.",
       "Why do you want to apply for this school position?",
@@ -352,12 +413,33 @@ function generateQuestionsForCategory(){
     INTERVIEW_CATEGORY === "Adult" &&
     INTERVIEW_SUBCATEGORY === "Career Interview"
   ){
+
+    if(isMalay){
+      return [
+        "Ceritakan tentang diri anda.",
+        "Mengapa anda berminat untuk menjadi " + INTERVIEW_CAREER + "?",
+        "Apakah kemahiran yang penting untuk seorang " + INTERVIEW_CAREER + "?",
+        "Ceritakan tentang satu cabaran yang pernah anda hadapi dan bagaimana anda mengatasinya.",
+        "Mengapa kami patut mengambil anda sebagai " + INTERVIEW_CAREER + "?"
+      ];
+    }
+
     return [
       "Tell me about yourself.",
       "Why are you interested in becoming a " + INTERVIEW_CAREER + "?",
       "What skills are important for a " + INTERVIEW_CAREER + "?",
       "Tell me about a challenge you have faced and how you handled it.",
       "Why should we hire you as a " + INTERVIEW_CAREER + "?"
+    ];
+  }
+
+  if(isMalay){
+    return [
+      "Ceritakan tentang diri anda.",
+      "Mengapa anda berminat dengan jawatan ini?",
+      "Apakah kekuatan anda?",
+      "Ceritakan tentang satu cabaran yang pernah anda hadapi dan bagaimana anda mengatasinya.",
+      "Mengapa kami patut memilih anda?"
     ];
   }
 
@@ -607,6 +689,41 @@ function openSetupPage(){
 
 
 /* =====================================================
+   LANGUAGE SELECTION
+===================================================== */
+
+function selectLanguage(language){
+
+  INTERVIEW_LANGUAGE = language;
+
+  const malayBtn =
+    document.getElementById("malayLanguageBtn");
+
+  const englishBtn =
+    document.getElementById("englishLanguageBtn");
+
+  const languageText =
+    document.getElementById("selectedLanguageText");
+
+  malayBtn.classList.remove("selected");
+  englishBtn.classList.remove("selected");
+
+  if(language === "Malay"){
+
+    malayBtn.classList.add("selected");
+    languageText.textContent =
+      "🇲🇾 Bahasa Melayu dipilih";
+
+  }else{
+
+    englishBtn.classList.add("selected");
+    languageText.textContent =
+      "🇬🇧 English selected";
+  }
+}
+
+
+/* =====================================================
    CATEGORY PAGE
 ===================================================== */
 
@@ -789,6 +906,8 @@ function continueInterview(){
   showPage("interviewPage");
 
   document.getElementById("selectedInterview").textContent =
+    (INTERVIEW_LANGUAGE === "Malay" ? "🇲🇾 Bahasa Melayu" : "🇬🇧 English") +
+    " • " +
     INTERVIEW_CATEGORY +
     " • " +
     INTERVIEW_SUBCATEGORY +
@@ -877,7 +996,10 @@ function setupSpeechRecognition(){
 
   // Browser SpeechRecognition masih menggunakan satu language.
   // AI multilingual STT boleh ditambah kemudian.
-  recognition.lang = "en-US";
+  recognition.lang =
+    INTERVIEW_LANGUAGE === "Malay"
+      ? "ms-MY"
+      : "en-US";
 
   recognition.onstart = function(){
 
@@ -967,7 +1089,10 @@ function startAnswer(){
 
   document.getElementById("transcript").value = "";
 
-  recognition.lang = "en-US";
+  recognition.lang =
+    INTERVIEW_LANGUAGE === "Malay"
+      ? "ms-MY"
+      : "en-US";
 
   seconds = 0;
   updateTimer();
@@ -1116,6 +1241,8 @@ function displayResults(){
     "<div class='answer-result'>" +
       "<strong>Interview Type</strong>" +
       "<div class='answer-text'>" +
+        (INTERVIEW_LANGUAGE === "Malay" ? "🇲🇾 Bahasa Melayu" : "🇬🇧 English") +
+        " • " +
         INTERVIEW_CATEGORY +
         " • " +
         INTERVIEW_SUBCATEGORY +
@@ -1199,6 +1326,8 @@ function saveInterview(){
     subcategory:INTERVIEW_SUBCATEGORY,
 
     career:INTERVIEW_CAREER,
+
+    language:INTERVIEW_LANGUAGE,
 
     answers:answers
   };

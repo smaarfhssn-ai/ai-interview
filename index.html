@@ -20,7 +20,7 @@ body{
 h1{margin-top:0;color:#123b63}
 h2{color:#123b63}
 .subtitle{color:#666;margin-bottom:25px}
-.page{display:none}
+.page{display:none !important}.page.active{display:block !important}
 #authPage{display:block}
 .auth-icon{font-size:60px;margin-bottom:10px}
 .auth-tabs{display:flex;gap:8px;margin-bottom:20px}
@@ -377,11 +377,22 @@ function generateQuestionsForCategory(){
 
 function hideAllPages(){
 
-  document.getElementById("authPage").style.display = "none";
-  document.getElementById("setupPage").style.display = "none";
-  document.getElementById("devicePage").style.display = "none";
-  document.getElementById("interviewPage").style.display = "none";
-  document.getElementById("finishPage").style.display = "none";
+  document.querySelectorAll(".page").forEach(function(page){
+    page.classList.remove("active");
+    page.style.setProperty("display","none","important");
+  });
+}
+
+function showPage(id){
+
+  hideAllPages();
+
+  const page = document.getElementById(id);
+
+  if(page){
+    page.classList.add("active");
+    page.style.setProperty("display","block","important");
+  }
 }
 
 
@@ -590,10 +601,7 @@ function register(){
 
 function openSetupPage(){
 
-  hideAllPages();
-
-  document.getElementById("setupPage").style.display = "block";
-
+  showPage("setupPage");
   showCategorySelection();
 }
 
@@ -688,9 +696,7 @@ function backToCategory(){
 
 function openDevicePage(){
 
-  hideAllPages();
-
-  document.getElementById("devicePage").style.display = "block";
+  showPage("devicePage");
 }
 
 
@@ -780,9 +786,7 @@ function continueInterview(){
   currentQuestion = 0;
   answers = [];
 
-  hideAllPages();
-
-  document.getElementById("interviewPage").style.display = "block";
+  showPage("interviewPage");
 
   document.getElementById("selectedInterview").textContent =
     INTERVIEW_CATEGORY +
@@ -1092,9 +1096,7 @@ function finishInterview(){
     }catch(error){}
   }
 
-  hideAllPages();
-
-  document.getElementById("finishPage").style.display = "block";
+  showPage("finishPage");
 
   displayResults();
   saveInterview();
@@ -1249,9 +1251,7 @@ function saveInterview(){
 
 window.addEventListener("load",function(){
 
-  hideAllPages();
-
-  document.getElementById("authPage").style.display = "block";
+  showPage("authPage");
 });
 
 </script>

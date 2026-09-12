@@ -87,6 +87,101 @@ h1 {
 
 
 /* =====================================================
+   AUTH PAGE
+===================================================== */
+
+#authPage {
+
+  display: block;
+
+}
+
+
+.auth-tabs {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+
+}
+
+
+.auth-tabs button {
+
+  flex: 1;
+
+  margin: 0;
+
+}
+
+
+.auth-tab-active {
+
+  background: #123b63 !important;
+
+}
+
+
+.auth-form {
+
+  text-align: left;
+
+}
+
+
+.auth-form label {
+
+  display: block;
+
+  font-weight: bold;
+
+  margin-bottom: 8px;
+
+  color: #333;
+
+}
+
+
+.auth-form input {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  margin-bottom: 15px;
+
+}
+
+
+.auth-form button {
+
+  width: 100%;
+
+  margin: 0;
+
+}
+
+
+.auth-message {
+
+  margin-top: 15px;
+
+  font-weight: bold;
+
+  min-height: 20px;
+
+}
+
+
+/* =====================================================
    CAMERA
 ===================================================== */
 
@@ -232,6 +327,13 @@ button:disabled {
 /* =====================================================
    INTERVIEW
 ===================================================== */
+
+#devicePage {
+
+  display: none;
+
+}
+
 
 #interviewPage {
 
@@ -445,6 +547,36 @@ textarea {
 
 
 /* =====================================================
+   USER INFO
+===================================================== */
+
+.user-info {
+
+  background: #eef6ff;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  margin-bottom: 20px;
+
+  font-size: 14px;
+
+  color: #123b63;
+
+}
+
+
+.logout-btn {
+
+  background: #6c757d;
+
+  font-size: 13px;
+
+}
+
+
+/* =====================================================
    MOBILE
 ===================================================== */
 
@@ -470,6 +602,13 @@ textarea {
 
   }
 
+
+  .auth-tabs button {
+
+    width: 50%;
+
+  }
+
 }
 
 </style>
@@ -478,6 +617,122 @@ textarea {
 
 
 <body>
+
+
+<!-- =====================================================
+     AUTH PAGE
+===================================================== -->
+
+<div
+  class="container"
+  id="authPage">
+
+
+  <h1>
+    🤖 AI Interview
+  </h1>
+
+
+  <p class="subtitle">
+
+    Practice your interview skills
+    with AI-powered feedback.
+
+  </p>
+
+
+  <div class="auth-tabs">
+
+    <button
+      id="loginTab"
+      class="auth-tab-active"
+      onclick="showLogin()">
+
+      Login
+
+    </button>
+
+
+    <button
+      id="registerTab"
+      onclick="showRegister()">
+
+      Register
+
+    </button>
+
+  </div>
+
+
+  <!-- LOGIN -->
+
+  <div
+    id="loginForm"
+    class="auth-form">
+
+
+    <label>
+      Email
+    </label>
+
+
+    <input
+      type="email"
+      id="loginEmail"
+      placeholder="Enter your email"
+      autocomplete="email">
+
+
+    <button
+      onclick="login()">
+
+      🔑 Login
+
+    </button>
+
+
+  </div>
+
+
+  <!-- REGISTER -->
+
+  <div
+    id="registerForm"
+    class="auth-form"
+    style="display:none;">
+
+
+    <label>
+      Email
+    </label>
+
+
+    <input
+      type="email"
+      id="registerEmail"
+      placeholder="Enter your email"
+      autocomplete="email">
+
+
+    <button
+      onclick="register()">
+
+      📝 Create Account
+
+    </button>
+
+
+  </div>
+
+
+  <div
+    id="authMessage"
+    class="auth-message">
+  </div>
+
+
+</div>
+
 
 
 <!-- =====================================================
@@ -492,6 +747,27 @@ textarea {
   <h1>
     🎥 Camera & Microphone
   </h1>
+
+
+  <div
+    class="user-info">
+
+    Logged in as:
+
+    <strong id="loggedInEmail">
+    </strong>
+
+    <br>
+
+    <button
+      class="logout-btn"
+      onclick="logout()">
+
+      Logout
+
+    </button>
+
+  </div>
 
 
   <p class="subtitle">
@@ -597,6 +873,17 @@ textarea {
   </h1>
 
 
+  <div
+    class="user-info">
+
+    👤
+
+    <span id="interviewEmail">
+    </span>
+
+  </div>
+
+
   <p class="subtitle">
 
     Jawab soalan berikut
@@ -631,7 +918,6 @@ textarea {
   </div>
 
 
-
   <!-- CAMERA -->
 
   <div class="camera-title">
@@ -642,7 +928,6 @@ textarea {
 
 
   <div id="cameraContainer"></div>
-
 
 
   <!-- TIMER -->
@@ -658,7 +943,6 @@ textarea {
   </div>
 
 
-
   <!-- RECORDING STATUS -->
 
   <div
@@ -668,7 +952,6 @@ textarea {
     ⚪ Not Listening
 
   </div>
-
 
 
   <!-- START ANSWER -->
@@ -682,7 +965,6 @@ textarea {
   </button>
 
 
-
   <!-- STOP ANSWER -->
 
   <button
@@ -692,7 +974,6 @@ textarea {
     ⏹️ Stop Answer
 
   </button>
-
 
 
   <!-- TRANSCRIPT -->
@@ -715,7 +996,6 @@ textarea {
 
 
   </div>
-
 
 
   <!-- NEXT -->
@@ -764,6 +1044,17 @@ textarea {
   </p>
 
 
+  <div
+    class="user-info">
+
+    Interview by:
+
+    <strong id="finishEmail">
+    </strong>
+
+  </div>
+
+
   <!-- SAVE STATUS -->
 
   <div id="saveStatus">
@@ -778,6 +1069,14 @@ textarea {
   <div id="results"></div>
 
 
+  <button
+    onclick="location.reload()">
+
+    🔄 Start Again
+
+  </button>
+
+
 </div>
 
 
@@ -790,15 +1089,16 @@ textarea {
 ===================================================== */
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwTor5ZMatERLth4fEXlN5XQUEzvqg2WkWRJX5frbHhFsxc-PJClE87FBYx-CuqcXozAg/exec";
+  "https://script.google.com/macros/s/AKfycbx_6J2uxaIl-lnPYj3leeFI6PhyXLWsvNGF5JN4yQ2bcS4y_TBY3iveqPzCIKRFTarcoQ/exec";
 
 
 /* =====================================================
-   USER EMAIL
+   CURRENT USER
 ===================================================== */
 
-const USER_EMAIL =
-  "test@example.com";
+let USER_EMAIL = "";
+
+let USER_ID = "";
 
 
 /* =====================================================
@@ -858,6 +1158,528 @@ const questions = [
   "Why should we choose you for this position?"
 
 ];
+
+
+/* =====================================================
+   AUTH TAB
+===================================================== */
+
+function showLogin() {
+
+  document.getElementById(
+    "loginForm"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "registerForm"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "loginTab"
+  ).classList.add(
+    "auth-tab-active"
+  );
+
+
+  document.getElementById(
+    "registerTab"
+  ).classList.remove(
+    "auth-tab-active"
+  );
+
+
+  document.getElementById(
+    "authMessage"
+  ).textContent = "";
+
+}
+
+
+function showRegister() {
+
+  document.getElementById(
+    "loginForm"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "registerForm"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "registerTab"
+  ).classList.add(
+    "auth-tab-active"
+  );
+
+
+  document.getElementById(
+    "loginTab"
+  ).classList.remove(
+    "auth-tab-active"
+  );
+
+
+  document.getElementById(
+    "authMessage"
+  ).textContent = "";
+
+}
+
+
+/* =====================================================
+   SEND AUTH REQUEST
+===================================================== */
+
+async function sendAuthRequest(
+  action,
+  email
+) {
+
+  const formData =
+    new URLSearchParams();
+
+
+  const data = {
+
+    action:
+      action,
+
+    email:
+      email
+
+  };
+
+
+  formData.append(
+    "payload",
+    JSON.stringify(data)
+  );
+
+
+  /*
+   * no-cors digunakan supaya
+   * browser tidak block request.
+   *
+   * Tetapi response server tidak
+   * boleh dibaca secara langsung.
+   */
+
+  await fetch(
+
+    SCRIPT_URL,
+
+    {
+
+      method: "POST",
+
+      mode: "no-cors",
+
+      headers: {
+
+        "Content-Type":
+          "application/x-www-form-urlencoded;charset=UTF-8"
+
+      },
+
+      body:
+        formData.toString()
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   REGISTER
+===================================================== */
+
+async function register() {
+
+  const emailInput =
+    document.getElementById(
+      "registerEmail"
+    );
+
+
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+
+
+  const email =
+    emailInput.value
+      .trim()
+      .toLowerCase();
+
+
+  if (!email) {
+
+    message.textContent =
+      "❌ Sila masukkan email.";
+
+    message.style.color =
+      "#d9534f";
+
+    return;
+
+  }
+
+
+  if (
+    !email.includes("@") ||
+    !email.includes(".")
+  ) {
+
+    message.textContent =
+      "❌ Sila masukkan email yang sah.";
+
+    message.style.color =
+      "#d9534f";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "⏳ Mendaftarkan...";
+
+  message.style.color =
+    "#1769aa";
+
+
+  try {
+
+    /*
+     * Simpan request ke Apps Script.
+     */
+
+    await sendAuthRequest(
+      "register",
+      email
+    );
+
+
+    /*
+     * Disebabkan no-cors,
+     * browser tidak boleh baca
+     * response Apps Script.
+     *
+     * Jadi kita tunggu sedikit
+     * kemudian cuba login.
+     */
+
+    await new Promise(
+      function(resolve) {
+
+        setTimeout(
+          resolve,
+          1200
+        );
+
+      }
+    );
+
+
+    /*
+     * Untuk prototype:
+     * selepas register berjaya,
+     * terus login menggunakan email
+     * yang sama.
+     */
+
+    USER_EMAIL =
+      email;
+
+
+    USER_ID =
+      "";
+
+
+    localStorage.setItem(
+      "USER_EMAIL",
+      USER_EMAIL
+    );
+
+
+    localStorage.setItem(
+      "USER_ID",
+      USER_ID
+    );
+
+
+    message.textContent =
+      "✅ Pendaftaran berjaya!";
+
+    message.style.color =
+      "green";
+
+
+    setTimeout(
+      function() {
+
+        openDevicePage();
+
+      },
+      800
+    );
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "REGISTER ERROR:",
+      error
+    );
+
+
+    message.textContent =
+      "❌ Gagal mendaftar.";
+
+    message.style.color =
+      "#d9534f";
+
+  }
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function login() {
+
+  const emailInput =
+    document.getElementById(
+      "loginEmail"
+    );
+
+
+  const message =
+    document.getElementById(
+      "authMessage"
+    );
+
+
+  const email =
+    emailInput.value
+      .trim()
+      .toLowerCase();
+
+
+  if (!email) {
+
+    message.textContent =
+      "❌ Sila masukkan email.";
+
+    message.style.color =
+      "#d9534f";
+
+    return;
+
+  }
+
+
+  if (
+    !email.includes("@") ||
+    !email.includes(".")
+  ) {
+
+    message.textContent =
+      "❌ Sila masukkan email yang sah.";
+
+    message.style.color =
+      "#d9534f";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "⏳ Logging in...";
+
+  message.style.color =
+    "#1769aa";
+
+
+  try {
+
+    await sendAuthRequest(
+      "login",
+      email
+    );
+
+
+    /*
+     * Untuk prototype email-only,
+     * simpan email selepas request
+     * dihantar.
+     */
+
+    USER_EMAIL =
+      email;
+
+
+    localStorage.setItem(
+      "USER_EMAIL",
+      USER_EMAIL
+    );
+
+
+    message.textContent =
+      "✅ Login berjaya!";
+
+    message.style.color =
+      "green";
+
+
+    setTimeout(
+      function() {
+
+        openDevicePage();
+
+      },
+      600
+    );
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
+
+
+    message.textContent =
+      "❌ Gagal login.";
+
+    message.style.color =
+      "#d9534f";
+
+  }
+
+}
+
+
+/* =====================================================
+   OPEN DEVICE PAGE
+===================================================== */
+
+function openDevicePage() {
+
+  document.getElementById(
+    "authPage"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "devicePage"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "loggedInEmail"
+  ).textContent =
+    USER_EMAIL;
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+  if (stream) {
+
+    stream
+      .getTracks()
+      .forEach(
+        function(track) {
+
+          track.stop();
+
+        }
+      );
+
+    stream = null;
+
+  }
+
+
+  USER_EMAIL = "";
+
+  USER_ID = "";
+
+
+  localStorage.removeItem(
+    "USER_EMAIL"
+  );
+
+
+  localStorage.removeItem(
+    "USER_ID"
+  );
+
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   CHECK SAVED LOGIN
+===================================================== */
+
+window.addEventListener(
+  "load",
+  function() {
+
+    const savedEmail =
+      localStorage.getItem(
+        "USER_EMAIL"
+      );
+
+
+    const savedUserID =
+      localStorage.getItem(
+        "USER_ID"
+      );
+
+
+    if (savedEmail) {
+
+      USER_EMAIL =
+        savedEmail;
+
+
+      USER_ID =
+        savedUserID || "";
+
+
+      openDevicePage();
+
+    }
+
+  }
+);
 
 
 /* =====================================================
@@ -1048,6 +1870,12 @@ function continueInterview() {
     "block";
 
 
+  document.getElementById(
+    "interviewEmail"
+  ).textContent =
+    USER_EMAIL;
+
+
   const video =
     document.getElementById(
       "video"
@@ -1061,9 +1889,9 @@ function continueInterview() {
 
 
   /*
-     Pindahkan video yang sama
-     ke interview page.
-  */
+   * Pindahkan video yang sama
+   * ke interview page.
+   */
 
   cameraContainer.appendChild(
     video
@@ -1478,8 +2306,19 @@ function saveCurrentAnswer() {
 function nextQuestion() {
 
   /*
-     Simpan jawapan semasa.
-  */
+   * Stop recording first.
+   */
+
+  if (isListening) {
+
+    stopAnswer();
+
+  }
+
+
+  /*
+   * Save current answer.
+   */
 
   saveCurrentAnswer();
 
@@ -1488,8 +2327,8 @@ function nextQuestion() {
 
 
   /*
-     Kalau sudah habis semua soalan.
-  */
+   * Kalau sudah habis semua soalan.
+   */
 
   if (
     currentQuestion >=
@@ -1554,8 +2393,8 @@ function finishInterview() {
 
 
   /*
-     Stop camera selepas interview.
-  */
+   * Stop camera selepas interview.
+   */
 
   if (stream) {
 
@@ -1579,8 +2418,8 @@ function finishInterview() {
 
 
   /*
-     Tukar kepada finish page.
-  */
+   * Tukar kepada finish page.
+   */
 
   document.getElementById(
     "interviewPage"
@@ -1594,16 +2433,22 @@ function finishInterview() {
     "block";
 
 
+  document.getElementById(
+    "finishEmail"
+  ).textContent =
+    USER_EMAIL;
+
+
   /*
-     Paparkan jawapan.
-  */
+   * Paparkan jawapan.
+   */
 
   displayResults();
 
 
   /*
-     Hantar data ke Google Sheets.
-  */
+   * Hantar data ke Google Sheets.
+   */
 
   sendInterviewToSheet();
 
@@ -1709,8 +2554,8 @@ async function sendInterviewToSheet() {
 
 
   /*
-     Data yang akan dihantar.
-  */
+   * Data yang akan dihantar.
+   */
 
   const data = {
 
@@ -1733,28 +2578,34 @@ async function sendInterviewToSheet() {
     "================================="
   );
 
+
   console.log(
     "DATA TO SEND"
   );
 
+
   console.log(
     data
   );
+
 
   console.log(
     "INTERVIEW ID:",
     interviewID
   );
 
+
   console.log(
     "EMAIL:",
     USER_EMAIL
   );
 
+
   console.log(
     "ANSWERS:",
     answers
   );
+
 
   console.log(
     "================================="
@@ -1762,15 +2613,6 @@ async function sendInterviewToSheet() {
 
 
   try {
-
-    /*
-       Gunakan application/x-www-form-urlencoded.
-
-       Ini penting kerana Apps Script
-       boleh baca data melalui:
-
-       e.parameter.payload
-    */
 
     const formData =
       new URLSearchParams();
@@ -1781,13 +2623,6 @@ async function sendInterviewToSheet() {
       JSON.stringify(data)
     );
 
-
-    /*
-       no-cors mengelakkan browser
-       daripada menyekat request cross-origin.
-
-       Apps Script tetap menerima POST.
-    */
 
     await fetch(
 
@@ -1818,14 +2653,6 @@ async function sendInterviewToSheet() {
       "POST request sent successfully."
     );
 
-
-    /*
-       Browser tidak boleh membaca response
-       kerana no-cors.
-
-       Jadi mesej ini bermaksud request
-       telah dihantar, bukan membaca response server.
-    */
 
     status.textContent =
       "✅ Interview data telah dihantar!";

@@ -280,6 +280,7 @@ button:disabled {
    PAGE
 ===================================================== */
 
+#setupPage,
 #devicePage,
 #interviewPage,
 #finishPage {
@@ -741,6 +742,105 @@ textarea {
 
 
 <!-- =====================================================
+     INTERVIEW SETUP PAGE
+===================================================== -->
+
+<div
+  class="container"
+  id="setupPage">
+
+  <h1>🎯 Interview Setup</h1>
+
+  <p class="subtitle">
+    Pilih jenis interview yang anda mahu practice.
+  </p>
+
+  <div id="categorySelection">
+
+    <h2>Choose Interview Type</h2>
+
+    <button
+      type="button"
+      onclick="selectStudent()">
+      🎓 Student
+    </button>
+
+    <button
+      type="button"
+      onclick="selectAdult()">
+      👨‍💼 Adult
+    </button>
+
+  </div>
+
+  <div id="studentSelection" style="display:none;">
+
+    <h2>🎓 Student Interview</h2>
+
+    <p class="subtitle">
+      Pilih jenis interview.
+    </p>
+
+    <button
+      type="button"
+      onclick="selectStudentType('University Scholarship')">
+      🎓 University Scholarship
+    </button>
+
+    <button
+      type="button"
+      onclick="selectStudentType('School Position')">
+      🏫 School Position
+    </button>
+
+    <br>
+
+    <button
+      type="button"
+      onclick="backToCategory()">
+      ← Back
+    </button>
+
+  </div>
+
+  <div id="adultSelection" style="display:none;">
+
+    <h2>👨‍💼 Adult Interview</h2>
+
+    <p class="subtitle">
+      Masukkan kerja atau position yang anda mahu interview.
+    </p>
+
+    <input
+      type="text"
+      id="careerInput"
+      placeholder="Contoh: Railway Engineer">
+
+    <button
+      type="button"
+      onclick="selectCareer()">
+      💼 Continue
+    </button>
+
+    <br>
+
+    <button
+      type="button"
+      onclick="backToCategory()">
+      ← Back
+    </button>
+
+    <p
+      id="setupMessage"
+      class="message">
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
      DEVICE PAGE
 ===================================================== -->
 
@@ -868,6 +968,12 @@ textarea {
     menggunakan suara anda.
 
   </p>
+
+  <div
+    id="selectedInterview"
+    class="auto-language"
+    style="margin-bottom:18px;">
+  </div>
 
 
   <!-- AUTO LANGUAGE -->
@@ -1075,6 +1181,14 @@ let USER_EMAIL = "";
 
 let USER_ID = "";
 
+/* =====================================================
+   INTERVIEW CATEGORY
+===================================================== */
+
+let INTERVIEW_CATEGORY = "";
+let INTERVIEW_SUBCATEGORY = "";
+let INTERVIEW_CAREER = "";
+
 
 /* =====================================================
    VARIABLES
@@ -1116,19 +1230,73 @@ const interviewID =
    QUESTIONS
 ===================================================== */
 
-const questions = [
+let questions = [];
 
-  "Tell me about yourself.",
 
-  "Why are you interested in this career?",
+/* =====================================================
+   TEMPORARY QUESTION BANK
+   AI GENERATION WILL REPLACE THIS LATER
+===================================================== */
 
-  "What are your strengths?",
+function generateQuestionsForCategory() {
 
-  "What is one challenge you have faced and how did you overcome it?",
+  if (
+    INTERVIEW_CATEGORY === "Student" &&
+    INTERVIEW_SUBCATEGORY === "University Scholarship"
+  ) {
 
-  "Why should we choose you for this position?"
+    return [
+      "Tell me about yourself.",
+      "Why are you applying for this scholarship?",
+      "What are your academic achievements?",
+      "How will this scholarship help you achieve your goals?",
+      "Why should we choose you for this scholarship?"
+    ];
 
-];
+  }
+
+
+  if (
+    INTERVIEW_CATEGORY === "Student" &&
+    INTERVIEW_SUBCATEGORY === "School Position"
+  ) {
+
+    return [
+      "Tell me about yourself.",
+      "Why do you want to apply for this school position?",
+      "What strengths can you contribute to this position?",
+      "Tell me about a time you worked successfully with others.",
+      "Why should we choose you for this position?"
+    ];
+
+  }
+
+
+  if (
+    INTERVIEW_CATEGORY === "Adult" &&
+    INTERVIEW_SUBCATEGORY === "Career Interview"
+  ) {
+
+    return [
+      "Tell me about yourself.",
+      "Why are you interested in becoming a " + INTERVIEW_CAREER + "?",
+      "What skills are important for a " + INTERVIEW_CAREER + "?",
+      "Tell me about a challenge you have faced and how you handled it.",
+      "Why should we hire you as a " + INTERVIEW_CAREER + "?"
+    ];
+
+  }
+
+
+  return [
+    "Tell me about yourself.",
+    "Why are you interested in this position?",
+    "What are your strengths?",
+    "What challenge have you faced and how did you overcome it?",
+    "Why should we choose you?"
+  ];
+
+}
 
 
 /* =====================================================
@@ -1468,7 +1636,7 @@ function login() {
 
           function() {
 
-            openDevicePage();
+            openSetupPage();
 
           },
 
@@ -1612,7 +1780,7 @@ function register() {
 
           function() {
 
-            openDevicePage();
+            openSetupPage();
 
           },
 
@@ -1639,6 +1807,141 @@ function register() {
     }
 
   );
+
+}
+
+
+/* =====================================================
+   OPEN SETUP PAGE
+===================================================== */
+
+function openSetupPage() {
+
+  hideAllPages();
+
+  document.getElementById(
+    "setupPage"
+  ).style.display =
+    "block";
+
+  showCategorySelection();
+
+}
+
+
+/* =====================================================
+   CATEGORY SELECTION
+===================================================== */
+
+function showCategorySelection() {
+
+  document.getElementById(
+    "categorySelection"
+  ).style.display =
+    "block";
+
+  document.getElementById(
+    "studentSelection"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "adultSelection"
+  ).style.display =
+    "none";
+
+}
+
+
+function selectStudent() {
+
+  INTERVIEW_CATEGORY = "Student";
+  INTERVIEW_SUBCATEGORY = "";
+  INTERVIEW_CAREER = "";
+
+  document.getElementById(
+    "categorySelection"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "studentSelection"
+  ).style.display =
+    "block";
+
+}
+
+
+function selectAdult() {
+
+  INTERVIEW_CATEGORY = "Adult";
+  INTERVIEW_SUBCATEGORY = "Career Interview";
+  INTERVIEW_CAREER = "";
+
+  document.getElementById(
+    "categorySelection"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "adultSelection"
+  ).style.display =
+    "block";
+
+  document.getElementById(
+    "careerInput"
+  ).focus();
+
+}
+
+
+function selectStudentType(type) {
+
+  INTERVIEW_CATEGORY = "Student";
+  INTERVIEW_SUBCATEGORY = type;
+  INTERVIEW_CAREER = "";
+
+  openDevicePage();
+
+}
+
+
+function selectCareer() {
+
+  const career =
+    document
+      .getElementById("careerInput")
+      .value
+      .trim();
+
+  const message =
+    document.getElementById("setupMessage");
+
+  message.className = "message";
+
+  if (!career) {
+
+    message.textContent =
+      "❌ Sila masukkan kerja atau position.";
+
+    message.classList.add("error");
+
+    return;
+
+  }
+
+  INTERVIEW_CATEGORY = "Adult";
+  INTERVIEW_SUBCATEGORY = "Career Interview";
+  INTERVIEW_CAREER = career;
+
+  openDevicePage();
+
+}
+
+
+function backToCategory() {
+
+  showCategorySelection();
 
 }
 
@@ -2533,7 +2836,20 @@ function displayResults() {
     );
 
 
-  results.innerHTML = "";
+  results.innerHTML =
+    "<div class='answer-result'>" +
+    "<strong>Interview Type</strong>" +
+    "<div class='answer-text'>" +
+    INTERVIEW_CATEGORY +
+    " • " +
+    INTERVIEW_SUBCATEGORY +
+    (
+      INTERVIEW_CAREER
+        ? " • " + INTERVIEW_CAREER
+        : ""
+    ) +
+    "</div>" +
+    "</div>";
 
 
   answers.forEach(
@@ -2644,6 +2960,14 @@ function saveInterview() {
     email:
       USER_EMAIL,
 
+    category:
+      INTERVIEW_CATEGORY,
+
+    subcategory:
+      INTERVIEW_SUBCATEGORY,
+
+    career:
+      INTERVIEW_CAREER,
 
     answers:
       answers

@@ -7,296 +7,675 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
-  margin:0;font-family:Arial,sans-serif;
+  margin:0;
+  font-family:Arial,sans-serif;
   background:linear-gradient(135deg,#dcecff,#f5f9ff);
-  min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  color:#17324d
 }
+
 .container{
-  width:100%;max-width:700px;background:#fff;padding:30px;
-  border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1);
+  width:100%;
+  max-width:720px;
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
   text-align:center
 }
-h1{margin-top:0;color:#123b63}
-h2{color:#123b63}
-.subtitle{color:#666;margin-bottom:25px}
-.page{display:none !important}.page.active{display:block !important}
-#authPage{display:block}
-.auth-icon{font-size:60px;margin-bottom:10px}
-.auth-tabs{display:flex;gap:8px;margin-bottom:20px}
+
+.page{
+  display:none!important
+}
+
+.page.active{
+  display:block!important
+}
+
+h1{
+  margin:0 0 10px;
+  color:#123b63
+}
+
+h2{
+  color:#123b63
+}
+
+.subtitle{
+  color:#667085;
+  margin-bottom:24px
+}
+
+.auth-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px
+}
+
 .auth-tab{
-  flex:1;padding:12px;border-radius:10px;background:#eef6ff;
-  color:#1769aa;font-weight:bold;cursor:pointer
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  background:#eef6ff;
+  color:#1769aa;
+  font-weight:bold;
+  cursor:pointer
 }
-.auth-tab.active{background:#1769aa;color:#fff}
-.auth-form{display:none}
-.auth-form.active{display:block}
+
+.auth-tab.active{
+  background:#1769aa;
+  color:#fff
+}
+
+.auth-form{
+  display:none
+}
+
+.auth-form.active{
+  display:block
+}
+
 input{
-  width:100%;padding:14px;border:1px solid #ccc;border-radius:10px;
-  font-size:15px;margin-bottom:12px
+  width:100%;
+  padding:14px;
+  border:1px solid #ccd3da;
+  border-radius:10px;
+  font-size:15px;
+  margin-bottom:12px
 }
+
 button{
-  border:0;padding:13px 22px;margin:6px;border-radius:10px;
-  font-size:15px;cursor:pointer;background:#1769aa;color:#fff
+  border:0;
+  padding:13px 22px;
+  margin:6px;
+  border-radius:10px;
+  font-size:15px;
+  cursor:pointer;
+  background:#1769aa;
+  color:#fff
 }
-button:hover{opacity:.9}
-button:disabled{opacity:.5;cursor:not-allowed}
-#stopBtn,#stopAnswer{background:#d9534f}
-#continueBtn,#nextQuestion{background:#198754}
-#continueBtn,#nextQuestion{display:none}
-#nextQuestion{width:90%}
-.message{margin-top:15px;font-weight:bold;min-height:22px}
-.success{color:green}.error{color:red}
-video{
-  width:100%;max-width:600px;border-radius:15px;background:#111;
-  transform:scaleX(-1);margin-bottom:20px
+
+button:hover{
+  opacity:.9
 }
-.status-container{margin-bottom:20px}
-.status{margin:10px;font-size:16px}
-.ready{color:green;font-weight:bold}
-.failed{color:red;font-weight:bold}
-.auto-language{
-  background:#eef6ff;padding:13px;border-radius:10px;
-  color:#1769aa;font-weight:bold;margin-bottom:18px
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed
 }
+
+.success{
+  color:#198754
+}
+
+.error{
+  color:#dc3545
+}
+
+.message{
+  min-height:24px;
+  margin-top:10px;
+  font-weight:bold
+}
+
 .selection-card{
-  display:flex;flex-direction:column;gap:10px;max-width:430px;margin:20px auto
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  max-width:460px;
+  margin:20px auto
 }
-.selection-card button{font-size:17px;padding:16px}
+
+.selection-card button{
+  font-size:17px;
+  padding:17px
+}
+
 .language-options{
-  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
   margin:15px auto 25px
 }
+
 .language-option{
-  background:#eef6ff;color:#1769aa;border:2px solid transparent;
-  min-width:180px;font-weight:bold
+  background:#eef6ff;
+  color:#1769aa;
+  border:2px solid transparent;
+  min-width:190px;
+  font-weight:bold
 }
+
 .language-option.selected{
-  background:#1769aa;color:#fff;border-color:#123b63
+  background:#1769aa;
+  color:#fff;
+  border-color:#123b63
 }
-.back-btn{background:#6c757d}
+
+.back-btn{
+  background:#6c757d
+}
+
+.career-box{
+  max-width:460px;
+  margin:15px auto
+}
+
+.hidden{
+  display:none!important
+}
+
+.status-container{
+  margin:20px 0
+}
+
+.status{
+  margin:12px;
+  font-size:16px
+}
+
+.ready{
+  color:#198754;
+  font-weight:bold
+}
+
+.failed{
+  color:#dc3545;
+  font-weight:bold
+}
+
+video{
+  width:100%;
+  max-width:600px;
+  border-radius:15px;
+  background:#111;
+  transform:scaleX(-1);
+  margin-bottom:18px
+}
+
 .question-box{
-  background:#eef6ff;padding:25px;border-radius:15px;margin-bottom:20px
+  background:#eef6ff;
+  padding:25px;
+  border-radius:15px;
+  margin-bottom:18px
 }
-.question-label{
-  font-size:13px;font-weight:bold;color:#1769aa;margin-bottom:10px
+
+.question-number{
+  font-size:14px;
+  color:#1769aa;
+  font-weight:bold;
+  margin-bottom:10px
 }
-.question{font-size:22px;font-weight:bold;color:#123b63}
-.camera-title{text-align:left;font-weight:bold;margin:15px 0 8px;color:#333}
-.timer{font-size:20px;font-weight:bold;margin:15px;color:#123b63}
-.recording{color:#d9534f;font-weight:bold;margin:10px}
-.transcript-box{margin-top:20px;text-align:left}
-.transcript-title{font-weight:bold;margin-bottom:8px}
-textarea{
-  width:100%;height:150px;resize:none;border:1px solid #ccc;
-  border-radius:10px;padding:15px;font-size:15px
+
+.question-text{
+  font-size:22px;
+  font-weight:bold;
+  line-height:1.45
 }
-.finish-icon{font-size:60px}
-#saveStatus{margin-top:20px;padding:12px;border-radius:10px;font-weight:bold}
-.answer-result{
-  text-align:left;background:#f5f9ff;padding:15px;border-radius:12px;margin-top:15px
+
+.answer-box{
+  width:100%;
+  min-height:150px;
+  padding:15px;
+  border:1px solid #ccd3da;
+  border-radius:12px;
+  font-size:16px;
+  resize:vertical;
+  margin-bottom:12px
 }
-.answer-result strong{color:#123b63}
-.answer-text{margin-top:8px;color:#444;line-height:1.5}
-.small-info{font-size:13px;color:#666;margin-top:8px}
-@media(max-width:600px){
-  .container{padding:20px}
-  .question{font-size:18px}
-  button{width:90%}
-  .auth-tabs{flex-direction:column}
+
+.timer{
+  font-size:28px;
+  font-weight:bold;
+  margin:12px
+}
+
+.transcript{
+  background:#f7f8fa;
+  padding:14px;
+  border-radius:10px;
+  text-align:left;
+  min-height:70px;
+  margin:12px 0;
+  white-space:pre-wrap
+}
+
+#stopBtn{
+  background:#dc3545
+}
+
+#nextQuestion,
+#continueBtn{
+  background:#198754
+}
+
+#nextQuestion,
+#continueBtn{
+  display:none
+}
+
+.info{
+  background:#f8fafc;
+  padding:14px;
+  border-radius:10px;
+  margin:12px 0;
+  text-align:left
+}
+
+.result-item{
+  text-align:left;
+  background:#f8fafc;
+  padding:14px;
+  border-radius:10px;
+  margin:10px 0
+}
+
+.result-item strong{
+  color:#123b63
 }
 </style>
 </head>
 
 <body>
 
-<!-- ========================= AUTH PAGE ========================= -->
-<div class="container page" id="authPage">
+<!-- ========================= AUTH ========================= -->
 
-  <div class="auth-icon">🤖</div>
+<div class="container page active" id="authPage">
+
+  <div style="font-size:58px">🎤</div>
+
   <h1>AI Interview</h1>
-  <p class="subtitle">Practice your interview skills with AI</p>
+
+  <p class="subtitle">
+    Practice your interview with AI
+  </p>
 
   <div class="auth-tabs">
-    <div id="loginTab" class="auth-tab active" onclick="showLogin()">Login</div>
-    <div id="registerTab" class="auth-tab" onclick="showRegister()">Register</div>
-  </div>
 
-  <div id="loginForm" class="auth-form active">
-    <input type="email" id="loginEmail" placeholder="Enter your email" autocomplete="email">
-    <button id="loginBtn" onclick="login()">🔐 Login</button>
-    <p id="loginMessage" class="message"></p>
-  </div>
-
-  <div id="registerForm" class="auth-form">
-    <input type="email" id="registerEmail" placeholder="Enter your email" autocomplete="email">
-    <button id="registerBtn" onclick="register()">📝 Register</button>
-    <p id="registerMessage" class="message"></p>
-  </div>
-</div>
-
-<!-- ========================= SETUP PAGE ========================= -->
-<div class="container page" id="setupPage">
-
-  <h1>🎯 Interview Setup</h1>
-  <p class="subtitle">Pilih bahasa dan jenis interview yang anda mahu practice.</p>
-
-  <h2>🌐 Interview Language</h2>
-
-  <div class="language-options">
-    <button
-      type="button"
-      id="malayLanguageBtn"
-      class="language-option selected"
-      onclick="selectLanguage('Malay')">
-      🇲🇾 Bahasa Melayu
-    </button>
-
-    <button
-      type="button"
-      id="englishLanguageBtn"
-      class="language-option"
-      onclick="selectLanguage('English')">
-      🇬🇧 English
-    </button>
-  </div>
-
-  <div id="selectedLanguageText" class="small-info">
-    Bahasa Melayu dipilih
-  </div>
-
-  <div id="categorySelection">
-    <h2>Choose Interview Type</h2>
-
-    <div class="selection-card">
-      <button onclick="selectStudent()">🎓 Student</button>
-      <button onclick="selectAdult()">👨‍💼 Adult</button>
+    <div
+      class="auth-tab active"
+      id="loginTab"
+      onclick="showLogin()">
+      Login
     </div>
-  </div>
 
-  <div id="studentSelection" style="display:none">
-    <h2>🎓 Student Interview</h2>
-    <p class="subtitle">Pilih jenis interview.</p>
-
-    <div class="selection-card">
-      <button onclick="selectStudentType('University Scholarship')">
-        🎓 University Scholarship
-      </button>
-
-      <button onclick="selectStudentType('School Position')">
-        🏫 School Position
-      </button>
-
-      <button class="back-btn" onclick="backToCategory()">← Back</button>
+    <div
+      class="auth-tab"
+      id="registerTab"
+      onclick="showRegister()">
+      Register
     </div>
+
   </div>
 
-  <div id="adultSelection" style="display:none">
-    <h2>👨‍💼 Adult Interview</h2>
-    <p class="subtitle">Masukkan kerja atau position yang anda mahu interview.</p>
+
+  <!-- LOGIN -->
+
+  <div
+    class="auth-form active"
+    id="loginForm">
 
     <input
-      type="text"
-      id="careerInput"
-      placeholder="Contoh: Railway Engineer"
-      maxlength="100"
-    >
+      id="loginEmail"
+      type="email"
+      placeholder="Email address">
+
+    <button onclick="login()">
+      Login
+    </button>
+
+    <div
+      id="loginMessage"
+      class="message">
+    </div>
+
+  </div>
+
+
+  <!-- REGISTER -->
+
+  <div
+    class="auth-form"
+    id="registerForm">
+
+    <input
+      id="registerEmail"
+      type="email"
+      placeholder="Email address">
+
+    <button onclick="register()">
+      Register
+    </button>
+
+    <div
+      id="registerMessage"
+      class="message">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ========================= SETUP ========================= -->
+
+<div
+  class="container page"
+  id="setupPage">
+
+  <h1>
+    Interview Setup
+  </h1>
+
+  <p class="subtitle">
+    Pilih bahasa dan kategori interview.
+  </p>
+
+
+  <h2>
+    Interview Language
+  </h2>
+
+  <div class="language-options">
+
+    <button
+      id="malayBtn"
+      class="language-option selected"
+      onclick="selectLanguage('Malay')">
+
+      🇲🇾 Bahasa Melayu
+
+    </button>
+
+    <button
+      id="englishBtn"
+      class="language-option"
+      onclick="selectLanguage('English')">
+
+      🇬🇧 English
+
+    </button>
+
+  </div>
+
+
+  <h2>
+    Pilih Kategori
+  </h2>
+
+  <div class="selection-card">
+
+    <button onclick="selectStudent()">
+      🎓 Student
+    </button>
+
+    <button onclick="selectAdult()">
+      👨‍💼 Adult
+    </button>
+
+  </div>
+
+
+  <!-- STUDENT -->
+
+  <div
+    id="studentOptions"
+    class="hidden">
+
+    <h2>
+      Student Interview
+    </h2>
 
     <div class="selection-card">
-      <button onclick="selectCareer()">💼 Continue</button>
-      <button class="back-btn" onclick="backToCategory()">← Back</button>
+
+      <button
+        onclick="chooseInterview(
+          'Student',
+          'University Scholarship',
+          ''
+        )">
+
+        🎓 University Scholarship
+
+      </button>
+
+      <button
+        onclick="chooseInterview(
+          'Student',
+          'School Position',
+          ''
+        )">
+
+        🏫 School Position
+
+      </button>
+
     </div>
 
-    <p id="setupMessage" class="message"></p>
   </div>
+
+
+  <!-- ADULT -->
+
+  <div
+    id="adultOptions"
+    class="hidden">
+
+    <h2>
+      Career Interview
+    </h2>
+
+    <div class="career-box">
+
+      <input
+        id="careerInput"
+        placeholder="Contoh: Railway Engineer">
+
+      <button onclick="chooseCareer()">
+        Continue
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
-<!-- ========================= DEVICE PAGE ========================= -->
-<div class="container page" id="devicePage">
 
-  <h1>🎥 Camera & Microphone</h1>
+<!-- ========================= DEVICE ========================= -->
+
+<div
+  class="container page"
+  id="devicePage">
+
+  <h1>
+    Camera & Microphone
+  </h1>
+
   <p class="subtitle">
-    Pastikan camera dan microphone anda berfungsi sebelum memulakan interview.
+    Benarkan camera dan microphone sebelum interview bermula.
   </p>
 
-  <video id="video" autoplay playsinline muted></video>
+  <video
+    id="video"
+    autoplay
+    playsinline
+    muted>
+  </video>
+
 
   <div class="status-container">
-    <div class="status">
-      📷 Camera:
-      <span id="cameraStatus" class="failed">Not Ready</span>
+
+    <div
+      id="cameraStatus"
+      class="status">
+
+      📷 Camera: checking...
+
     </div>
 
-    <div class="status">
-      🎙️ Microphone:
-      <span id="micStatus" class="failed">Not Ready</span>
+    <div
+      id="micStatus"
+      class="status">
+
+      🎤 Microphone: checking...
+
     </div>
+
+    <div
+      id="speechStatus"
+      class="status">
+
+      🗣️ Speech Recognition: checking...
+
+    </div>
+
   </div>
 
-  <button id="startBtn" onclick="startDevices()">🎬 Test Camera & Microphone</button>
-  <button id="stopBtn" onclick="stopDevices()">⏹️ Stop</button>
-  <button id="continueBtn" onclick="continueInterview()">Continue →</button>
 
-  <p id="deviceMessage" class="message"></p>
+  <button
+    class="back-btn"
+    onclick="backToSetup()">
+
+    Back
+
+  </button>
+
+
+  <button
+    id="continueBtn"
+    onclick="startInterview()">
+
+    Start Interview
+
+  </button>
+
 </div>
 
-<!-- ========================= INTERVIEW PAGE ========================= -->
-<div class="container page" id="interviewPage">
 
-  <h1>🎤 AI Interview</h1>
+<!-- ========================= INTERVIEW ========================= -->
 
-  <p class="subtitle">
-    Jawab soalan berikut menggunakan suara anda.
-  </p>
+<div
+  class="container page"
+  id="interviewPage">
 
-  <div id="selectedInterview" class="auto-language"></div>
+  <h1>
+    AI Interview
+  </h1>
 
-  <div class="auto-language" id="languageDisplay">
-    🌐 Bahasa Melayu
+
+  <div
+    id="interviewInfo"
+    class="info">
   </div>
+
 
   <div class="question-box">
-    <div class="question-label" id="questionLabel">QUESTION 1</div>
-    <div class="question" id="questionText"></div>
+
+    <div
+      id="questionNumber"
+      class="question-number">
+    </div>
+
+    <div
+      id="questionText"
+      class="question-text">
+    </div>
+
   </div>
 
-  <div class="camera-title">📹 Your Camera</div>
-  <div id="cameraContainer"></div>
 
-  <div class="timer">
-    ⏱️ <span id="timer">00:00</span>
+  <div
+    class="timer"
+    id="timer">
+
+    00:00
+
   </div>
 
-  <div id="recordingStatus" class="recording">⚪ Not Listening</div>
 
-  <button id="startAnswer" onclick="startAnswer()">🎙️ Start Answer</button>
-  <button id="stopAnswer" onclick="stopAnswer()" disabled>⏹️ Stop Answer</button>
+  <div
+    id="transcript"
+    class="transcript">
 
-  <div class="transcript-box">
-    <div class="transcript-title">📝 Your Answer</div>
+    Your speech transcript will appear here...
 
-    <textarea
-      id="transcript"
-      placeholder="Transcript jawapan anda akan muncul di sini..."
-      readonly></textarea>
   </div>
 
-  <button id="nextQuestion" onclick="nextQuestion()">Next Question →</button>
+
+  <textarea
+    id="answerBox"
+    class="answer-box"
+    placeholder="Transcript akan muncul di sini. Anda juga boleh edit jawapan.">
+  </textarea>
+
+
+  <button
+    id="startAnswer"
+    onclick="startAnswering()">
+
+    🎤 Start Answer
+
+  </button>
+
+
+  <button
+    id="stopBtn"
+    onclick="stopAnswering()">
+
+    ⏹ Stop
+
+  </button>
+
+
+  <br>
+
+
+  <button
+    id="nextQuestion"
+    onclick="goNextQuestion()">
+
+    Next Question →
+
+  </button>
+
 </div>
 
-<!-- ========================= FINISH PAGE ========================= -->
-<div class="container page" id="finishPage">
 
-  <div class="finish-icon">🎉</div>
-  <h1>Interview Completed!</h1>
+<!-- ========================= FINISH ========================= -->
+
+<div
+  class="container page"
+  id="finishPage">
+
+  <div style="font-size:58px">
+    🎉
+  </div>
+
+  <h1>
+    Interview Completed!
+  </h1>
 
   <p class="subtitle">
-    Tahniah! Anda telah melengkapkan semua soalan interview.
+    Tahniah! Anda telah melengkapkan semua soalan.
   </p>
 
-  <div id="saveStatus">💾 Saving interview...</div>
-  <div id="results"></div>
+  <div id="saveStatus">
+    💾 Saving interview...
+  </div>
+
+  <div id="results">
+  </div>
+
 </div>
+
 
 <script>
 
@@ -305,7 +684,8 @@ textarea{
 ===================================================== */
 
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxmlFpFiFpqIh86pQkeIH6032nOVYP29e3PQ8wQw88Od-pLT3_lXUhhKgcJMpUIROeW9Q/exec;
+"https://script.google.com/macros/s/AKfycbxmlFpFiFpqIh86pQkeIH6032nOVYP29e3PQ8wQw88Od-pLT3_lXUhhKgcJMpUIROeW9Q/exec";
+
 
 /* =====================================================
    USER
@@ -324,13 +704,18 @@ let INTERVIEW_SUBCATEGORY = "";
 let INTERVIEW_CAREER = "";
 let INTERVIEW_LANGUAGE = "Malay";
 
+
+/* =====================================================
+   INTERVIEW DATA
+===================================================== */
+
 let questions = [];
 let currentQuestion = 0;
 let answers = [];
 
 
 /* =====================================================
-   CAMERA / SPEECH VARIABLES
+   CAMERA / SPEECH
 ===================================================== */
 
 let stream = null;
@@ -351,129 +736,30 @@ const interviewID =
 
 
 /* =====================================================
-   TEMPORARY QUESTION GENERATION
-   AI GENERATION WILL BE CONNECTED LATER
-===================================================== */
-
-function generateQuestionsForCategory(){
-
-  const isMalay =
-    INTERVIEW_LANGUAGE === "Malay";
-
-  if(
-    INTERVIEW_CATEGORY === "Student" &&
-    INTERVIEW_SUBCATEGORY === "University Scholarship"
-  ){
-
-    if(isMalay){
-      return [
-        "Ceritakan tentang diri anda.",
-        "Mengapa anda memohon biasiswa ini?",
-        "Apakah pencapaian akademik anda?",
-        "Bagaimanakah biasiswa ini akan membantu anda mencapai matlamat anda?",
-        "Mengapa kami patut memilih anda untuk menerima biasiswa ini?"
-      ];
-    }
-
-    return [
-      "Tell me about yourself.",
-      "Why are you applying for this scholarship?",
-      "What are your academic achievements?",
-      "How will this scholarship help you achieve your goals?",
-      "Why should we choose you for this scholarship?"
-    ];
-  }
-
-  if(
-    INTERVIEW_CATEGORY === "Student" &&
-    INTERVIEW_SUBCATEGORY === "School Position"
-  ){
-
-    if(isMalay){
-      return [
-        "Ceritakan tentang diri anda.",
-        "Mengapa anda mahu memohon jawatan ini?",
-        "Apakah kekuatan yang boleh anda sumbangkan kepada jawatan ini?",
-        "Ceritakan pengalaman anda bekerja dengan orang lain.",
-        "Mengapa kami patut memilih anda untuk jawatan ini?"
-      ];
-    }
-
-    return [
-      "Tell me about yourself.",
-      "Why do you want to apply for this school position?",
-      "What strengths can you contribute to this position?",
-      "Tell me about a time you worked successfully with others.",
-      "Why should we choose you for this position?"
-    ];
-  }
-
-  if(
-    INTERVIEW_CATEGORY === "Adult" &&
-    INTERVIEW_SUBCATEGORY === "Career Interview"
-  ){
-
-    if(isMalay){
-      return [
-        "Ceritakan tentang diri anda.",
-        "Mengapa anda berminat untuk menjadi " + INTERVIEW_CAREER + "?",
-        "Apakah kemahiran yang penting untuk seorang " + INTERVIEW_CAREER + "?",
-        "Ceritakan tentang satu cabaran yang pernah anda hadapi dan bagaimana anda mengatasinya.",
-        "Mengapa kami patut mengambil anda sebagai " + INTERVIEW_CAREER + "?"
-      ];
-    }
-
-    return [
-      "Tell me about yourself.",
-      "Why are you interested in becoming a " + INTERVIEW_CAREER + "?",
-      "What skills are important for a " + INTERVIEW_CAREER + "?",
-      "Tell me about a challenge you have faced and how you handled it.",
-      "Why should we hire you as a " + INTERVIEW_CAREER + "?"
-    ];
-  }
-
-  if(isMalay){
-    return [
-      "Ceritakan tentang diri anda.",
-      "Mengapa anda berminat dengan jawatan ini?",
-      "Apakah kekuatan anda?",
-      "Ceritakan tentang satu cabaran yang pernah anda hadapi dan bagaimana anda mengatasinya.",
-      "Mengapa kami patut memilih anda?"
-    ];
-  }
-
-  return [
-    "Tell me about yourself.",
-    "Why are you interested in this position?",
-    "What are your strengths?",
-    "Tell me about a challenge you have faced and how you overcame it.",
-    "Why should we choose you?"
-  ];
-}
-
-
-/* =====================================================
    PAGE CONTROL
 ===================================================== */
 
-function hideAllPages(){
-
-  document.querySelectorAll(".page").forEach(function(page){
-    page.classList.remove("active");
-    page.style.setProperty("display","none","important");
-  });
-}
-
 function showPage(id){
 
-  hideAllPages();
+  document
+    .querySelectorAll(".page")
+    .forEach(function(page){
 
-  const page = document.getElementById(id);
+      page.classList.remove("active");
+
+    });
+
+
+  const page =
+    document.getElementById(id);
+
 
   if(page){
+
     page.classList.add("active");
-    page.style.setProperty("display","block","important");
+
   }
+
 }
 
 
@@ -483,21 +769,45 @@ function showPage(id){
 
 function showLogin(){
 
-  document.getElementById("loginTab").classList.add("active");
-  document.getElementById("registerTab").classList.remove("active");
+  document
+    .getElementById("loginTab")
+    .classList.add("active");
 
-  document.getElementById("loginForm").classList.add("active");
-  document.getElementById("registerForm").classList.remove("active");
+  document
+    .getElementById("registerTab")
+    .classList.remove("active");
+
+
+  document
+    .getElementById("loginForm")
+    .classList.add("active");
+
+  document
+    .getElementById("registerForm")
+    .classList.remove("active");
+
 }
 
 
 function showRegister(){
 
-  document.getElementById("registerTab").classList.add("active");
-  document.getElementById("loginTab").classList.remove("active");
+  document
+    .getElementById("registerTab")
+    .classList.add("active");
 
-  document.getElementById("registerForm").classList.add("active");
-  document.getElementById("loginForm").classList.remove("active");
+  document
+    .getElementById("loginTab")
+    .classList.remove("active");
+
+
+  document
+    .getElementById("registerForm")
+    .classList.add("active");
+
+  document
+    .getElementById("loginForm")
+    .classList.remove("active");
+
 }
 
 
@@ -506,59 +816,106 @@ function showRegister(){
 ===================================================== */
 
 function validEmail(email){
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(email);
+
 }
 
 
 /* =====================================================
-   JSONP
+   JSONP REQUEST
 ===================================================== */
 
-function jsonpRequest(action,email,callback){
+function jsonpRequest(
+  action,
+  email,
+  callback
+){
 
   const callbackName =
-    "jsonpCallback_" +
+    "jsonp_" +
     Date.now() +
     "_" +
-    Math.floor(Math.random()*100000);
+    Math.floor(
+      Math.random() * 100000
+    );
 
-  let script = document.createElement("script");
 
-  window[callbackName] = function(data){
+  const script =
+    document.createElement("script");
 
-    try{
+
+  let finished = false;
+
+
+  window[callbackName] =
+    function(data){
+
+      if(finished) return;
+
+      finished = true;
+
+
       callback(data);
-    }
-    finally{
+
+
       delete window[callbackName];
 
-      if(script && script.parentNode){
-        script.parentNode.removeChild(script);
+
+      if(script.parentNode){
+
+        script.parentNode
+          .removeChild(script);
+
       }
-    }
-  };
+
+    };
+
+
+  script.onerror =
+    function(){
+
+      if(finished) return;
+
+      finished = true;
+
+
+      callback({
+
+        success:false,
+
+        message:
+          "Tidak dapat berhubung dengan server."
+
+      });
+
+
+      delete window[callbackName];
+
+
+      if(script.parentNode){
+
+        script.parentNode
+          .removeChild(script);
+
+      }
+
+    };
+
 
   script.src =
     SCRIPT_URL +
-    "?action=" + encodeURIComponent(action) +
-    "&email=" + encodeURIComponent(email) +
-    "&callback=" + encodeURIComponent(callbackName);
+    "?action=" +
+    encodeURIComponent(action) +
+    "&email=" +
+    encodeURIComponent(email) +
+    "&callback=" +
+    encodeURIComponent(callbackName);
 
-  script.onerror = function(){
-
-    delete window[callbackName];
-
-    if(script && script.parentNode){
-      script.parentNode.removeChild(script);
-    }
-
-    callback({
-      success:false,
-      message:"Tidak dapat berhubung dengan server."
-    });
-  };
 
   document.body.appendChild(script);
+
 }
 
 
@@ -569,53 +926,92 @@ function jsonpRequest(action,email,callback){
 function login(){
 
   const email =
-    document.getElementById("loginEmail").value.trim().toLowerCase();
+    document
+      .getElementById("loginEmail")
+      .value
+      .trim()
+      .toLowerCase();
 
-  const message =
-    document.getElementById("loginMessage");
 
-  const button =
-    document.getElementById("loginBtn");
+  const msg =
+    document.getElementById(
+      "loginMessage"
+    );
 
-  message.className = "message";
-
-  if(!email){
-    message.textContent = "❌ Sila masukkan email.";
-    message.classList.add("error");
-    return;
-  }
 
   if(!validEmail(email)){
-    message.textContent = "❌ Format email tidak sah.";
-    message.classList.add("error");
+
+    msg.textContent =
+      "Masukkan email yang sah.";
+
+    msg.className =
+      "message error";
+
     return;
+
   }
 
-  button.disabled = true;
-  button.textContent = "⏳ Checking...";
-  message.textContent = "Sedang menyemak email...";
 
-  jsonpRequest("login",email,function(data){
+  msg.textContent =
+    "Checking...";
 
-    button.disabled = false;
-    button.textContent = "🔐 Login";
+  msg.className =
+    "message";
 
-    if(data.success){
 
-      USER_EMAIL = data.email || email;
-      USER_ID = data.userID || "";
+  jsonpRequest(
+    "login",
+    email,
+    function(data){
 
-      message.textContent = "✅ Login berjaya!";
-      message.classList.add("success");
+      if(
+        data &&
+        data.success
+      ){
 
-      setTimeout(openSetupPage,500);
+        USER_EMAIL = email;
 
-    }else{
+        USER_ID =
+          data.userID || "";
 
-      message.textContent = "❌ " + data.message;
-      message.classList.add("error");
+
+        msg.textContent =
+          "Login berjaya!";
+
+        msg.className =
+          "message success";
+
+
+        setTimeout(
+          function(){
+
+            showPage(
+              "setupPage"
+            );
+
+          },
+          400
+        );
+
+      }
+
+      else{
+
+        msg.textContent =
+          (
+            data &&
+            data.message
+          ) ||
+          "Login gagal.";
+
+        msg.className =
+          "message error";
+
+      }
+
     }
-  });
+  );
+
 }
 
 
@@ -626,264 +1022,567 @@ function login(){
 function register(){
 
   const email =
-    document.getElementById("registerEmail").value.trim().toLowerCase();
+    document
+      .getElementById("registerEmail")
+      .value
+      .trim()
+      .toLowerCase();
 
-  const message =
-    document.getElementById("registerMessage");
 
-  const button =
-    document.getElementById("registerBtn");
+  const msg =
+    document.getElementById(
+      "registerMessage"
+    );
 
-  message.className = "message";
-
-  if(!email){
-    message.textContent = "❌ Sila masukkan email.";
-    message.classList.add("error");
-    return;
-  }
 
   if(!validEmail(email)){
-    message.textContent = "❌ Format email tidak sah.";
-    message.classList.add("error");
+
+    msg.textContent =
+      "Masukkan email yang sah.";
+
+    msg.className =
+      "message error";
+
     return;
+
   }
 
-  button.disabled = true;
-  button.textContent = "⏳ Registering...";
-  message.textContent = "Sedang mendaftarkan email...";
 
-  jsonpRequest("register",email,function(data){
+  msg.textContent =
+    "Registering...";
 
-    button.disabled = false;
-    button.textContent = "📝 Register";
+  msg.className =
+    "message";
 
-    if(data.success){
 
-      USER_EMAIL = data.email || email;
-      USER_ID = data.userID || "";
+  jsonpRequest(
+    "register",
+    email,
+    function(data){
 
-      message.textContent = "✅ Pendaftaran berjaya!";
-      message.classList.add("success");
+      if(
+        data &&
+        data.success
+      ){
 
-      setTimeout(openSetupPage,500);
+        msg.textContent =
+          "Register berjaya. Sila login.";
 
-    }else{
+        msg.className =
+          "message success";
 
-      message.textContent = "❌ " + data.message;
-      message.classList.add("error");
+
+        document
+          .getElementById("loginEmail")
+          .value = email;
+
+
+        setTimeout(
+          showLogin,
+          500
+        );
+
+      }
+
+      else{
+
+        msg.textContent =
+          (
+            data &&
+            data.message
+          ) ||
+          "Register gagal.";
+
+        msg.className =
+          "message error";
+
+      }
+
     }
-  });
+  );
+
 }
 
 
 /* =====================================================
-   OPEN SETUP PAGE
-===================================================== */
-
-function openSetupPage(){
-
-  showPage("setupPage");
-  showCategorySelection();
-}
-
-
-/* =====================================================
-   LANGUAGE SELECTION
+   LANGUAGE
 ===================================================== */
 
 function selectLanguage(language){
 
-  INTERVIEW_LANGUAGE = language;
+  INTERVIEW_LANGUAGE =
+    language;
 
-  const malayBtn =
-    document.getElementById("malayLanguageBtn");
 
-  const englishBtn =
-    document.getElementById("englishLanguageBtn");
+  document
+    .getElementById("malayBtn")
+    .classList
+    .toggle(
+      "selected",
+      language === "Malay"
+    );
 
-  const languageText =
-    document.getElementById("selectedLanguageText");
 
-  malayBtn.classList.remove("selected");
-  englishBtn.classList.remove("selected");
+  document
+    .getElementById("englishBtn")
+    .classList
+    .toggle(
+      "selected",
+      language === "English"
+    );
 
-  if(language === "Malay"){
-
-    malayBtn.classList.add("selected");
-    languageText.textContent =
-      "🇲🇾 Bahasa Melayu dipilih";
-
-  }else{
-
-    englishBtn.classList.add("selected");
-    languageText.textContent =
-      "🇬🇧 English selected";
-  }
 }
 
 
 /* =====================================================
-   CATEGORY PAGE
+   CATEGORY
 ===================================================== */
-
-function showCategorySelection(){
-
-  document.getElementById("categorySelection").style.display = "block";
-  document.getElementById("studentSelection").style.display = "none";
-  document.getElementById("adultSelection").style.display = "none";
-
-  const message = document.getElementById("setupMessage");
-  if(message){
-    message.textContent = "";
-  }
-}
-
 
 function selectStudent(){
 
-  INTERVIEW_CATEGORY = "Student";
-  INTERVIEW_SUBCATEGORY = "";
-  INTERVIEW_CAREER = "";
+  document
+    .getElementById("studentOptions")
+    .classList
+    .remove("hidden");
 
-  document.getElementById("categorySelection").style.display = "none";
-  document.getElementById("studentSelection").style.display = "block";
+
+  document
+    .getElementById("adultOptions")
+    .classList
+    .add("hidden");
+
 }
 
 
 function selectAdult(){
 
-  INTERVIEW_CATEGORY = "Adult";
-  INTERVIEW_SUBCATEGORY = "Career Interview";
-  INTERVIEW_CAREER = "";
-
-  document.getElementById("categorySelection").style.display = "none";
-  document.getElementById("adultSelection").style.display = "block";
-
-  document.getElementById("careerInput").value = "";
-  document.getElementById("careerInput").focus();
-}
+  document
+    .getElementById("adultOptions")
+    .classList
+    .remove("hidden");
 
 
-function selectStudentType(type){
-
-  INTERVIEW_CATEGORY = "Student";
-  INTERVIEW_SUBCATEGORY = type;
-  INTERVIEW_CAREER = "";
-
-  openDevicePage();
-}
+  document
+    .getElementById("studentOptions")
+    .classList
+    .add("hidden");
 
 
-function selectCareer(){
+  document
+    .getElementById("careerInput")
+    .focus();
 
-  const career =
-    document.getElementById("careerInput").value.trim();
-
-  const message =
-    document.getElementById("setupMessage");
-
-  message.className = "message";
-
-  if(!career){
-
-    message.textContent =
-      "❌ Sila masukkan kerja atau position.";
-
-    message.classList.add("error");
-    return;
-  }
-
-  INTERVIEW_CATEGORY = "Adult";
-  INTERVIEW_SUBCATEGORY = "Career Interview";
-  INTERVIEW_CAREER = career;
-
-  openDevicePage();
-}
-
-
-function backToCategory(){
-  showCategorySelection();
 }
 
 
 /* =====================================================
-   DEVICE PAGE
+   CAREER
 ===================================================== */
 
-function openDevicePage(){
+function chooseCareer(){
 
-  showPage("devicePage");
+  const career =
+    document
+      .getElementById("careerInput")
+      .value
+      .trim();
+
+
+  if(!career){
+
+    alert(
+      "Sila masukkan nama kerjaya."
+    );
+
+    return;
+
+  }
+
+
+  chooseInterview(
+    "Adult",
+    "Career Interview",
+    career
+  );
+
 }
 
 
-async function startDevices(){
+/* =====================================================
+   CHOOSE INTERVIEW
+===================================================== */
+
+function chooseInterview(
+  category,
+  subcategory,
+  career
+){
+
+  INTERVIEW_CATEGORY =
+    category;
+
+  INTERVIEW_SUBCATEGORY =
+    subcategory;
+
+  INTERVIEW_CAREER =
+    career;
+
+
+  questions =
+    generateQuestionsForCategory();
+
+
+  currentQuestion = 0;
+
+  answers = [];
+
+
+  showPage(
+    "devicePage"
+  );
+
+
+  checkDevices();
+
+}
+
+
+/* =====================================================
+   QUESTION BANK
+===================================================== */
+
+function generateQuestionsForCategory(){
+
+  const isMalay =
+    INTERVIEW_LANGUAGE === "Malay";
+
+
+  /* ================= STUDENT
+     UNIVERSITY SCHOLARSHIP
+  ================= */
+
+  if(
+    INTERVIEW_CATEGORY === "Student" &&
+    INTERVIEW_SUBCATEGORY ===
+      "University Scholarship"
+  ){
+
+    if(isMalay){
+
+      return [
+
+        "Ceritakan tentang diri anda.",
+
+        "Mengapa anda memohon biasiswa ini?",
+
+        "Apakah pencapaian akademik anda?",
+
+        "Bagaimanakah biasiswa ini akan membantu anda mencapai matlamat anda?",
+
+        "Mengapa kami patut memilih anda untuk menerima biasiswa ini?"
+
+      ];
+
+    }
+
+
+    return [
+
+      "Tell me about yourself.",
+
+      "Why are you applying for this scholarship?",
+
+      "What are your academic achievements?",
+
+      "How will this scholarship help you achieve your goals?",
+
+      "Why should we choose you for this scholarship?"
+
+    ];
+
+  }
+
+
+  /* ================= STUDENT
+     SCHOOL POSITION
+  ================= */
+
+  if(
+    INTERVIEW_CATEGORY === "Student" &&
+    INTERVIEW_SUBCATEGORY ===
+      "School Position"
+  ){
+
+    if(isMalay){
+
+      return [
+
+        "Ceritakan tentang diri anda.",
+
+        "Mengapa anda mahu memohon jawatan ini?",
+
+        "Apakah kekuatan yang boleh anda sumbangkan kepada jawatan ini?",
+
+        "Ceritakan pengalaman anda bekerja dengan orang lain.",
+
+        "Mengapa kami patut memilih anda untuk jawatan ini?"
+
+      ];
+
+    }
+
+
+    return [
+
+      "Tell me about yourself.",
+
+      "Why do you want to apply for this school position?",
+
+      "What strengths can you contribute to this position?",
+
+      "Tell me about a time you worked successfully with others.",
+
+      "Why should we choose you for this position?"
+
+    ];
+
+  }
+
+
+  /* ================= ADULT
+     CAREER
+  ================= */
+
+  const career =
+    INTERVIEW_CAREER ||
+    "this career";
+
+
+  if(isMalay){
+
+    return [
+
+      "Ceritakan tentang diri anda dan minat anda terhadap kerjaya " +
+        career +
+        ".",
+
+
+      "Mengapa anda berminat untuk menjadi " +
+        career +
+        "?",
+
+
+      "Apakah kemahiran yang penting untuk kerjaya " +
+        career +
+        "?",
+
+
+      "Ceritakan satu pengalaman yang menunjukkan anda boleh menyelesaikan masalah.",
+
+
+      "Mengapa kami patut memilih anda untuk kerjaya ini?"
+
+    ];
+
+  }
+
+
+  return [
+
+    "Tell me about yourself and your interest in " +
+      career +
+      ".",
+
+
+    "Why are you interested in becoming a " +
+      career +
+      "?",
+
+
+    "What skills are important for a " +
+      career +
+      "?",
+
+
+    "Tell me about an experience that shows your problem-solving skills.",
+
+
+    "Why should we choose you for this career?"
+
+  ];
+
+}
+
+
+/* =====================================================
+   CAMERA / MICROPHONE
+===================================================== */
+
+async function checkDevices(){
+
+  const camera =
+    document.getElementById(
+      "cameraStatus"
+    );
+
+
+  const mic =
+    document.getElementById(
+      "micStatus"
+    );
+
+
+  const speech =
+    document.getElementById(
+      "speechStatus"
+    );
+
+
+  const btn =
+    document.getElementById(
+      "continueBtn"
+    );
+
+
+  btn.style.display =
+    "none";
+
+
+  camera.textContent =
+    "📷 Camera: checking...";
+
+
+  mic.textContent =
+    "🎤 Microphone: checking...";
+
 
   try{
 
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-      throw new Error("getUserMedia not supported");
-    }
-
     stream =
-      await navigator.mediaDevices.getUserMedia({
-        video:true,
-        audio:true
-      });
+      await navigator
+        .mediaDevices
+        .getUserMedia({
 
-    const video =
-      document.getElementById("video");
+          video:true,
 
-    video.srcObject = stream;
-    video.muted = true;
-    video.volume = 0;
+          audio:true
 
-    document.getElementById("cameraStatus").textContent = "Ready ✓";
-    document.getElementById("cameraStatus").className = "ready";
+        });
 
-    document.getElementById("micStatus").textContent = "Ready ✓";
-    document.getElementById("micStatus").className = "ready";
 
-    document.getElementById("continueBtn").style.display = "inline-block";
+    document
+      .getElementById("video")
+      .srcObject =
+      stream;
 
-    document.getElementById("deviceMessage").textContent =
-      "Camera dan microphone berjaya diaktifkan!";
 
-    document.getElementById("deviceMessage").className =
-      "message success";
+    camera.textContent =
+      "📷 Camera: Ready";
 
-  }catch(error){
+    camera.className =
+      "status ready";
 
-    console.error("Device error:",error);
 
-    document.getElementById("deviceMessage").textContent =
-      "❌ Tidak dapat mengakses camera atau microphone. Sila benarkan permission.";
+    mic.textContent =
+      "🎤 Microphone: Ready";
 
-    document.getElementById("deviceMessage").className =
-      "message error";
+    mic.className =
+      "status ready";
+
   }
+
+  catch(error){
+
+    console.error(error);
+
+
+    camera.textContent =
+      "📷 Camera/Microphone: Permission needed";
+
+    camera.className =
+      "status failed";
+
+
+    mic.textContent =
+      "🎤 Please allow camera and microphone in browser.";
+
+    mic.className =
+      "status failed";
+
+
+    return;
+
+  }
+
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(SpeechRecognition){
+
+    speech.textContent =
+      "🗣️ Speech Recognition: Ready";
+
+    speech.className =
+      "status ready";
+
+
+    btn.style.display =
+      "inline-block";
+
+  }
+
+  else{
+
+    speech.textContent =
+      "🗣️ Speech Recognition: Not supported. Use Google Chrome.";
+
+    speech.className =
+      "status failed";
+
+  }
+
 }
 
 
-function stopDevices(){
+/* =====================================================
+   STOP CAMERA
+===================================================== */
+
+function stopStream(){
 
   if(stream){
 
-    stream.getTracks().forEach(function(track){
-      track.stop();
-    });
+    stream
+      .getTracks()
+      .forEach(function(track){
+
+        track.stop();
+
+      });
+
 
     stream = null;
+
   }
 
-  document.getElementById("video").srcObject = null;
+}
 
-  document.getElementById("cameraStatus").textContent = "Not Ready";
-  document.getElementById("cameraStatus").className = "failed";
 
-  document.getElementById("micStatus").textContent = "Not Ready";
-  document.getElementById("micStatus").className = "failed";
+/* =====================================================
+   BACK TO SETUP
+===================================================== */
 
-  document.getElementById("continueBtn").style.display = "none";
+function backToSetup(){
+
+  stopStream();
+
+  showPage(
+    "setupPage"
+  );
+
 }
 
 
@@ -891,53 +1590,63 @@ function stopDevices(){
    START INTERVIEW
 ===================================================== */
 
-function continueInterview(){
+function startInterview(){
 
-  if(!stream){
-    alert("Sila test camera dan microphone dahulu.");
+  if(!questions.length){
+
+    alert(
+      "Soalan interview belum tersedia."
+    );
+
     return;
+
   }
 
-  questions = generateQuestionsForCategory();
-  currentQuestion = 0;
-  answers = [];
 
-  showPage("interviewPage");
+  const languageText =
+    INTERVIEW_LANGUAGE === "Malay"
+      ? "🇲🇾 Bahasa Melayu"
+      : "🇬🇧 English";
 
-  document.getElementById("selectedInterview").textContent =
-    (INTERVIEW_LANGUAGE === "Malay" ? "🇲🇾 Bahasa Melayu" : "🇬🇧 English") +
-    " • " +
-    INTERVIEW_CATEGORY +
-    " • " +
-    INTERVIEW_SUBCATEGORY +
-    (INTERVIEW_CAREER ? " • " + INTERVIEW_CAREER : "");
 
-  setupInterviewCamera();
+  if(
+    INTERVIEW_CATEGORY === "Adult"
+  ){
+
+    document
+      .getElementById(
+        "interviewInfo"
+      )
+      .textContent =
+        "👨‍💼 Adult — " +
+        INTERVIEW_CAREER +
+        " | " +
+        languageText;
+
+  }
+
+  else{
+
+    document
+      .getElementById(
+        "interviewInfo"
+      )
+      .textContent =
+        "🎓 " +
+        INTERVIEW_SUBCATEGORY +
+        " | " +
+        languageText;
+
+  }
+
+
+  showPage(
+    "interviewPage"
+  );
+
+
   showQuestion();
-  setupSpeechRecognition();
-}
 
-
-/* =====================================================
-   INTERVIEW CAMERA
-===================================================== */
-
-function setupInterviewCamera(){
-
-  const container =
-    document.getElementById("cameraContainer");
-
-  container.innerHTML = "";
-
-  const video =
-    document.createElement("video");
-
-  video.autoplay = true;
-  video.playsInline = true;
-  video.muted = true;
-  video.srcObject = stream;
-
-  container.appendChild(video);
 }
 
 
@@ -947,211 +1656,63 @@ function setupInterviewCamera(){
 
 function showQuestion(){
 
-  const question = questions[currentQuestion];
-
-  document.getElementById("questionLabel").textContent =
-    "QUESTION " + (currentQuestion + 1);
-
-  document.getElementById("questionText").textContent =
-    question;
-
-  document.getElementById("transcript").value = "";
-
-  document.getElementById("nextQuestion").style.display = "none";
-
-  document.getElementById("startAnswer").disabled = false;
-  document.getElementById("stopAnswer").disabled = true;
-
-  document.getElementById("recordingStatus").textContent =
-    "⚪ Not Listening";
-
-  resetTimer();
-}
+  stopAnswering();
 
 
-/* =====================================================
-   SPEECH RECOGNITION
-===================================================== */
-
-function setupSpeechRecognition(){
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if(!SpeechRecognition){
-
-    document.getElementById("recordingStatus").textContent =
-      "❌ Speech Recognition tidak disokong. Gunakan Google Chrome.";
-
-    return;
-  }
-
-  recognition = new SpeechRecognition();
-
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.maxAlternatives = 1;
-
-  // Browser SpeechRecognition masih menggunakan satu language.
-  // AI multilingual STT boleh ditambah kemudian.
-  recognition.lang =
-    INTERVIEW_LANGUAGE === "Malay"
-      ? "ms-MY"
-      : "en-US";
-
-  recognition.onstart = function(){
-
-    isListening = true;
-
-    document.getElementById("recordingStatus").textContent =
-      "🔴 Listening...";
-
-    document.getElementById("startAnswer").disabled = true;
-    document.getElementById("stopAnswer").disabled = false;
-  };
+  document
+    .getElementById(
+      "questionNumber"
+    )
+    .textContent =
+      "Question " +
+      (currentQuestion + 1) +
+      " / " +
+      questions.length;
 
 
-  recognition.onresult = function(event){
-
-    let interimTranscript = "";
-
-    for(
-      let i = event.resultIndex;
-      i < event.results.length;
-      i++
-    ){
-
-      const transcript =
-        event.results[i][0].transcript;
-
-      if(event.results[i].isFinal){
-
-        finalTranscript += transcript + " ";
-
-      }else{
-
-        interimTranscript += transcript;
-      }
-    }
-
-    document.getElementById("transcript").value =
-      finalTranscript + interimTranscript;
-  };
+  document
+    .getElementById(
+      "questionText"
+    )
+    .textContent =
+      questions[currentQuestion];
 
 
-  recognition.onerror = function(event){
-
-    console.error("Speech recognition error:",event.error);
-
-    if(event.error === "not-allowed"){
-
-      document.getElementById("recordingStatus").textContent =
-        "❌ Microphone permission denied.";
-
-    }else{
-
-      document.getElementById("recordingStatus").textContent =
-        "⚠️ Speech recognition error: " + event.error;
-    }
-  };
+  document
+    .getElementById(
+      "transcript"
+    )
+    .textContent =
+      "Your speech transcript will appear here...";
 
 
-  recognition.onend = function(){
-
-    if(isListening){
-
-      try{
-        recognition.start();
-      }catch(error){}
-    }
-  };
-}
+  document
+    .getElementById(
+      "answerBox"
+    )
+    .value = "";
 
 
-/* =====================================================
-   START ANSWER
-===================================================== */
+  document
+    .getElementById(
+      "nextQuestion"
+    )
+    .style.display =
+      "none";
 
-function startAnswer(){
 
-  if(!recognition){
+  document
+    .getElementById(
+      "startAnswer"
+    )
+    .style.display =
+      "inline-block";
 
-    alert(
-      "Speech Recognition tidak disokong. Gunakan Google Chrome."
-    );
-
-    return;
-  }
-
-  finalTranscript = "";
-
-  document.getElementById("transcript").value = "";
-
-  recognition.lang =
-    INTERVIEW_LANGUAGE === "Malay"
-      ? "ms-MY"
-      : "en-US";
 
   seconds = 0;
+
   updateTimer();
 
-  answerStartTime = Date.now();
-
-  clearInterval(timerInterval);
-
-  timerInterval =
-    setInterval(function(){
-
-      seconds++;
-      updateTimer();
-
-    },1000);
-
-  isListening = true;
-
-  try{
-    recognition.start();
-  }catch(error){
-    console.log("Recognition already started.");
-  }
-}
-
-
-/* =====================================================
-   STOP ANSWER
-===================================================== */
-
-function stopAnswer(){
-
-  isListening = false;
-
-  if(recognition){
-
-    try{
-      recognition.stop();
-    }catch(error){}
-  }
-
-  clearInterval(timerInterval);
-
-  const answer =
-    document.getElementById("transcript").value.trim();
-
-  document.getElementById("recordingStatus").textContent =
-    "⚪ Answer Recorded";
-
-  document.getElementById("startAnswer").disabled = true;
-  document.getElementById("stopAnswer").disabled = true;
-
-  answers.push({
-    question: questions[currentQuestion],
-    answer: answer,
-    duration: seconds
-  });
-
-  document.getElementById("nextQuestion").style.display =
-    "inline-block";
 }
 
 
@@ -1162,26 +1723,316 @@ function stopAnswer(){
 function updateTimer(){
 
   const minutes =
-    Math.floor(seconds / 60);
+    String(
+      Math.floor(seconds / 60)
+    )
+    .padStart(2,"0");
+
 
   const secs =
-    seconds % 60;
+    String(
+      seconds % 60
+    )
+    .padStart(2,"0");
 
-  document.getElementById("timer").textContent =
-    String(minutes).padStart(2,"0") +
-    ":" +
-    String(secs).padStart(2,"0");
+
+  document
+    .getElementById("timer")
+    .textContent =
+      minutes +
+      ":" +
+      secs;
+
 }
 
 
-function resetTimer(){
+/* =====================================================
+   START ANSWER
+===================================================== */
 
-  clearInterval(timerInterval);
+function startAnswering(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(!SpeechRecognition){
+
+    alert(
+      "Speech Recognition tidak disokong. Gunakan Google Chrome."
+    );
+
+    return;
+
+  }
+
+
+  finalTranscript = "";
 
   seconds = 0;
 
-  document.getElementById("timer").textContent =
-    "00:00";
+  updateTimer();
+
+
+  recognition =
+    new SpeechRecognition();
+
+
+  recognition.continuous =
+    true;
+
+
+  recognition.interimResults =
+    true;
+
+
+  recognition.lang =
+    INTERVIEW_LANGUAGE === "Malay"
+      ? "ms-MY"
+      : "en-US";
+
+
+  recognition.onstart =
+    function(){
+
+      isListening = true;
+
+
+      document
+        .getElementById(
+          "startAnswer"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "stopBtn"
+        )
+        .style.display =
+        "inline-block";
+
+
+      timerInterval =
+        setInterval(
+          function(){
+
+            seconds++;
+
+            updateTimer();
+
+          },
+          1000
+        );
+
+    };
+
+
+  recognition.onresult =
+    function(event){
+
+      let interim = "";
+
+
+      for(
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ){
+
+        const text =
+          event
+            .results[i][0]
+            .transcript;
+
+
+        if(
+          event.results[i]
+            .isFinal
+        ){
+
+          finalTranscript +=
+            " " +
+            text;
+
+        }
+
+        else{
+
+          interim +=
+            " " +
+            text;
+
+        }
+
+      }
+
+
+      const combined =
+        (
+          finalTranscript +
+          " " +
+          interim
+        )
+        .trim();
+
+
+      document
+        .getElementById(
+          "transcript"
+        )
+        .textContent =
+        combined ||
+        "Listening...";
+
+
+      document
+        .getElementById(
+          "answerBox"
+        )
+        .value =
+        combined;
+
+    };
+
+
+  recognition.onerror =
+    function(event){
+
+      console.error(
+        "Speech error:",
+        event
+      );
+
+
+      if(
+        event.error !==
+        "no-speech"
+      ){
+
+        document
+          .getElementById(
+            "transcript"
+          )
+          .textContent =
+            "Speech error: " +
+            event.error;
+
+      }
+
+    };
+
+
+  recognition.onend =
+    function(){
+
+      if(isListening){
+
+        try{
+
+          recognition.start();
+
+        }
+
+        catch(error){
+
+          console.log(error);
+
+        }
+
+      }
+
+    };
+
+
+  try{
+
+    recognition.start();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Tidak dapat memulakan microphone."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   STOP ANSWER
+===================================================== */
+
+function stopAnswering(){
+
+  isListening = false;
+
+
+  if(recognition){
+
+    try{
+
+      recognition.stop();
+
+    }
+
+    catch(error){
+
+      console.log(error);
+
+    }
+
+
+    recognition = null;
+
+  }
+
+
+  if(timerInterval){
+
+    clearInterval(
+      timerInterval
+    );
+
+    timerInterval = null;
+
+  }
+
+
+  const stop =
+    document.getElementById(
+      "stopBtn"
+    );
+
+
+  if(stop){
+
+    stop.style.display =
+      "none";
+
+  }
+
+
+  const next =
+    document.getElementById(
+      "nextQuestion"
+    );
+
+
+  if(next){
+
+    next.style.display =
+      "inline-block";
+
+  }
+
 }
 
 
@@ -1189,17 +2040,51 @@ function resetTimer(){
    NEXT QUESTION
 ===================================================== */
 
-function nextQuestion(){
+function goNextQuestion(){
 
-  currentQuestion++;
+  stopAnswering();
 
-  if(currentQuestion >= questions.length){
 
-    finishInterview();
-    return;
+  const answer =
+    document
+      .getElementById(
+        "answerBox"
+      )
+      .value
+      .trim();
+
+
+  answers.push({
+
+    question:
+      questions[currentQuestion],
+
+    answer:
+      answer,
+
+    duration:
+      seconds
+
+  });
+
+
+  if(
+    currentQuestion <
+    questions.length - 1
+  ){
+
+    currentQuestion++;
+
+    showQuestion();
+
   }
 
-  showQuestion();
+  else{
+
+    finishInterview();
+
+  }
+
 }
 
 
@@ -1209,72 +2094,67 @@ function nextQuestion(){
 
 function finishInterview(){
 
-  isListening = false;
+  stopAnswering();
 
-  clearInterval(timerInterval);
-
-  if(recognition){
-
-    try{
-      recognition.stop();
-    }catch(error){}
-  }
-
-  showPage("finishPage");
-
-  displayResults();
-  saveInterview();
-}
+  stopStream();
 
 
-/* =====================================================
-   RESULTS
-===================================================== */
+  showPage(
+    "finishPage"
+  );
 
-function displayResults(){
 
   const results =
-    document.getElementById("results");
+    document.getElementById(
+      "results"
+    );
 
-  results.innerHTML =
-    "<div class='answer-result'>" +
-      "<strong>Interview Type</strong>" +
-      "<div class='answer-text'>" +
-        (INTERVIEW_LANGUAGE === "Malay" ? "🇲🇾 Bahasa Melayu" : "🇬🇧 English") +
-        " • " +
-        INTERVIEW_CATEGORY +
-        " • " +
-        INTERVIEW_SUBCATEGORY +
-        (INTERVIEW_CAREER ? " • " + INTERVIEW_CAREER : "") +
-      "</div>" +
-    "</div>";
 
-  answers.forEach(function(item,index){
+  results.innerHTML = "";
 
-    const box =
-      document.createElement("div");
 
-    box.className = "answer-result";
+  answers.forEach(
+    function(answer,index){
 
-    box.innerHTML =
-      "<strong>Question " +
-      (index + 1) +
-      "</strong>" +
+      const div =
+        document.createElement(
+          "div"
+        );
 
-      "<div class='answer-text'>" +
-      escapeHTML(
-        item.answer || "No answer recorded."
-      ) +
-      "</div>" +
 
-      "<div class='small-info'>" +
-      "Duration: " +
-      item.duration +
-      " seconds" +
-      "</div>";
+      div.className =
+        "result-item";
 
-    results.appendChild(box);
-  });
+
+      div.innerHTML =
+        "<strong>Question " +
+        (index + 1) +
+        "</strong><br>" +
+
+        escapeHTML(
+          answer.question
+        ) +
+
+        "<br><br>" +
+
+        "<strong>Answer</strong><br>" +
+
+        escapeHTML(
+          answer.answer ||
+          "(No answer)"
+        );
+
+
+      results.appendChild(
+        div
+      );
+
+    }
+  );
+
+
+  saveInterview();
+
 }
 
 
@@ -1284,9 +2164,18 @@ function displayResults(){
 
 function escapeHTML(text){
 
-  const div = document.createElement("div");
-  div.textContent = text;
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    text || "";
+
+
   return div.innerHTML;
+
 }
 
 
@@ -1296,92 +2185,114 @@ function escapeHTML(text){
 
 function saveInterview(){
 
-  const saveStatus =
-    document.getElementById("saveStatus");
+  const status =
+    document.getElementById(
+      "saveStatus"
+    );
+
 
   if(!USER_EMAIL){
 
-    saveStatus.textContent =
+    status.textContent =
       "❌ User email tidak dijumpai.";
 
-    saveStatus.className = "error";
+    status.className =
+      "error";
 
     return;
+
   }
 
-  saveStatus.textContent =
-    "💾 Saving interview...";
 
   const payload = {
 
-    action:"saveInterview",
+    action:
+      "saveInterview",
 
-    interviewID:interviewID,
+    interviewID:
+      interviewID,
 
-    email:USER_EMAIL,
+    email:
+      USER_EMAIL,
 
-    category:INTERVIEW_CATEGORY,
+    category:
+      INTERVIEW_CATEGORY,
 
-    subcategory:INTERVIEW_SUBCATEGORY,
+    subcategory:
+      INTERVIEW_SUBCATEGORY,
 
-    career:INTERVIEW_CAREER,
+    career:
+      INTERVIEW_CAREER,
 
-    language:INTERVIEW_LANGUAGE,
+    language:
+      INTERVIEW_LANGUAGE,
 
-    answers:answers
+    answers:
+      answers
+
   };
 
 
-  fetch(SCRIPT_URL,{
+  status.textContent =
+    "💾 Saving interview...";
 
-    method:"POST",
+  status.className = "";
 
-    mode:"no-cors",
 
-    headers:{
-      "Content-Type":
-        "application/x-www-form-urlencoded"
-    },
+  fetch(
+    SCRIPT_URL,
+    {
 
-    body:
-      "payload=" +
-      encodeURIComponent(
-        JSON.stringify(payload)
-      )
+      method:"POST",
 
-  })
+      mode:"no-cors",
 
-  .then(function(){
+      headers:{
 
-    saveStatus.textContent =
-      "✅ Interview berjaya disimpan!";
+        "Content-Type":
+          "application/x-www-form-urlencoded"
 
-    saveStatus.className =
-      "success";
-  })
+      },
 
-  .catch(function(error){
+      body:
+        "payload=" +
+        encodeURIComponent(
+          JSON.stringify(payload)
+        )
 
-    console.error(error);
+    }
+  )
 
-    saveStatus.textContent =
-      "⚠️ Data mungkin telah disimpan. Sila semak Google Sheets.";
+  .then(
+    function(){
 
-    saveStatus.className =
-      "error";
-  });
+      status.textContent =
+        "✅ Interview berjaya disimpan!";
+
+      status.className =
+        "success";
+
+    }
+  )
+
+  .catch(
+    function(error){
+
+      console.error(error);
+
+
+      status.textContent =
+        "⚠️ Sila semak Google Sheets untuk pengesahan data.";
+
+      status.className =
+        "error";
+
+    }
+  );
+
 }
 
-
-/* =====================================================
-   INITIAL PAGE
-===================================================== */
-
-window.addEventListener("load",function(){
-
-  showPage("authPage");
-});
-
 </script>
+
 </body>
 </html>

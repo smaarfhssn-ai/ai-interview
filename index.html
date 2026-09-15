@@ -734,6 +734,11 @@ video{
 
   <div id="results">
   </div>
+  <div id="finalAIAnalysis" class="info" style="display:none;text-align:left">
+    <strong>🤖 Overall AI Analysis</strong>
+    <div id="finalAIContent" style="margin-top:10px"></div>
+  </div>
+
 
 </div>
 
@@ -772,6 +777,7 @@ let INTERVIEW_LANGUAGE = "Malay";
 let questions = [];
 let currentQuestion = 0;
 let answers = [];
+let aiAnalysisResults = [];
 
 
 /* =====================================================
@@ -2568,6 +2574,106 @@ function displaySpeechAnalysis(text){
 }
 
 
+
+/* =====================================================
+   AI ANALYSIS
+   The frontend sends the transcript + detector data to
+   the Apps Script backend. The backend should call the
+   selected AI provider securely (API key stays server-side).
+===================================================== */
+
+function buildAIAnalysisPayload(answerText){
+  const analysis = analyzeSpeech(answerText);
+
+  return {
+    action:"analyzeInterview",
+    email:USER_EMAIL,
+    interviewID:interviewID,
+    category:INTERVIEW_CATEGORY,
+    subcategory:INTERVIEW_SUBCATEGORY,
+    career:INTERVIEW_CAREER,
+    language:INTERVIEW_LANGUAGE,
+    question:questions[currentQuestion],
+    answer:answerText,
+    wordCount:analysis.wordCount,
+    fillerCount:analysis.fillerCount,
+    fillerRate:analysis.fillerRate,
+    fillers:analysis.fillers,
+    stutteringCount:analysis.stutteringCount,
+    stutterings:analysis.stutterings
+  };
+}
+
+async function requestAIAnalysis(answerText){
+  const box = document.getElementById("aiLiveAnalysis");
+  const status = document.getElementById("aiAnalysisStatus");
+  const content = document.getElementById("aiAnalysisContent");
+
+  if(!box || !status || !content) return;
+
+  if(!answerText.trim()){
+    box.style.display = "none";
+    return;
+  }
+
+  box.style.display = "block";
+  status.textContent = "🤖 AI sedang menganalisis jawapan...";
+  content.innerHTML = "";
+
+  try{
+    const response = await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain;charset=utf-8"
+      },
+      body:JSON.stringify(buildAIAnalysisPayload(answerText))
+    });
+
+    const data = await response.json();
+
+    if(data && data.success){
+      status.textContent = "✅ AI analysis siap.";
+
+      const result = data.analysis || {};
+
+      content.innerHTML =
+        "<strong>Content:</strong> " +
+        escapeHTML(String(result.content || "-")) + "<br>" +
+        "<strong>Relevance:</strong> " +
+        escapeHTML(String(result.relevance || "-")) + "<br>" +
+        "<strong>Structure:</strong> " +
+        escapeHTML(String(result.structure || "-")) + "<br>" +
+        "<strong>Communication:</strong> " +
+        escapeHTML(String(result.communication || "-")) + "<br><br>" +
+        "<strong>Feedback:</strong><br>" +
+        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>");
+
+      aiAnalysisResults[currentQuestion] = result;
+    }else{
+      status.textContent =
+        "⚠️ AI analysis belum tersedia.";
+      content.textContent =
+        (data && data.message) ||
+        "Pastikan Apps Script AI endpoint telah disediakan.";
+    }
+  }catch(error){
+    console.error("AI analysis error:",error);
+    status.textContent = "⚠️ AI analysis gagal.";
+    content.textContent =
+      "Transcript dan filler detection masih boleh digunakan. AI endpoint belum disambungkan.";
+  }
+}
+
+function resetAIAnalysis(){
+  const box = document.getElementById("aiLiveAnalysis");
+  const status = document.getElementById("aiAnalysisStatus");
+  const content = document.getElementById("aiAnalysisContent");
+
+  if(box) box.style.display = "none";
+  if(status) status.textContent = "Waiting for answer...";
+  if(content) content.innerHTML = "";
+}
+
 /* =====================================================
    NEXT QUESTION
 ===================================================== */
@@ -2723,6 +2829,66 @@ function finishInterview(){
 
 }
 
+
+
+/* =====================================================
+   OVERALL AI REPORT
+===================================================== */
+
+async function generateOverallAIReport(){
+  const box = document.getElementById("finalAIAnalysis");
+  const content = document.getElementById("finalAIContent");
+
+  if(!box || !content) return;
+
+  box.style.display = "block";
+  content.textContent = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
+
+  try{
+    const payload = {
+      action:"analyzeInterviewOverall",
+      email:USER_EMAIL,
+      interviewID:interviewID,
+      category:INTERVIEW_CATEGORY,
+      subcategory:INTERVIEW_SUBCATEGORY,
+      career:INTERVIEW_CAREER,
+      language:INTERVIEW_LANGUAGE,
+      answers:answers
+    };
+
+    const response = await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain;charset=utf-8"
+      },
+      body:JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if(data && data.success){
+      const result = data.analysis || {};
+
+      content.innerHTML =
+        "<strong>Overall Score:</strong> " +
+        escapeHTML(String(result.overallScore || "-")) + "/100<br><br>" +
+        "<strong>Strengths:</strong><br>" +
+        escapeHTML(String(result.strengths || "-")).replace(/\n/g,"<br>") +
+        "<br><br><strong>Areas to Improve:</strong><br>" +
+        escapeHTML(String(result.improvements || "-")).replace(/\n/g,"<br>") +
+        "<br><br><strong>Overall Feedback:</strong><br>" +
+        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>");
+    }else{
+      content.textContent =
+        (data && data.message) ||
+        "Overall AI report belum tersedia.";
+    }
+  }catch(error){
+    console.error("Overall AI error:",error);
+    content.textContent =
+      "AI overall report belum dapat dijana. Sila sambungkan AI endpoint pada Apps Script.";
+  }
+}
 
 /* =====================================================
    ESCAPE HTML

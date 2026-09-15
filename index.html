@@ -588,6 +588,13 @@ video{
     class="info">
   </div>
 
+  <video
+    id="interviewVideo"
+    autoplay
+    playsinline
+    muted>
+  </video>
+
 
   <div class="question-box">
 
@@ -1915,8 +1922,8 @@ function startAnswering(){
         .getElementById(
           "answerBox"
         )
-        .value =
-        combined;
+        .textContent =
+        combined || "Listening...";
 
     };
 
@@ -1935,13 +1942,14 @@ function startAnswering(){
         "no-speech"
       ){
 
-        document
-          .getElementById(
-            "transcript"
-          )
-          .textContent =
-            "Speech error: " +
-            event.error;
+        const transcriptBox = document.getElementById("transcript");
+        if(event.error === "service-not-allowed"){
+          transcriptBox.textContent =
+            "Speech Recognition tidak dibenarkan pada browser/peranti ini. Cuba Chrome pada komputer, atau kita boleh sambungkan Speech-to-Text melalui server AI.";
+        }else{
+          transcriptBox.textContent =
+            "Speech error: " + event.error;
+        }
 
       }
 
@@ -2073,8 +2081,11 @@ function goNextQuestion(){
       .getElementById(
         "answerBox"
       )
-      .value
+      .textContent
       .trim();
+
+  const placeholder = "Transcript akan muncul di sini.";
+  const finalAnswer = answer === placeholder ? "" : answer;
 
 
   answers.push({
@@ -2083,7 +2094,7 @@ function goNextQuestion(){
       questions[currentQuestion],
 
     answer:
-      answer,
+      finalAnswer,
 
     duration:
       seconds

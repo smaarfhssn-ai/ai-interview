@@ -3020,20 +3020,26 @@ function saveInterview(){
 
 }
 
-</script>
 
 
+/* =====================================================
+   INITIALISE SPEECH ANALYSIS UI
+===================================================== */
 document.addEventListener("DOMContentLoaded", function(){
   const answer = document.getElementById("answerBox");
+
   if(answer){
     answer.addEventListener("input", function(){
       displaySpeechAnalysis(answer.value);
     });
   }
 
-  // Show the panel immediately with zero values instead of leaving it blank.
+  // Keep the analysis panel visible and initialise it at zero.
   displaySpeechAnalysis("");
 });
+
+</script>
+
 
 </body>
 </html>

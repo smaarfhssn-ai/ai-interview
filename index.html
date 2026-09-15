@@ -662,7 +662,7 @@ video{
   </div>
 
 
-  <div id="fillerAnalysis" class="analysis-box">
+  <div id="fillerAnalysis" class="analysis-box" style="display:none;">
     <div class="analysis-title">Speech Analysis</div>
     <div class="metric-row"><span>Filler Words</span><span id="fillerCount" class="metric-value">0</span></div>
     <div class="metric-row"><span>Stuttering</span><span id="stutterCount" class="metric-value">0</span></div>
@@ -1765,7 +1765,7 @@ function showQuestion(){
     )
     .value = "";
 
-  displaySpeechAnalysis("");
+  // Keep analysis hidden until the interview is finished.
 
 
   document
@@ -2103,7 +2103,7 @@ function startAnswering(){
         .value =
         combined;
 
-      displaySpeechAnalysis(combined);
+      // Analysis is calculated silently and shown only after the final question.
 
     };
 
@@ -2800,17 +2800,9 @@ function finishInterview(){
         ) +
 
         "<br><br>" +
-
-        "<strong>Speech Analysis</strong><br>" +
-
-        "Filler Words: " +
-        (answer.fillerCount || 0) +
-        " (" +
-        (answer.fillerRate || 0) +
-        "%)<br>" +
-
-        "Stuttering: " +
-        (answer.stutterCount || 0);
+         "<div style=\"font-size:13px;color:#667085;\">" +
+         "Speech analysis akan dipaparkan dalam laporan keseluruhan selepas interview." +
+         "</div>";
 
 
       results.appendChild(
@@ -2822,6 +2814,9 @@ function finishInterview(){
 
 
   saveInterview();
+
+  // Only now, after all questions are completed, generate the report.
+  generateOverallAIReport();
 
 }
 
@@ -2865,16 +2860,42 @@ async function generateOverallAIReport(){
     if(data && data.success){
       const result = data.analysis || {};
 
+      const metric = function(label, value){
+        return "<div style=\"display:flex;justify-content:space-between;gap:12px;" +
+          "padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;" +
+          "margin:7px 0;background:#fff\">" +
+          "<span>" + label + "</span>" +
+          "<strong>" + escapeHTML(String(value == null || value === "" ? "-" : value)) +
+          "</strong></div>";
+      };
+
       content.innerHTML =
-        "<strong>Overall Score:</strong> " +
-        escapeHTML(String(result.overallScore || "-")) + "/100<br><br>" +
-        "<strong>Strengths:</strong><br>" +
+        metric("Communication Confidence", result.confidenceScore) +
+        metric("Professionalism", result.professionalismScore) +
+        metric("Speech Fluency", result.fluencyScore) +
+        metric("Answer Quality", result.answerQualityScore) +
+        metric("Relevance", result.relevanceScore) +
+        metric("Answer Structure", result.structureScore) +
+        metric("Observable Body Language", result.bodyLanguageScore) +
+        metric("Filler Words", result.fillerCount) +
+        metric("Stuttering", result.stutteringCount) +
+        metric("⭐ Overall Rating", result.overallScore) +
+
+        "<br><strong>Strengths:</strong><br>" +
         escapeHTML(String(result.strengths || "-")).replace(/\n/g,"<br>") +
+
         "<br><br><strong>Areas to Improve:</strong><br>" +
         escapeHTML(String(result.improvements || "-")).replace(/\n/g,"<br>") +
+
         "<br><br><strong>Overall Feedback:</strong><br>" +
-        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>");
-    }else{
+        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>") +
+
+        "<br><br><small style=\"color:#667085\">" +
+        "Body language dinilai berdasarkan perkara yang boleh diperhatikan melalui kamera " +
+        "dan bukan emosi atau personaliti dalaman." +
+        "</small>";
+
+      }else{
       content.textContent =
         (data && data.message) ||
         "Overall AI report belum tersedia.";
@@ -3023,20 +3044,10 @@ function saveInterview(){
 
 
 /* =====================================================
-   INITIALISE SPEECH ANALYSIS UI
+   SPEECH ANALYSIS UI
+   Hidden during interview. Final report appears after
+   the last question.
 ===================================================== */
-document.addEventListener("DOMContentLoaded", function(){
-  const answer = document.getElementById("answerBox");
-
-  if(answer){
-    answer.addEventListener("input", function(){
-      displaySpeechAnalysis(answer.value);
-    });
-  }
-
-  // Keep the analysis panel visible and initialise it at zero.
-  displaySpeechAnalysis("");
-});
 
 </script>
 

@@ -200,6 +200,18 @@ video{
   margin-bottom:18px
 }
 
+.interview-camera{
+  width:100%;
+  max-width:600px;
+  margin:0 auto 18px
+}
+
+.interview-camera video{
+  display:block;
+  width:100%;
+  border-radius:15px;
+}
+
 .question-box{
   background:#eef6ff;
   padding:25px;
@@ -613,7 +625,8 @@ video{
   <textarea
     id="answerBox"
     class="answer-box"
-    placeholder="Transcript akan muncul di sini. Anda juga boleh edit jawapan.">
+    placeholder="Transcript akan muncul di sini."
+    readonly>
   </textarea>
 
 
@@ -1642,6 +1655,17 @@ function startInterview(){
   showPage(
     "interviewPage"
   );
+
+  // Kekalkan camera hidup sepanjang interview
+  const interviewVideo =
+    document.getElementById("interviewVideo");
+
+  if(interviewVideo && stream){
+    interviewVideo.srcObject = stream;
+    interviewVideo.play().catch(function(error){
+      console.log("Video play:", error);
+    });
+  }
 
 
   showQuestion();

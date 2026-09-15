@@ -259,6 +259,24 @@ video{
   white-space:pre-wrap
 }
 
+.filler-analysis{
+  background:#f8fafc;
+  border:1px solid #d9e2ec;
+  padding:14px;
+  border-radius:10px;
+  text-align:left;
+  margin:12px 0;
+  line-height:1.6
+}
+
+.filler-analysis strong{
+  color:#123b63
+}
+
+.filler-list{
+  margin-top:6px;
+}
+
 #stopBtn{
   background:#dc3545
 }
@@ -625,6 +643,15 @@ video{
     class="transcript">
 
     Your speech transcript will appear here...
+
+  </div>
+
+  <div
+    id="fillerAnalysis"
+    class="filler-analysis">
+
+    <strong>Filler Words</strong><br>
+    Belum dianalisis. Tekan <b>Stop</b> selepas menjawab.
 
   </div>
 
@@ -1722,6 +1749,14 @@ function showQuestion(){
     )
     .value = "";
 
+  document
+    .getElementById(
+      "fillerAnalysis"
+    )
+    .innerHTML =
+      "<strong>Filler Words</strong><br>" +
+      "Belum dianalisis. Tekan <b>Stop</b> selepas menjawab.";
+
 
   document
     .getElementById(
@@ -1922,7 +1957,7 @@ function startAnswering(){
         .getElementById(
           "answerBox"
         )
-        .textContent =
+        .value =
         combined || "Listening...";
 
     };
@@ -1997,6 +2032,151 @@ function startAnswering(){
 }
 
 
+
+/* =====================================================
+   FILLER WORD DETECTION
+===================================================== */
+
+function getFillerPatterns(){
+
+  if(INTERVIEW_LANGUAGE === "English"){
+
+    return [
+      {word:"you know", pattern:/\byou\s+know\b/gi},
+      {word:"basically", pattern:/\bbasically\b/gi},
+      {word:"actually", pattern:/\bactually\b/gi},
+      {word:"literally", pattern:/\bliterally\b/gi},
+      {word:"like", pattern:/\blike\b/gi},
+      {word:"I mean", pattern:/\bi\s+mean\b/gi},
+      {word:"um", pattern:/\bum+\b/gi},
+      {word:"uh", pattern:/\buh+\b/gi},
+      {word:"erm", pattern:/\berm+\b/gi}
+    ];
+
+  }
+
+  return [
+    {word:"sebenarnya", pattern:/\bsebenarnya\b/gi},
+    {word:"macam", pattern:/\bmacam\b/gi},
+    {word:"maksud saya", pattern:/\bmaksud\s+saya\b/gi},
+    {word:"apa tu", pattern:/\bapa\s+tu\b/gi},
+    {word:"aa", pattern:/(^|\s)a{2,}(?=\s|$)/gi},
+    {word:"err", pattern:/(^|\s)err+(?=\s|$)/gi},
+    {word:"erm", pattern:/(^|\s)erm+(?=\s|$)/gi},
+    {word:"em", pattern:/(^|\s)em+(?=\s|$)/gi},
+    {word:"lah", pattern:/\blah\b/gi},
+    {word:"kan", pattern:/\bkan\b/gi}
+  ];
+
+}
+
+
+function analyzeFillerWords(text){
+
+  const cleanText =
+    (text || "")
+      .replace(/\s+/g," ")
+      .trim();
+
+  const patterns =
+    getFillerPatterns();
+
+  const counts = [];
+  let total = 0;
+
+  patterns.forEach(function(item){
+
+    const matches =
+      cleanText.match(item.pattern);
+
+    const count =
+      matches ? matches.length : 0;
+
+    if(count > 0){
+
+      counts.push({
+        word:item.word,
+        count:count
+      });
+
+      total += count;
+
+    }
+
+  });
+
+  const wordMatches =
+    cleanText.match(/\b[\wÀ-ÿ'-]+\b/g);
+
+  const totalWords =
+    wordMatches ? wordMatches.length : 0;
+
+  const rate =
+    totalWords > 0
+      ? (total / totalWords) * 100
+      : 0;
+
+  counts.sort(function(a,b){
+    return b.count - a.count;
+  });
+
+  return {
+    count:total,
+    rate:rate,
+    words:totalWords,
+    breakdown:counts
+  };
+
+}
+
+
+function displayFillerAnalysis(text){
+
+  const result =
+    analyzeFillerWords(text);
+
+  const box =
+    document.getElementById(
+      "fillerAnalysis"
+    );
+
+  let breakdown =
+    "None";
+
+  if(result.breakdown.length){
+
+    breakdown =
+      result.breakdown
+        .map(function(item){
+          return '"' +
+            escapeHTML(item.word) +
+            '" — ' +
+            item.count;
+        })
+        .join("<br>");
+
+  }
+
+  box.innerHTML =
+    "<strong>Filler Words Analysis</strong><br><br>" +
+    "Words Spoken: <b>" +
+    result.words +
+    "</b><br>" +
+    "Filler Words: <b>" +
+    result.count +
+    "</b><br>" +
+    "Filler Rate: <b>" +
+    result.rate.toFixed(1) +
+    "%</b><br><br>" +
+    "<strong>Most Used</strong><div class='filler-list'>" +
+    breakdown +
+    "</div>";
+
+  return result;
+
+}
+
+
 /* =====================================================
    STOP ANSWER
 ===================================================== */
@@ -2064,6 +2244,18 @@ function stopAnswering(){
 
   }
 
+  const answerBox =
+    document.getElementById("answerBox");
+
+  const answerText =
+    answerBox ? answerBox.value.trim() : "";
+
+  const fillerResult =
+    displayFillerAnalysis(answerText);
+
+  window.currentFillerResult =
+    fillerResult;
+
 }
 
 
@@ -2081,11 +2273,18 @@ function goNextQuestion(){
       .getElementById(
         "answerBox"
       )
-      .textContent
+      .value
       .trim();
 
   const placeholder = "Transcript akan muncul di sini.";
-  const finalAnswer = answer === placeholder ? "" : answer;
+  const finalAnswer =
+    answer === placeholder ||
+    answer === "Listening..."
+      ? ""
+      : answer;
+
+  const fillerResult =
+    analyzeFillerWords(finalAnswer);
 
 
   answers.push({
@@ -2097,7 +2296,19 @@ function goNextQuestion(){
       finalAnswer,
 
     duration:
-      seconds
+      seconds,
+
+    fillerCount:
+      fillerResult.count,
+
+    fillerRate:
+      fillerResult.rate,
+
+    wordCount:
+      fillerResult.words,
+
+    fillers:
+      fillerResult.breakdown
 
   });
 
@@ -2176,7 +2387,25 @@ function finishInterview(){
         escapeHTML(
           answer.answer ||
           "(No answer)"
-        );
+        ) +
+
+        "<br><br>" +
+
+        "<strong>Communication Analysis</strong><br>" +
+
+        "Words Spoken: " +
+        (answer.wordCount || 0) +
+
+        "<br>" +
+
+        "Filler Words: " +
+        (answer.fillerCount || 0) +
+
+        "<br>" +
+
+        "Filler Rate: " +
+        Number(answer.fillerRate || 0).toFixed(1) +
+        "%";
 
 
       results.appendChild(

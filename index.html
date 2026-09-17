@@ -689,7 +689,7 @@ video{
 
   <button
     id="stopBtn"
-    onclick="stopAnswering()">
+    onclick="stopAnsweringAndTranscribe()">
 
     ⏹ Stop
 
@@ -753,6 +753,13 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwbIvErlPxLWD_Jp4ha5tZUmgsPgF7sF0yXFe-dASyZ9XkNeZAnE5rdBh_dBYy_7Fn8Gg/exec";
 
 /* =====================================================
+   SERVER STT URL
+   ===================================================== */
+
+const STT_URL =
+"https://ai-interview-45xhiqc95-ubk2.vercel.app/api/transcribe";
+
+/* =====================================================
    USER
 ===================================================== */
 
@@ -785,8 +792,11 @@ let aiAnalysisResults = [];
 ===================================================== */
 
 let stream = null;
-let recognition = null;
+let mediaRecorder = null;
+let audioChunks = [];
 let isListening = false;
+let isTranscribing = false;
+let pendingTranscription = false;
 let timerInterval = null;
 let seconds = 0;
 let finalTranscript = "";
@@ -1484,136 +1494,105 @@ function generateQuestionsForCategory(){
 
 /* =====================================================
    CAMERA / MICROPHONE
-===================================================== */
+   ===================================================== */
 
 async function checkDevices(){
 
-  const camera =
-    document.getElementById(
-      "cameraStatus"
-    );
+  const camera = document.getElementById("cameraStatus");
+  const mic = document.getElementById("micStatus");
+  const speech = document.getElementById("speechStatus");
+  const btn = document.getElementById("continueBtn");
 
+  btn.style.display = "none";
 
-  const mic =
-    document.getElementById(
-      "micStatus"
-    );
-
-
-  const speech =
-    document.getElementById(
-      "speechStatus"
-    );
-
-
-  const btn =
-    document.getElementById(
-      "continueBtn"
-    );
-
-
-  btn.style.display =
-    "none";
-
-
-  camera.textContent =
-    "📷 Camera: checking...";
-
-
-  mic.textContent =
-    "🎤 Microphone: checking...";
-
+  camera.textContent = "📷 Camera: checking...";
+  mic.textContent = "🎤 Microphone: checking...";
+  speech.textContent = "🗣️ Server STT: checking...";
 
   try{
 
-    stream =
-      await navigator
-        .mediaDevices
-        .getUserMedia({
+    if(!navigator.mediaDevices ||
+       !navigator.mediaDevices.getUserMedia){
 
-          video:true,
+      throw new Error("getUserMedia is not supported.");
+    }
 
-          audio:true
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:true,
+      audio:true
+    });
 
-        });
+    document.getElementById("video").srcObject = stream;
 
+    if(!stream.getAudioTracks().length){
+      throw new Error("No microphone audio track.");
+    }
 
-    document
-      .getElementById("video")
-      .srcObject =
-      stream;
+    camera.textContent = "📷 Camera: Ready";
+    camera.className = "status ready";
 
+    mic.textContent = "🎤 Microphone: Ready";
+    mic.className = "status ready";
 
-    camera.textContent =
-      "📷 Camera: Ready";
+    if(typeof MediaRecorder === "undefined"){
 
-    camera.className =
-      "status ready";
+      speech.textContent =
+        "🗣️ Server STT: MediaRecorder tidak disokong.";
 
+      speech.className = "status failed";
+      return;
+    }
 
-    mic.textContent =
-      "🎤 Microphone: Ready";
+    const supportedTypes = [
+      "audio/webm;codecs=opus",
+      "audio/webm",
+      "audio/mp4",
+      "audio/aac"
+    ];
 
-    mic.className =
-      "status ready";
+    const hasSupportedType =
+      supportedTypes.some(function(type){
+        return !MediaRecorder.isTypeSupported ||
+               MediaRecorder.isTypeSupported(type);
+      });
+
+    if(!hasSupportedType){
+
+      speech.textContent =
+        "🗣️ Server STT: Format audio tidak disokong.";
+
+      speech.className = "status failed";
+      return;
+    }
+
+    speech.textContent = "🗣️ Server STT: Ready";
+    speech.className = "status ready";
+    btn.style.display = "inline-block";
 
   }
-
   catch(error){
 
     console.error(error);
-
+    stopStream();
 
     camera.textContent =
       "📷 Camera/Microphone: Permission needed";
-
-    camera.className =
-      "status failed";
-
+    camera.className = "status failed";
 
     mic.textContent =
       "🎤 Please allow camera and microphone in browser.";
-
-    mic.className =
-      "status failed";
-
-
-    return;
-
-  }
-
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-  if(SpeechRecognition){
+    mic.className = "status failed";
 
     speech.textContent =
-      "🗣️ Speech Recognition: Ready";
-
-    speech.className =
-      "status ready";
-
-
-    btn.style.display =
-      "inline-block";
-
+      "🗣️ Server STT: Cannot access microphone.";
+    speech.className = "status failed";
   }
-
-  else{
-
-    speech.textContent =
-      "🗣️ Speech Recognition: Not supported. Use Google Chrome.";
-
-    speech.className =
-      "status failed";
-
-  }
-
 }
 
+
+/* =====================================================
+   STOP CAMERA
+   ===================================================== */
 
 /* =====================================================
    STOP CAMERA
@@ -1955,298 +1934,382 @@ function displaySpeechAnalysis(text){
 
 
 /* =====================================================
-   START ANSWER
-===================================================== */
+   START ANSWER — SERVER STT
+   ===================================================== */
+
+function chooseAudioMimeType(){
+
+  const types = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/aac"
+  ];
+
+  for(const type of types){
+
+    if(typeof MediaRecorder === "undefined"){
+      return "";
+    }
+
+    if(!MediaRecorder.isTypeSupported ||
+       MediaRecorder.isTypeSupported(type)){
+
+      return type;
+    }
+  }
+
+  return "";
+}
+
 
 function startAnswering(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-  if(!SpeechRecognition){
-
-    alert(
-      "Speech Recognition tidak disokong. Gunakan Google Chrome."
-    );
-
+  if(!stream){
+    alert("Microphone belum tersedia.");
     return;
-
   }
 
-
-  finalTranscript = "";
-
-  seconds = 0;
-
-  updateTimer();
-
-
-  recognition =
-    new SpeechRecognition();
-
-
-  recognition.continuous =
-    true;
-
-
-  recognition.interimResults =
-    true;
-
-
-  recognition.lang =
-    INTERVIEW_LANGUAGE === "Malay"
-      ? "ms-MY"
-      : "en-US";
-
-
-  recognition.onstart =
-    function(){
-
-      isListening = true;
-
-
-      document
-        .getElementById(
-          "startAnswer"
-        )
-        .style.display =
-        "none";
-
-
-      document
-        .getElementById(
-          "stopBtn"
-        )
-        .style.display =
-        "inline-block";
-
-
-      timerInterval =
-        setInterval(
-          function(){
-
-            seconds++;
-
-            updateTimer();
-
-          },
-          1000
-        );
-
-    };
-
-
-  recognition.onresult =
-    function(event){
-
-      let interim = "";
-
-
-      for(
-        let i = event.resultIndex;
-        i < event.results.length;
-        i++
-      ){
-
-        const text =
-          event
-            .results[i][0]
-            .transcript;
-
-
-        if(
-          event.results[i]
-            .isFinal
-        ){
-
-          finalTranscript +=
-            " " +
-            text;
-
-        }
-
-        else{
-
-          interim +=
-            " " +
-            text;
-
-        }
-
-      }
-
-
-      const combined =
-        (
-          finalTranscript +
-          " " +
-          interim
-        )
-        .trim();
-
-
-      document
-        .getElementById(
-          "transcript"
-        )
-        .textContent =
-        combined ||
-        "Listening...";
-
-
-      document
-        .getElementById(
-          "answerBox"
-        )
-        .value =
-        combined;
-
-      // Analysis is calculated silently and shown only after the final question.
-
-    };
-
-
-  recognition.onerror =
-    function(event){
-
-      console.error(
-        "Speech error:",
-        event
-      );
-
-
-      if(
-        event.error !==
-        "no-speech"
-      ){
-
-        document
-          .getElementById(
-            "transcript"
-          )
-          .textContent =
-            "Speech error: " +
-            event.error;
-
-      }
-
-    };
-
-
-  recognition.onend =
-    function(){
-
-      if(isListening){
-
-        try{
-
-          recognition.start();
-
-        }
-
-        catch(error){
-
-          console.log(error);
-
-        }
-
-      }
-
-    };
-
+  if(typeof MediaRecorder === "undefined"){
+    alert("Browser ini tidak menyokong rakaman audio.");
+    return;
+  }
+
+  const audioTracks = stream.getAudioTracks();
+
+  if(!audioTracks.length){
+    alert("Microphone tidak tersedia.");
+    return;
+  }
+
+  if(isListening || isTranscribing){
+    return;
+  }
+
+  const audioStream =
+    new MediaStream(audioTracks);
+
+  const mimeType =
+    chooseAudioMimeType();
 
   try{
 
-    recognition.start();
+    mediaRecorder =
+      mimeType
+        ? new MediaRecorder(audioStream, {mimeType:mimeType})
+        : new MediaRecorder(audioStream);
 
   }
-
   catch(error){
 
     console.error(error);
 
     alert(
-      "Tidak dapat memulakan microphone."
+      "Tidak dapat memulakan rakaman audio pada browser ini."
     );
 
+    return;
   }
 
+  audioChunks = [];
+  finalTranscript = "";
+  pendingTranscription = false;
+  isListening = true;
+  isTranscribing = false;
+
+  seconds = 0;
+  updateTimer();
+
+  document.getElementById("transcript").textContent =
+    "🎤 Listening...";
+
+  document.getElementById("answerBox").value = "";
+
+  document.getElementById("startAnswer").style.display =
+    "none";
+
+  document.getElementById("stopBtn").style.display =
+    "inline-block";
+
+  document.getElementById("nextQuestion").style.display =
+    "none";
+
+  mediaRecorder.ondataavailable =
+    function(event){
+
+      if(event.data && event.data.size > 0){
+        audioChunks.push(event.data);
+      }
+    };
+
+  mediaRecorder.onstop =
+    async function(){
+
+      const shouldTranscribe =
+        pendingTranscription;
+
+      pendingTranscription = false;
+
+      if(!shouldTranscribe){
+        return;
+      }
+
+      const recordedType =
+        mediaRecorder && mediaRecorder.mimeType
+          ? mediaRecorder.mimeType
+          : (mimeType || "audio/webm");
+
+      const audioBlob =
+        new Blob(
+          audioChunks,
+          {type:recordedType}
+        );
+
+      if(!audioBlob.size){
+
+        isTranscribing = false;
+
+        document.getElementById("transcript").textContent =
+          "⚠️ Tiada audio dirakam.";
+
+        document.getElementById("answerBox").value = "";
+
+        document.getElementById("startAnswer").style.display =
+          "inline-block";
+
+        return;
+      }
+
+      await transcribeAudio(audioBlob);
+    };
+
+  try{
+
+    mediaRecorder.start();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    isListening = false;
+    mediaRecorder = null;
+
+    alert("Tidak dapat memulakan rakaman audio.");
+
+    document.getElementById("startAnswer").style.display =
+      "inline-block";
+
+    document.getElementById("stopBtn").style.display =
+      "none";
+
+    return;
+  }
+
+  timerInterval =
+    setInterval(
+      function(){
+        seconds++;
+        updateTimer();
+      },
+      1000
+    );
 }
 
 
 /* =====================================================
    STOP ANSWER
-===================================================== */
+   ===================================================== */
 
 function stopAnswering(){
 
   isListening = false;
 
-
-  if(recognition){
-
-    try{
-
-      recognition.stop();
-
-    }
-
-    catch(error){
-
-      console.log(error);
-
-    }
-
-
-    recognition = null;
-
-  }
-
-
   if(timerInterval){
-
-    clearInterval(
-      timerInterval
-    );
-
+    clearInterval(timerInterval);
     timerInterval = null;
-
   }
-
 
   const stop =
-    document.getElementById(
-      "stopBtn"
-    );
-
+    document.getElementById("stopBtn");
 
   if(stop){
-
-    stop.style.display =
-      "none";
-
+    stop.style.display = "none";
   }
 
+  if(mediaRecorder &&
+     mediaRecorder.state !== "inactive"){
 
-  const next =
-    document.getElementById(
-      "nextQuestion"
-    );
-
-
-  if(next){
-
-    next.style.display =
-      "inline-block";
-
+    try{
+      mediaRecorder.stop();
+    }
+    catch(error){
+      console.error(error);
+    }
   }
-
 }
 
 
+function stopAnsweringAndTranscribe(){
 
+  if(isTranscribing){
+    return;
+  }
+
+  if(!mediaRecorder){
+
+    alert("Belum ada jawapan untuk dihantar.");
+    return;
+  }
+
+  pendingTranscription = true;
+  isTranscribing = true;
+
+  stopAnswering();
+
+  document.getElementById("transcript").textContent =
+    "☁️ Audio sedang dihantar untuk Speech-to-Text...";
+
+  document.getElementById("answerBox").value =
+    "Transcribing...";
+
+  document.getElementById("nextQuestion").style.display =
+    "none";
+}
+
+
+/* =====================================================
+   SEND AUDIO TO VERCEL STT
+   ===================================================== */
+
+async function transcribeAudio(audioBlob){
+
+  try{
+
+    const formData = new FormData();
+
+    let extension = "webm";
+
+    if(audioBlob.type.includes("mp4")){
+      extension = "mp4";
+    }
+    else if(audioBlob.type.includes("aac")){
+      extension = "aac";
+    }
+
+    const file =
+      new File(
+        [audioBlob],
+        "interview-answer." + extension,
+        {
+          type:audioBlob.type || "audio/webm"
+        }
+      );
+
+    formData.append("file", file);
+
+    formData.append(
+      "language",
+      INTERVIEW_LANGUAGE === "Malay" ? "ms" : "en"
+    );
+
+    const response =
+      await fetch(
+        STT_URL,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok ||
+       !data ||
+       !data.success){
+
+      throw new Error(
+        (data && data.message) ||
+        "STT gagal."
+      );
+    }
+
+    finalTranscript =
+      String(data.text || "").trim();
+
+    document.getElementById("transcript").textContent =
+      finalTranscript ||
+      "⚠️ Tiada transcript dikesan.";
+
+    document.getElementById("answerBox").value =
+      finalTranscript;
+
+    // Calculate filler/stuttering silently.
+    const analysis =
+      analyzeSpeech(finalTranscript);
+
+    currentFillerAnalysis = {
+      count:analysis.fillerCount,
+      rate:analysis.fillerRate,
+      wordCount:analysis.wordCount,
+      fillers:Object.keys(analysis.fillers).map(function(name){
+        return {
+          word:name,
+          count:analysis.fillers[name]
+        };
+      })
+    };
+
+    currentStutterAnalysis = {
+      count:analysis.stutteringCount,
+      patterns:analysis.stutterings.map(function(item){
+        return item.text;
+      })
+    };
+
+    isTranscribing = false;
+    mediaRecorder = null;
+    audioChunks = [];
+
+    document.getElementById("startAnswer").style.display =
+      "none";
+
+    document.getElementById("stopBtn").style.display =
+      "none";
+
+    document.getElementById("nextQuestion").style.display =
+      "inline-block";
+
+  }
+  catch(error){
+
+    console.error("STT error:", error);
+
+    isTranscribing = false;
+    mediaRecorder = null;
+    audioChunks = [];
+
+    document.getElementById("transcript").textContent =
+      "⚠️ Speech-to-Text gagal: " +
+      (error.message || "Unknown error");
+
+    document.getElementById("answerBox").value = "";
+
+    document.getElementById("startAnswer").style.display =
+      "inline-block";
+
+    document.getElementById("stopBtn").style.display =
+      "none";
+
+    document.getElementById("nextQuestion").style.display =
+      "none";
+  }
+}
+
+
+/* =====================================================
+   FILLER WORD + STUTTERING DETECTION — FIXED
 /* =====================================================
    FILLER WORD + STUTTERING DETECTION — FIXED
    Detects hesitation sounds even when punctuation/elongation
@@ -2672,24 +2735,27 @@ function resetAIAnalysis(){
 
 /* =====================================================
    NEXT QUESTION
-===================================================== */
+   ===================================================== */
 
 function goNextQuestion(){
 
+  if(isTranscribing){
+    alert("Tunggu sehingga Speech-to-Text selesai.");
+    return;
+  }
+
   stopAnswering();
 
-
   const answer =
-    document
-      .getElementById(
-        "answerBox"
-      )
-      .value
-      .trim();
+    document.getElementById("answerBox").value.trim();
 
+  if(!answer){
+    alert("Tiada transcript. Sila jawab soalan dahulu.");
+    return;
+  }
 
-  const fillerAnalysis = analyzeFillerWords(answer);
-  const stutterAnalysis = analyzeStuttering(answer);
+  const analysis =
+    analyzeSpeech(answer);
 
   answers.push({
 
@@ -2703,25 +2769,31 @@ function goNextQuestion(){
       seconds,
 
     fillerCount:
-      fillerAnalysis.count,
+      analysis.fillerCount,
 
     fillerRate:
-      Number(fillerAnalysis.rate.toFixed(2)),
+      Number(analysis.fillerRate.toFixed(2)),
 
     wordCount:
-      fillerAnalysis.wordCount,
+      analysis.wordCount,
 
     fillers:
-      fillerAnalysis.fillers,
+      Object.keys(analysis.fillers).map(function(name){
+        return {
+          word:name,
+          count:analysis.fillers[name]
+        };
+      }),
 
     stutterCount:
-      stutterAnalysis.count,
+      analysis.stutteringCount,
 
     stutterPatterns:
-      stutterAnalysis.patterns
+      analysis.stutterings.map(function(item){
+        return item.text;
+      })
 
   });
-
 
   if(
     currentQuestion <
@@ -2729,11 +2801,9 @@ function goNextQuestion(){
   ){
 
     currentQuestion++;
-
     showQuestion();
 
   }
-
   else{
 
     finishInterview();
@@ -2743,6 +2813,8 @@ function goNextQuestion(){
 }
 
 
+/* =====================================================
+   FINISH
 /* =====================================================
    FINISH
 ===================================================== */

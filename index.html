@@ -1,2902 +1,448 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Interview</title>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#dcecff,#f5f9ff);
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-  color:#17324d
-}
-
-.container{
-  width:100%;
-  max-width:720px;
-  background:#fff;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.1);
-  text-align:center
-}
-
-.page{
-  display:none!important
-}
-
-.page.active{
-  display:block!important
-}
-
-h1{
-  margin:0 0 10px;
-  color:#123b63
-}
-
-h2{
-  color:#123b63
-}
-
-.subtitle{
-  color:#667085;
-  margin-bottom:24px
-}
-
-.auth-tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:20px
-}
-
-.auth-tab{
-  flex:1;
-  padding:12px;
-  border-radius:10px;
-  background:#eef6ff;
-  color:#1769aa;
-  font-weight:bold;
-  cursor:pointer
-}
-
-.auth-tab.active{
-  background:#1769aa;
-  color:#fff
-}
-
-.auth-form{
-  display:none
-}
-
-.auth-form.active{
-  display:block
-}
-
-input{
-  width:100%;
-  padding:14px;
-  border:1px solid #ccd3da;
-  border-radius:10px;
-  font-size:15px;
-  margin-bottom:12px
-}
-
-button{
-  border:0;
-  padding:13px 22px;
-  margin:6px;
-  border-radius:10px;
-  font-size:15px;
-  cursor:pointer;
-  background:#1769aa;
-  color:#fff
-}
-
-button:hover{
-  opacity:.9
-}
-
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed
-}
-
-.success{
-  color:#198754
-}
-
-.error{
-  color:#dc3545
-}
-
-.message{
-  min-height:24px;
-  margin-top:10px;
-  font-weight:bold
-}
-
-.selection-card{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  max-width:460px;
-  margin:20px auto
-}
-
-.selection-card button{
-  font-size:17px;
-  padding:17px
-}
-
-.language-options{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin:15px auto 25px
-}
-
-.language-option{
-  background:#eef6ff;
-  color:#1769aa;
-  border:2px solid transparent;
-  min-width:190px;
-  font-weight:bold
-}
-
-.language-option.selected{
-  background:#1769aa;
-  color:#fff;
-  border-color:#123b63
-}
-
-.back-btn{
-  background:#6c757d
-}
-
-.career-box{
-  max-width:460px;
-  margin:15px auto
-}
-
-.hidden{
-  display:none!important
-}
-
-.status-container{
-  margin:20px 0
-}
-
-.status{
-  margin:12px;
-  font-size:16px
-}
-
-.ready{
-  color:#198754;
-  font-weight:bold
-}
-
-.failed{
-  color:#dc3545;
-  font-weight:bold
-}
-
-video{
-  width:100%;
-  max-width:600px;
-  border-radius:15px;
-  background:#111;
-  transform:scaleX(-1);
-  margin-bottom:18px
-}
-
-.question-box{
-  background:#eef6ff;
-  padding:25px;
-  border-radius:15px;
-  margin-bottom:18px
-}
-
-.question-number{
-  font-size:14px;
-  color:#1769aa;
-  font-weight:bold;
-  margin-bottom:10px
-}
-
-.question-text{
-  font-size:22px;
-  font-weight:bold;
-  line-height:1.45
-}
-
-.answer-box{
-  width:100%;
-  min-height:150px;
-  padding:15px;
-  border:1px solid #ccd3da;
-  border-radius:12px;
-  font-size:16px;
-  resize:vertical;
-  margin-bottom:12px
-}
-
-.timer{
-  font-size:28px;
-  font-weight:bold;
-  margin:12px
-}
-
-.transcript{
-  background:#f7f8fa;
-  padding:14px;
-  border-radius:10px;
-  text-align:left;
-  min-height:70px;
-  margin:12px 0;
-  white-space:pre-wrap
-}
-
-.analysis-box{
-  background:#f8fafc;
-  border:1px solid #e5e7eb;
-  padding:14px;
-  border-radius:10px;
-  text-align:left;
-  margin:12px 0;
-  line-height:1.6
-}
-
-.analysis-title{
-  font-weight:bold;
-  color:#123b63;
-  margin-bottom:6px
-}
-
-.metric-row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:3px 0
-}
-
-.metric-value{
-  font-weight:bold;
-  color:#1769aa
-}
-
-.tag{
-  display:inline-block;
-  background:#eef6ff;
-  color:#1769aa;
-  padding:3px 8px;
-  border-radius:999px;
-  margin:3px 4px 0 0;
-  font-size:13px;
-  font-weight:bold
-}
-
-#stopBtn{
-  background:#dc3545
-}
-
-#nextQuestion,
-#continueBtn{
-  background:#198754
-}
-
-#nextQuestion,
-#continueBtn{
-  display:none
-}
-
-.info{
-  background:#f8fafc;
-  padding:14px;
-  border-radius:10px;
-  margin:12px 0;
-  text-align:left
-}
-
-.result-item{
-  text-align:left;
-  background:#f8fafc;
-  padding:14px;
-  border-radius:10px;
-  margin:10px 0
-}
-
-.result-item strong{
-  color:#123b63
-}
-
-.answer-box[readonly]{
-  background:#f8fafc;
-  cursor:default;
-  resize:none;
-}
-
-</style>
-</head>
-
-<body>
-
-<!-- ========================= AUTH ========================= -->
-
-<div class="container page active" id="authPage">
-
-  <div style="font-size:58px">🎤</div>
-
-  <h1>AI Interview</h1>
-
-  <p class="subtitle">
-    Practice your interview with AI
-  </p>
-
-  <div class="auth-tabs">
-
-    <div
-      class="auth-tab active"
-      id="loginTab"
-      onclick="showLogin()">
-      Login
-    </div>
-
-    <div
-      class="auth-tab"
-      id="registerTab"
-      onclick="showRegister()">
-      Register
-    </div>
-
-  </div>
-
-
-  <!-- LOGIN -->
-
-  <div
-    class="auth-form active"
-    id="loginForm">
-
-    <input
-      id="loginEmail"
-      type="email"
-      placeholder="Email address">
-
-    <button onclick="login()">
-      Login
-    </button>
-
-    <div
-      id="loginMessage"
-      class="message">
-    </div>
-
-  </div>
-
-
-  <!-- REGISTER -->
-
-  <div
-    class="auth-form"
-    id="registerForm">
-
-    <input
-      id="registerEmail"
-      type="email"
-      placeholder="Email address">
-
-    <button onclick="register()">
-      Register
-    </button>
-
-    <div
-      id="registerMessage"
-      class="message">
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ========================= SETUP ========================= -->
-
-<div
-  class="container page"
-  id="setupPage">
-
-  <h1>
-    Interview Setup
-  </h1>
-
-  <p class="subtitle">
-    Pilih bahasa dan kategori interview.
-  </p>
-
-
-  <h2>
-    Interview Language
-  </h2>
-
-  <div class="language-options">
-
-    <button
-      id="malayBtn"
-      class="language-option selected"
-      onclick="selectLanguage('Malay')">
-
-      🇲🇾 Bahasa Melayu
-
-    </button>
-
-    <button
-      id="englishBtn"
-      class="language-option"
-      onclick="selectLanguage('English')">
-
-      🇬🇧 English
-
-    </button>
-
-  </div>
-
-
-  <h2>
-    Pilih Kategori
-  </h2>
-
-  <div class="selection-card">
-
-    <button onclick="selectStudent()">
-      🎓 Student
-    </button>
-
-    <button onclick="selectAdult()">
-      👨‍💼 Adult
-    </button>
-
-  </div>
-
-
-  <!-- STUDENT -->
-
-  <div
-    id="studentOptions"
-    class="hidden">
-
-    <h2>
-      Student Interview
-    </h2>
-
-    <div class="selection-card">
-
-      <button
-        onclick="chooseInterview(
-          'Student',
-          'University Scholarship',
-          ''
-        )">
-
-        🎓 University Scholarship
-
-      </button>
-
-      <button
-        onclick="chooseInterview(
-          'Student',
-          'School Position',
-          ''
-        )">
-
-        🏫 School Position
-
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- ADULT -->
-
-  <div
-    id="adultOptions"
-    class="hidden">
-
-    <h2>
-      Career Interview
-    </h2>
-
-    <div class="career-box">
-
-      <input
-        id="careerInput"
-        placeholder="Contoh: Railway Engineer">
-
-      <button onclick="chooseCareer()">
-        Continue
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ========================= DEVICE ========================= -->
-
-<div
-  class="container page"
-  id="devicePage">
-
-  <h1>
-    Camera & Microphone
-  </h1>
-
-  <p class="subtitle">
-    Benarkan camera dan microphone sebelum interview bermula.
-  </p>
-
-  <video
-    id="video"
-    autoplay
-    playsinline
-    muted>
-  </video>
-
-
-  <div class="status-container">
-
-    <div
-      id="cameraStatus"
-      class="status">
-
-      📷 Camera: checking...
-
-    </div>
-
-    <div
-      id="micStatus"
-      class="status">
-
-      🎤 Microphone: checking...
-
-    </div>
-
-    <div
-      id="speechStatus"
-      class="status">
-
-      🗣️ Speech Recognition: checking...
-
-    </div>
-
-  </div>
-
-
-  <button
-    class="back-btn"
-    onclick="backToSetup()">
-
-    Back
-
-  </button>
-
-
-  <button
-    id="continueBtn"
-    onclick="startInterview()">
-
-    Start Interview
-
-  </button>
-
-</div>
-
-
-<!-- ========================= INTERVIEW ========================= -->
-
-<div
-  class="container page"
-  id="interviewPage">
-
-  <h1>
-    AI Interview
-  </h1>
-
-  <video
-    id="interviewVideo"
-    autoplay
-    playsinline
-    muted>
-  </video>
-
-  <div
-    id="interviewInfo"
-    class="info">
-  </div>
-
-
-  <div class="question-box">
-
-    <div
-      id="questionNumber"
-      class="question-number">
-    </div>
-
-    <div
-      id="questionText"
-      class="question-text">
-    </div>
-
-  </div>
-
-
-  <div
-    class="timer"
-    id="timer">
-
-    00:00
-
-  </div>
-
-
-  <div
-    id="transcript"
-    class="transcript">
-
-    Your speech transcript will appear here...
-
-  </div>
-
-
-  <div id="fillerAnalysis" style="display:none !important;" class="analysis-box" style="display:none;">
-    <div class="analysis-title" style="display:none !important;">Speech Analysis</div>
-    <div class="metric-row"><span>Filler Words</span><span id="fillerCount" style="display:none !important;" class="metric-value">0</span></div>
-    <div class="metric-row"><span>Stuttering</span><span id="stutterCount" style="display:none !important;" class="metric-value">0</span></div>
-    <div id="speechPatterns" style="display:none !important;" style="margin-top:6px;color:#667085;">Belum ada transcript.</div>
-  </div>
-
-
-  <textarea
-    id="answerBox"
-    class="answer-box"
-    placeholder="Transcript akan muncul di sini."
-    readonly readonly>
-  </textarea>
-
-
-  <button
-    id="startAnswer"
-    onclick="startAnswering()">
-
-    🎤 Start Answer
-
-  </button>
-
-
-  <button
-    id="stopBtn"
-    onclick="stopAnsweringAndTranscribe()">
-
-    ⏹ Stop
-
-  </button>
-
-
-  <br>
-
-
-  <button
-    id="nextQuestion"
-    onclick="goNextQuestion()">
-
-    Next Question →
-
-  </button>
-
-</div>
-
-
-<!-- ========================= FINISH ========================= -->
-
-<div
-  class="container page"
-  id="finishPage">
-
-  <div style="font-size:58px">
-    🎉
-  </div>
-
-  <h1>
-    Interview Completed!
-  </h1>
-
-  <p class="subtitle">
-    Tahniah! Anda telah melengkapkan semua soalan.
-  </p>
-
-  <div id="saveStatus">
-    💾 Saving interview...
-  </div>
-
-  <div id="results">
-  </div>
-  <div id="finalAIAnalysis" class="info" style="display:none;text-align:left">
-    <strong>🤖 Overall AI Analysis</strong>
-    <div id="finalAIContent" style="margin-top:10px"></div>
-  </div>
-
-
-</div>
-
-
-<script>
-
-/* =====================================================
-   APPS SCRIPT URL
-===================================================== */
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbwbIvErlPxLWD_Jp4ha5tZUmgsPgF7sF0yXFe-dASyZ9XkNeZAnE5rdBh_dBYy_7Fn8Gg/exec";
-
-/* =====================================================
-   USER
-===================================================== */
-
-let USER_EMAIL = "";
-let USER_ID = "";
-
-
-/* =====================================================
-   INTERVIEW SETTINGS
-===================================================== */
-
-let INTERVIEW_CATEGORY = "";
-let INTERVIEW_SUBCATEGORY = "";
-let INTERVIEW_CAREER = "";
-let INTERVIEW_LANGUAGE = "Malay";
-
-
-/* =====================================================
-   INTERVIEW DATA
-===================================================== */
-
-let questions = [];
-let currentQuestion = 0;
-let answers = [];
-let aiAnalysisResults = [];
-
-
-/* =====================================================
-   CAMERA / SPEECH
-===================================================== */
-
-let stream = null;
-let mediaRecorder = null;
-let audioChunks = [];
-let recognition = null;
-let isListening = false;
-let isTranscribing = false;
-let pendingTranscription = false;
-let timerInterval = null;
-let seconds = 0;
-let finalTranscript = "";
-let currentFillerAnalysis = {count:0, rate:0, wordCount:0, fillers:[]};
-let currentStutterAnalysis = {count:0, patterns:[]};
-
-
-/* =====================================================
-   INTERVIEW ID
-===================================================== */
-
-const interviewID =
-  "INT" +
-  Date.now().toString(36).toUpperCase();
-
-
-/* =====================================================
-   PAGE CONTROL
-===================================================== */
-
-function showPage(id){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(function(page){
-
-      page.classList.remove("active");
-
-    });
-
-
-  const page =
-    document.getElementById(id);
-
-
-  if(page){
-
-    page.classList.add("active");
-
-  }
-
-}
-
-
-/* =====================================================
-   AUTH TABS
-===================================================== */
-
-function showLogin(){
-
-  document
-    .getElementById("loginTab")
-    .classList.add("active");
-
-  document
-    .getElementById("registerTab")
-    .classList.remove("active");
-
-
-  document
-    .getElementById("loginForm")
-    .classList.add("active");
-
-  document
-    .getElementById("registerForm")
-    .classList.remove("active");
-
-}
-
-
-function showRegister(){
-
-  document
-    .getElementById("registerTab")
-    .classList.add("active");
-
-  document
-    .getElementById("loginTab")
-    .classList.remove("active");
-
-
-  document
-    .getElementById("registerForm")
-    .classList.add("active");
-
-  document
-    .getElementById("loginForm")
-    .classList.remove("active");
-
-}
-
-
-/* =====================================================
-   EMAIL VALIDATION
-===================================================== */
-
-function validEmail(email){
-
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    .test(email);
-
-}
-
-
-/* =====================================================
-   JSONP REQUEST
-===================================================== */
-
-function jsonpRequest(
-  action,
-  email,
-  callback
-){
-
-  const callbackName =
-    "jsonp_" +
-    Date.now() +
-    "_" +
-    Math.floor(
-      Math.random() * 100000
-    );
-
-
-  const script =
-    document.createElement("script");
-
-
-  let finished = false;
-
-
-  window[callbackName] =
-    function(data){
-
-      if(finished) return;
-
-      finished = true;
-
-
-      callback(data);
-
-
-      delete window[callbackName];
-
-
-      if(script.parentNode){
-
-        script.parentNode
-          .removeChild(script);
-
-      }
-
-    };
-
-
-  script.onerror =
-    function(){
-
-      if(finished) return;
-
-      finished = true;
-
-
-      callback({
-
-        success:false,
-
-        message:
-          "Tidak dapat berhubung dengan server."
-
-      });
-
-
-      delete window[callbackName];
-
-
-      if(script.parentNode){
-
-        script.parentNode
-          .removeChild(script);
-
-      }
-
-    };
-
-
-  script.src =
-    SCRIPT_URL +
-    "?action=" +
-    encodeURIComponent(action) +
-    "&email=" +
-    encodeURIComponent(email) +
-    "&callback=" +
-    encodeURIComponent(callbackName);
-
-
-  document.body.appendChild(script);
-
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-function login(){
-
-  const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  const msg =
-    document.getElementById(
-      "loginMessage"
-    );
-
-
-  if(!validEmail(email)){
-
-    msg.textContent =
-      "Masukkan email yang sah.";
-
-    msg.className =
-      "message error";
-
-    return;
-
-  }
-
-
-  msg.textContent =
-    "Checking...";
-
-  msg.className =
-    "message";
-
-
-  jsonpRequest(
-    "login",
-    email,
-    function(data){
-
-      if(
-        data &&
-        data.success
-      ){
-
-        USER_EMAIL = email;
-
-        USER_ID =
-          data.userID || "";
-
-
-        msg.textContent =
-          "Login berjaya!";
-
-        msg.className =
-          "message success";
-
-
-        setTimeout(
-          function(){
-
-            showPage(
-              "setupPage"
-            );
-
-          },
-          400
-        );
-
-      }
-
-      else{
-
-        msg.textContent =
-          (
-            data &&
-            data.message
-          ) ||
-          "Login gagal.";
-
-        msg.className =
-          "message error";
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   REGISTER
-===================================================== */
-
-function register(){
-
-  const email =
-    document
-      .getElementById("registerEmail")
-      .value
-      .trim()
-      .toLowerCase();
-
-
-  const msg =
-    document.getElementById(
-      "registerMessage"
-    );
-
-
-  if(!validEmail(email)){
-
-    msg.textContent =
-      "Masukkan email yang sah.";
-
-    msg.className =
-      "message error";
-
-    return;
-
-  }
-
-
-  msg.textContent =
-    "Registering...";
-
-  msg.className =
-    "message";
-
-
-  jsonpRequest(
-    "register",
-    email,
-    function(data){
-
-      if(
-        data &&
-        data.success
-      ){
-
-        msg.textContent =
-          "Register berjaya. Sila login.";
-
-        msg.className =
-          "message success";
-
-
-        document
-          .getElementById("loginEmail")
-          .value = email;
-
-
-        setTimeout(
-          showLogin,
-          500
-        );
-
-      }
-
-      else{
-
-        msg.textContent =
-          (
-            data &&
-            data.message
-          ) ||
-          "Register gagal.";
-
-        msg.className =
-          "message error";
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   LANGUAGE
-===================================================== */
-
-function selectLanguage(language){
-
-  INTERVIEW_LANGUAGE =
-    language;
-
-
-  document
-    .getElementById("malayBtn")
-    .classList
-    .toggle(
-      "selected",
-      language === "Malay"
-    );
-
-
-  document
-    .getElementById("englishBtn")
-    .classList
-    .toggle(
-      "selected",
-      language === "English"
-    );
-
-}
-
-
-/* =====================================================
-   CATEGORY
-===================================================== */
-
-function selectStudent(){
-
-  document
-    .getElementById("studentOptions")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("adultOptions")
-    .classList
-    .add("hidden");
-
-}
-
-
-function selectAdult(){
-
-  document
-    .getElementById("adultOptions")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("studentOptions")
-    .classList
-    .add("hidden");
-
-
-  document
-    .getElementById("careerInput")
-    .focus();
-
-}
-
-
-/* =====================================================
-   CAREER
-===================================================== */
-
-function chooseCareer(){
-
-  const career =
-    document
-      .getElementById("careerInput")
-      .value
-      .trim();
-
-
-  if(!career){
-
-    alert(
-      "Sila masukkan nama kerjaya."
-    );
-
-    return;
-
-  }
-
-
-  chooseInterview(
-    "Adult",
-    "Career Interview",
-    career
-  );
-
-}
-
-
-/* =====================================================
-   CHOOSE INTERVIEW
-===================================================== */
-
-function chooseInterview(
-  category,
-  subcategory,
-  career
-){
-
-  INTERVIEW_CATEGORY =
-    category;
-
-  INTERVIEW_SUBCATEGORY =
-    subcategory;
-
-  INTERVIEW_CAREER =
-    career;
-
-
-  questions =
-    generateQuestionsForCategory();
-
-
-  currentQuestion = 0;
-
-  answers = [];
-
-
-  showPage(
-    "devicePage"
-  );
-
-
-  checkDevices();
-
-}
-
-
-/* =====================================================
-   QUESTION BANK
-===================================================== */
-
-function generateQuestionsForCategory(){
-
-  const isMalay =
-    INTERVIEW_LANGUAGE === "Malay";
-
-
-  /* ================= STUDENT
-     UNIVERSITY SCHOLARSHIP
-  ================= */
-
-  if(
-    INTERVIEW_CATEGORY === "Student" &&
-    INTERVIEW_SUBCATEGORY ===
-      "University Scholarship"
-  ){
-
-    if(isMalay){
-
-      return [
-
-        "Ceritakan tentang diri anda.",
-
-        "Mengapa anda memohon biasiswa ini?",
-
-        "Apakah pencapaian akademik anda?",
-
-        "Bagaimanakah biasiswa ini akan membantu anda mencapai matlamat anda?",
-
-        "Mengapa kami patut memilih anda untuk menerima biasiswa ini?"
-
-      ];
-
-    }
-
-
-    return [
-
-      "Tell me about yourself.",
-
-      "Why are you applying for this scholarship?",
-
-      "What are your academic achievements?",
-
-      "How will this scholarship help you achieve your goals?",
-
-      "Why should we choose you for this scholarship?"
-
-    ];
-
-  }
-
-
-  /* ================= STUDENT
-     SCHOOL POSITION
-  ================= */
-
-  if(
-    INTERVIEW_CATEGORY === "Student" &&
-    INTERVIEW_SUBCATEGORY ===
-      "School Position"
-  ){
-
-    if(isMalay){
-
-      return [
-
-        "Ceritakan tentang diri anda.",
-
-        "Mengapa anda mahu memohon jawatan ini?",
-
-        "Apakah kekuatan yang boleh anda sumbangkan kepada jawatan ini?",
-
-        "Ceritakan pengalaman anda bekerja dengan orang lain.",
-
-        "Mengapa kami patut memilih anda untuk jawatan ini?"
-
-      ];
-
-    }
-
-
-    return [
-
-      "Tell me about yourself.",
-
-      "Why do you want to apply for this school position?",
-
-      "What strengths can you contribute to this position?",
-
-      "Tell me about a time you worked successfully with others.",
-
-      "Why should we choose you for this position?"
-
-    ];
-
-  }
-
-
-  /* ================= ADULT
-     CAREER
-  ================= */
-
-  const career =
-    INTERVIEW_CAREER ||
-    "this career";
-
-
-  if(isMalay){
-
-    return [
-
-      "Ceritakan tentang diri anda dan minat anda terhadap kerjaya " +
-        career +
-        ".",
-
-
-      "Mengapa anda berminat untuk menjadi " +
-        career +
-        "?",
-
-
-      "Apakah kemahiran yang penting untuk kerjaya " +
-        career +
-        "?",
-
-
-      "Ceritakan satu pengalaman yang menunjukkan anda boleh menyelesaikan masalah.",
-
-
-      "Mengapa kami patut memilih anda untuk kerjaya ini?"
-
-    ];
-
-  }
-
-
-  return [
-
-    "Tell me about yourself and your interest in " +
-      career +
-      ".",
-
-
-    "Why are you interested in becoming a " +
-      career +
-      "?",
-
-
-    "What skills are important for a " +
-      career +
-      "?",
-
-
-    "Tell me about an experience that shows your problem-solving skills.",
-
-
-    "Why should we choose you for this career?"
-
-  ];
-
-}
-
-
-/* =====================================================
-   CAMERA / MICROPHONE
-   ===================================================== */
-
-async function checkDevices(){
-
-  const camera = document.getElementById("cameraStatus");
-  const mic = document.getElementById("micStatus");
-  const speech = document.getElementById("speechStatus");
-  const btn = document.getElementById("continueBtn");
-
-  btn.style.display = "none";
-
-  camera.textContent = "📷 Camera: checking...";
-  mic.textContent = "🎤 Microphone: checking...";
-  speech.textContent = "🗣️ Speech Recognition: checking...";
-
-  try{
-
-    if(!navigator.mediaDevices ||
-       !navigator.mediaDevices.getUserMedia){
-
-      throw new Error("getUserMedia is not supported.");
-    }
-
-    stream = await navigator.mediaDevices.getUserMedia({
-      video:true,
-      audio:true
-    });
-
-    document.getElementById("video").srcObject = stream;
-
-    if(!stream.getAudioTracks().length){
-      throw new Error("No microphone audio track.");
-    }
-
-    camera.textContent = "📷 Camera: Ready";
-    camera.className = "status ready";
-
-    mic.textContent = "🎤 Microphone: Ready";
-    mic.className = "status ready";
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if(!SpeechRecognition){
-      speech.textContent =
-        "🗣️ Speech Recognition: Browser tidak menyokong.";
-      speech.className = "status failed";
-      return;
-    }
-
-    speech.textContent = "🗣️ Speech Recognition: Ready";
-    speech.className = "status ready";
-    btn.style.display = "inline-block";
-
-  }
-  catch(error){
-
-    console.error(error);
-    stopStream();
-
-    camera.textContent =
-      "📷 Camera/Microphone: Permission needed";
-    camera.className = "status failed";
-
-    mic.textContent =
-      "🎤 Please allow camera and microphone in browser.";
-    mic.className = "status failed";
-
-    speech.textContent =
-      "🗣️ Server STT: Cannot access microphone.";
-    speech.className = "status failed";
-  }
-}
-
-
-/* =====================================================
-   STOP CAMERA
-   ===================================================== */
-
-/* =====================================================
-   STOP CAMERA
-===================================================== */
-
-function stopStream(){
-
-  if(stream){
-
-    stream
-      .getTracks()
-      .forEach(function(track){
-
-        track.stop();
-
-      });
-
-
-    stream = null;
-
-  }
-
-}
-
-
-/* =====================================================
-   BACK TO SETUP
-===================================================== */
-
-function backToSetup(){
-
-  stopStream();
-
-  showPage(
-    "setupPage"
-  );
-
-}
-
-
-/* =====================================================
-   START INTERVIEW
-===================================================== */
-
-function startInterview(){
-
-  if(!questions.length){
-
-    alert(
-      "Soalan interview belum tersedia."
-    );
-
-    return;
-
-  }
-
-
-  const languageText =
-    INTERVIEW_LANGUAGE === "Malay"
-      ? "🇲🇾 Bahasa Melayu"
-      : "🇬🇧 English";
-
-
-  if(
-    INTERVIEW_CATEGORY === "Adult"
-  ){
-
-    document
-      .getElementById(
-        "interviewInfo"
-      )
-      .textContent =
-        "👨‍💼 Adult — " +
-        INTERVIEW_CAREER +
-        " | " +
-        languageText;
-
-  }
-
-  else{
-
-    document
-      .getElementById(
-        "interviewInfo"
-      )
-      .textContent =
-        "🎓 " +
-        INTERVIEW_SUBCATEGORY +
-        " | " +
-        languageText;
-
-  }
-
-
-  showPage(
-    "interviewPage"
-  );
-
-  const interviewVideo = document.getElementById("interviewVideo");
-  if(stream && interviewVideo){
-    interviewVideo.srcObject = stream;
-    interviewVideo.play().catch(function(){});
-  }
-
-  showQuestion();
-
-}
-
-
-/* =====================================================
-   SHOW QUESTION
-===================================================== */
-
-function showQuestion(){
-
-  stopAnswering();
-
-
-  document
-    .getElementById(
-      "questionNumber"
-    )
-    .textContent =
-      "Question " +
-      (currentQuestion + 1) +
-      " / " +
-      questions.length;
-
-
-  document
-    .getElementById(
-      "questionText"
-    )
-    .textContent =
-      questions[currentQuestion];
-
-
-  document
-    .getElementById(
-      "transcript"
-    )
-    .textContent =
-      "Your speech transcript will appear here...";
-
-
-  document
-    .getElementById(
-      "answerBox"
-    )
-    .value = "";
-
-  // Keep analysis hidden until the interview is finished.
-
-
-  document
-    .getElementById(
-      "nextQuestion"
-    )
-    .style.display =
-      "none";
-
-
-  document
-    .getElementById(
-      "startAnswer"
-    )
-    .style.display =
-      "inline-block";
-
-
-  seconds = 0;
-
-  updateTimer();
-
-}
-
-
-/* =====================================================
-   TIMER
-===================================================== */
-
-function updateTimer(){
-
-  const minutes =
-    String(
-      Math.floor(seconds / 60)
-    )
-    .padStart(2,"0");
-
-
-  const secs =
-    String(
-      seconds % 60
-    )
-    .padStart(2,"0");
-
-
-  document
-    .getElementById("timer")
-    .textContent =
-      minutes +
-      ":" +
-      secs;
-
-}
-
-
-/* =====================================================
-   SPEECH ANALYSIS - FILLER WORDS + STUTTERING
-===================================================== */
-
-function normalizeFillerToken(token){
-  const t = (token || "").toLowerCase().trim();
-
-  // Hesitation sounds only. Normal words such as macam, lah, kan,
-  // actually, basically and like are intentionally NOT counted.
-  if(/^a{2,}$/.test(t)) return "AA";
-  if(/^e+a+$/.test(t) && t.length >= 3) return "EAA";
-  if(/^e{2,}$/.test(t)) return "EE";
-  if(/^er+$/.test(t)) return "ER";
-  if(/^erm+$/.test(t)) return "ERM";
-  if(/^em+$/.test(t)) return "EM";
-  if(/^hm+$/.test(t)) return "HMM";
-  if(/^uh+$/.test(t)) return "UH";
-  if(/^um+$/.test(t)) return "UM";
-
-  return null;
-}
-
-function analyzeFillerWords(text){
-  const clean = (text || "").trim();
-  const tokens = clean
-    ? clean.split(/\s+/).map(function(token){
-        return token.replace(/^[^a-zA-Z]+|[^a-zA-Z]+$/g, "");
-      }).filter(Boolean)
-    : [];
-
-  const counts = {};
-  let count = 0;
-
-  tokens.forEach(function(token){
-    const normalized = normalizeFillerToken(token);
-    if(normalized){
-      count++;
-      counts[normalized] = (counts[normalized] || 0) + 1;
-    }
-  });
-
-  const fillers = Object.keys(counts).map(function(word){
-    return {word:word, count:counts[word]};
-  }).sort(function(a,b){
-    return b.count - a.count;
-  });
-
-  return {
-    count:count,
-    wordCount:tokens.length,
-    rate:tokens.length ? (count / tokens.length) * 100 : 0,
-    fillers:fillers
-  };
-}
-
-function analyzeStuttering(text){
-  const clean = (text || "").trim();
-  if(!clean) return {count:0, patterns:[]};
-
-  const patterns = [];
-
-  // Detect repeated syllables/short fragments with hyphens: sa-sa-saya,
-  // I-I-I, w-w-want, th-th-the.
-  const hyphenRegex = /\b([a-zA-Z]{1,4})-\1-(?:\1-)?[a-zA-Z]+\b/gi;
-  let match;
-  while((match = hyphenRegex.exec(clean)) !== null){
-    patterns.push(match[0]);
-  }
-
-  // Detect separated repetitions: "sa sa saya", "I I I think", "w w want".
-  const separatedRegex = /\b([a-zA-Z]{1,4})\s+\1\s+(?:\1\s+)?[a-zA-Z]+\b/gi;
-  while((match = separatedRegex.exec(clean)) !== null){
-    patterns.push(match[0]);
-  }
-
-  // Remove duplicate detections.
-  const unique = patterns.filter(function(value,index,array){
-    return array.indexOf(value) === index;
-  });
-
-  return {
-    count:unique.length,
-    patterns:unique
-  };
-}
-
-function displaySpeechAnalysis(text){
-  const filler = analyzeFillerWords(text);
-  const stutter = analyzeStuttering(text);
-
-  currentFillerAnalysis = filler;
-  currentStutterAnalysis = stutter;
-
-  const fillerCount = document.getElementById("fillerCount");
-  const stutterCount = document.getElementById("stutterCount");
-  const patterns = document.getElementById("speechPatterns");
-
-  if(fillerCount) fillerCount.textContent = filler.count;
-  if(stutterCount) stutterCount.textContent = stutter.count;
-
-  if(!patterns) return;
-
-  if(!text || !text.trim()){
-    patterns.textContent = "Belum ada transcript.";
-    return;
-  }
-
-  let html = "";
-
-  if(filler.fillers.length){
-    html += "<div><strong>Filler detected:</strong><br>";
-    filler.fillers.forEach(function(item){
-      html += '<span class="tag">' + escapeHTML(item.word) + " × " + item.count + "</span>";
-    });
-    html += "</div>";
-  }
-
-  if(stutter.patterns.length){
-    html += "<div style=\"margin-top:8px;\"><strong>Stuttering detected:</strong><br>";
-    stutter.patterns.forEach(function(item){
-      html += '<span class="tag">' + escapeHTML(item) + "</span>";
-    });
-    html += "</div>";
-  }
-
-  if(!html){
-    html = "No filler words or stuttering pattern detected.";
-  }
-
-  patterns.innerHTML = html;
-}
-
-
-/* =====================================================
-   START ANSWER — GITHUB ONLY / BROWSER STT
-   ===================================================== */
-
 function startAnswering(){
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
 
   if(!stream){
     alert("Microphone belum tersedia.");
     return;
   }
 
-  if(!SpeechRecognition){
-    alert("Speech Recognition tidak disokong oleh browser ini.");
+  if(typeof MediaRecorder === "undefined"){
+    alert("Browser ini tidak menyokong rakaman audio.");
     return;
   }
 
-  if(isListening){
+  if(isListening || isTranscribing){
     return;
   }
 
-  finalTranscript = "";
-  isListening = true;
-  seconds = 0;
-  updateTimer();
+  const audioTracks = stream.getAudioTracks();
 
-  recognition = new SpeechRecognition();
-  recognition.lang =
-    INTERVIEW_LANGUAGE === "Malay" ? "ms-MY" : "en-US";
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.maxAlternatives = 1;
+  if(!audioTracks.length){
+    alert("Microphone tidak tersedia.");
+    return;
+  }
 
-  document.getElementById("transcript").textContent =
-    "🎤 Listening...";
-  document.getElementById("answerBox").value = "";
-  document.getElementById("startAnswer").style.display = "none";
-  document.getElementById("stopBtn").style.display = "inline-block";
-  document.getElementById("nextQuestion").style.display = "none";
+  const audioStream = new MediaStream(audioTracks);
 
-  recognition.onresult = function(event){
-    let interim = "";
-    let finalText = finalTranscript;
-
-    for(let i = event.resultIndex; i < event.results.length; i++){
-      const text = event.results[i][0].transcript;
-      if(event.results[i].isFinal){
-        finalText += (finalText ? " " : "") + text.trim();
-      }else{
-        interim += text;
-      }
-    }
-
-    finalTranscript = finalText.trim();
-    const shown = (finalTranscript + (interim ? " " + interim : "")).trim();
-
-    document.getElementById("transcript").textContent =
-      shown || "🎤 Listening...";
-    document.getElementById("answerBox").value = shown;
-  };
-
-  recognition.onerror = function(event){
-    console.error("Speech Recognition error:", event.error);
-
-    if(event.error === "not-allowed" || event.error === "service-not-allowed"){
-      document.getElementById("transcript").textContent =
-        "⚠️ Speech Recognition tidak dibenarkan oleh browser. Pastikan microphone diizinkan.";
-    }else if(event.error !== "aborted"){
-      document.getElementById("transcript").textContent =
-        "⚠️ Speech Recognition error: " + event.error;
-    }
-  };
-
-  recognition.onend = function(){
-    // Safari/iPad may stop recognition automatically. Restart while user is still answering.
-    if(isListening){
-      try{
-        recognition.start();
-      }catch(error){
-        console.warn("Recognition restart:", error);
-      }
-    }
-  };
+  const mimeType = chooseAudioMimeType();
 
   try{
-    recognition.start();
-  }catch(error){
+
+    mediaRecorder =
+      mimeType
+        ? new MediaRecorder(
+            audioStream,
+            { mimeType: mimeType }
+          )
+        : new MediaRecorder(
+            audioStream
+          );
+
+  }
+  catch(error){
+
     console.error(error);
-    isListening = false;
-    recognition = null;
-    document.getElementById("startAnswer").style.display = "inline-block";
-    document.getElementById("stopBtn").style.display = "none";
-    alert("Tidak dapat memulakan Speech Recognition.");
+
+    alert(
+      "Tidak dapat memulakan rakaman audio."
+    );
+
     return;
   }
 
-  timerInterval = setInterval(function(){
-    seconds++;
-    updateTimer();
-  },1000);
-}
 
+  /* =========================
+     RESET
+  ========================= */
 
-/* =====================================================
-   STOP ANSWER
-   ===================================================== */
+  audioChunks = [];
 
-function stopAnswering(){
+  finalTranscript = "";
 
-  isListening = false;
+  pendingTranscription = false;
 
-  if(timerInterval){
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
+  isListening = true;
 
-  if(recognition){
-    try{ recognition.stop(); }catch(error){}
-    recognition = null;
-  }
+  isTranscribing = false;
 
-  const stop = document.getElementById("stopBtn");
-  if(stop) stop.style.display = "none";
-}
-
-
-function stopAnsweringAndTranscribe(){
-
-  if(!isListening){
-    alert("Belum ada jawapan untuk dihentikan.");
-    return;
-  }
-
-  stopAnswering();
-
-  finalTranscript =
-    String(finalTranscript || document.getElementById("answerBox").value || "").trim();
-
-  document.getElementById("transcript").textContent =
-    finalTranscript || "⚠️ Tiada transcript dikesan.";
-  document.getElementById("answerBox").value = finalTranscript;
-
-  if(!finalTranscript){
-    document.getElementById("startAnswer").style.display = "inline-block";
-    document.getElementById("nextQuestion").style.display = "none";
-    return;
-  }
-
-  const analysis = analyzeSpeech(finalTranscript);
+  seconds = 0;
 
   currentFillerAnalysis = {
-    count:analysis.fillerCount,
-    rate:analysis.fillerRate,
-    wordCount:analysis.wordCount,
-    fillers:Object.keys(analysis.fillers).map(function(name){
-      return {word:name,count:analysis.fillers[name]};
-    })
+    count: 0,
+    rate: 0,
+    wordCount: 0,
+    fillers: []
   };
 
   currentStutterAnalysis = {
-    count:analysis.stutteringCount,
-    patterns:analysis.stutterings.map(function(item){
-      return item.text;
-    })
+    count: 0,
+    patterns: []
   };
 
-  document.getElementById("startAnswer").style.display = "none";
-  document.getElementById("stopBtn").style.display = "none";
-  document.getElementById("nextQuestion").style.display = "inline-block";
-}
+
+  updateTimer();
 
 
-/* =====================================================
-   FILLER WORD + STUTTERING DETECTION — FIXED
-/* =====================================================
-   FILLER WORD + STUTTERING DETECTION — FIXED
-   Detects hesitation sounds even when punctuation/elongation
-   is present, while keeping normal words such as "macam",
-   "like", "actually", "basically", "lah", "kan", etc. safe.
-===================================================== */
+  /* =========================
+     UI
+  ========================= */
 
-const HESITATION_LABELS = [
-  { label:"AA",  re:/^a{2,}$/i },
-  { label:"EAA", re:/^e+a+$/i },
-  { label:"EE",  re:/^e{2,}$/i },
-  { label:"ERR", re:/^e?r{2,}$/i },
-  { label:"ERM", re:/^e+r+m{1,}$/i },
-  { label:"EM",  re:/^e+m{1,}$/i },
-  { label:"HMM", re:/^h+m{2,}$/i },
-  { label:"UH",  re:/^u+h{1,}$/i },
-  { label:"UM",  re:/^u+m{1,}$/i }
-];
+  document.getElementById(
+    "transcript"
+  ).textContent =
+    "🎤 Listening...";
 
-const COMMON_WORDS = new Set([
-  "macam","like","actually","basically","literally",
-  "well","so","lah","kan","benda","tu"
-]);
 
-function cleanSpeechToken(token){
-  return String(token || "")
-    .toLowerCase()
-    .trim()
-    // Keep letters only. This handles "err...", "eaaaa!", "emm..", etc.
-    .replace(/[^a-z]+/gi,"");
-}
+  document.getElementById(
+    "answerBox"
+  ).value = "";
 
-function getHesitationLabel(token){
-  const t = cleanSpeechToken(token);
-  if(!t) return null;
 
-  for(const item of HESITATION_LABELS){
-    if(item.re.test(t)) return item.label;
-  }
+  document.getElementById(
+    "startAnswer"
+  ).style.display =
+    "none";
 
-  return null;
-}
 
-function detectExcessiveCommonWords(text){
-  const tokens = String(text || "")
-    .split(/\s+/)
-    .map(cleanSpeechToken)
-    .filter(Boolean);
+  document.getElementById(
+    "stopBtn"
+  ).style.display =
+    "inline-block";
 
-  const counts = {};
-  const fillers = [];
 
-  for(const token of tokens){
-    if(COMMON_WORDS.has(token)){
-      counts[token] = (counts[token] || 0) + 1;
-    }
-  }
+  document.getElementById(
+    "nextQuestion"
+  ).style.display =
+    "none";
 
-  // 3+ consecutive repetitions.
-  for(let i=0;i<tokens.length;){
-    const token = tokens[i];
 
-    if(!COMMON_WORDS.has(token)){
-      i++;
-      continue;
-    }
+  /* =========================
+     AUDIO DATA
+  ========================= */
 
-    let j = i + 1;
-    while(j < tokens.length && tokens[j] === token) j++;
+  mediaRecorder.ondataavailable =
+    function(event){
 
-    const runLength = j - i;
+      if(
+        event.data &&
+        event.data.size > 0
+      ){
 
-    if(runLength >= 3){
-      for(let k=i;k<j;k++){
-        fillers.push({
-          label:token.toUpperCase(),
-          index:k,
-          type:"common-excessive"
-        });
+        audioChunks.push(
+          event.data
+        );
+
       }
-    }
 
-    i = j;
-  }
+    };
 
-  // 4+ total occurrences: only count occurrences after the first 3.
-  for(const token of Object.keys(counts)){
-    if(counts[token] >= 4){
-      let seen = 0;
-      for(let i=0;i<tokens.length;i++){
-        if(tokens[i] === token){
-          seen++;
-          if(seen > 3){
-            if(!fillers.some(x => x.index === i)){
-              fillers.push({
-                label:token.toUpperCase(),
-                index:i,
-                type:"common-excessive"
-              });
-            }
+
+  /* =========================
+     ON STOP
+  ========================= */
+
+  mediaRecorder.onstop =
+    async function(){
+
+      /*
+       * Capture current recording data
+       * BEFORE clearing recorder state.
+       */
+
+      const shouldTranscribe =
+        pendingTranscription;
+
+
+      pendingTranscription =
+        false;
+
+
+      if(!shouldTranscribe){
+
+        return;
+
+      }
+
+
+      const recordedType =
+        mediaRecorder &&
+        mediaRecorder.mimeType
+          ? mediaRecorder.mimeType
+          : (
+              mimeType ||
+              "audio/webm"
+            );
+
+
+      /*
+       * Make ONE Blob only.
+       */
+
+      const chunks =
+        audioChunks.slice();
+
+
+      const audioBlob =
+        new Blob(
+          chunks,
+          {
+            type: recordedType
           }
-        }
-      }
-    }
-  }
-
-  return fillers;
-}
-
-function detectStuttering(text){
-  const normalized = String(text || "")
-    .replace(/[–—]/g,"-")
-    .trim();
-
-  if(!normalized) return [];
-
-  const result = [];
-
-  // sa-sa-saya / I-I-I / w-w-want
-  const hyphenPattern =
-    /\b([a-zA-Z]{1,4})(?:-\1){1,}(?:-[a-zA-Z]+)?\b/gi;
-
-  let match;
-  while((match = hyphenPattern.exec(normalized)) !== null){
-    result.push({type:"hyphen", text:match[0]});
-  }
-
-  const tokens = normalized
-    .split(/\s+/)
-    .map(cleanSpeechToken)
-    .filter(Boolean);
-
-  for(let i=0;i<tokens.length;i++){
-    const a=tokens[i], b=tokens[i+1], c=tokens[i+2];
-    if(!a || !b) continue;
-
-    // I I I / sa sa sa
-    if(a === b && b === c && a.length <= 4){
-      result.push({
-        type:"repeat",
-        text:a+" "+b+" "+c
-      });
-      i += 2;
-      continue;
-    }
-
-    // I I think / sa sa saya
-    if(a === b && a.length <= 4 && c && c.startsWith(a) && c.length > a.length){
-      result.push({
-        type:"fragment",
-        text:a+" "+b+" "+c
-      });
-      i += 2;
-    }
-  }
-
-  return result.filter((item,index,array) =>
-    array.findIndex(x => x.text.toLowerCase() === item.text.toLowerCase()) === index
-  );
-}
-
-function analyzeSpeech(text){
-  const raw = String(text || "").trim();
-
-  // Split on whitespace only first, so "err... eaaaa! emm" is preserved.
-  const rawTokens = raw ? raw.split(/\s+/) : [];
-  const tokens = rawTokens.map(cleanSpeechToken).filter(Boolean);
-
-  const fillers = [];
-
-  rawTokens.forEach(function(rawToken, index){
-    const label = getHesitationLabel(rawToken);
-    if(label){
-      fillers.push({
-        label:label,
-        index:index,
-        type:"hesitation"
-      });
-    }
-  });
-
-  detectExcessiveCommonWords(raw).forEach(function(item){
-    fillers.push(item);
-  });
-
-  const stutters = detectStuttering(raw);
-
-  const counts = {};
-  fillers.forEach(function(item){
-    counts[item.label] = (counts[item.label] || 0) + 1;
-  });
-
-  const wordCount = tokens.length;
-
-  return {
-    wordCount:wordCount,
-    fillerCount:fillers.length,
-    fillerRate:wordCount ? (fillers.length / wordCount) * 100 : 0,
-    fillers:counts,
-    stutteringCount:stutters.length,
-    stutterings:stutters
-  };
-}
-
-function displaySpeechAnalysis(text){
-  const raw = String(text || "").trim();
-
-  // Support both the original UI IDs and the fixed IDs.
-  const panel =
-    document.getElementById("speechAnalysis") ||
-    document.getElementById("speechPatterns");
-
-  const fillerBox =
-    document.getElementById("fillerAnalysis") ||
-    document.getElementById("fillerCount");
-
-  const stutterBox =
-    document.getElementById("stutterAnalysis") ||
-    document.getElementById("stutterCount");
-
-  if(!panel){
-    console.warn("Speech analysis panel not found.");
-    return;
-  }
-
-  if(!raw){
-    panel.style.display = "block";
-
-    if(fillerBox){
-      fillerBox.innerHTML =
-        "Filler Words: 0<br><small>Belum ada transcript.</small>";
-    }
-
-    if(stutterBox){
-      stutterBox.innerHTML =
-        "Stuttering: 0<br><small>Belum ada transcript.</small>";
-    }
-
-    return;
-  }
-
-  const analysis = analyzeSpeech(raw);
-  panel.style.display = "block";
-
-  let fillerText =
-    "Filler Words: " + analysis.fillerCount +
-    " (" + analysis.fillerRate.toFixed(1) + "%)";
-
-  const fillerNames = Object.keys(analysis.fillers);
-
-  if(fillerNames.length){
-    fillerText += "<br><small>Detected: " +
-      escapeHTML(
-        fillerNames.map(function(name){
-          return name + " ×" + analysis.fillers[name];
-        }).join(", ")
-      ) + "</small>";
-  }else{
-    fillerText += "<br><small>Tiada filler word yang jelas.</small>";
-  }
-
-  if(fillerBox){
-    fillerBox.innerHTML = fillerText;
-  }
-
-  let stutterText =
-    "Stuttering: " + analysis.stutteringCount;
-
-  if(analysis.stutteringCount){
-    stutterText += "<br><small>Detected: " +
-      escapeHTML(
-        analysis.stutterings.map(function(item){
-          return item.text;
-        }).join(", ")
-      ) + "</small>";
-  }else{
-    stutterText += "<br><small>Tiada corak stuttering yang jelas.</small>";
-  }
-
-  if(stutterBox){
-    stutterBox.innerHTML = stutterText;
-  }
-
-  // Also expose the latest analysis to the rest of the app.
-  window.latestSpeechAnalysis = analysis;
-}
-
-/* =====================================================
-   DETECTOR TEST
-   Lets us verify the detector independently of the
-   browser Speech Recognition engine.
-===================================================== */
-
-function refreshSpeechAnalysisFromTranscript(){
-  const answer = document.getElementById("answerBox");
-  const transcript = document.getElementById("transcript");
-
-  const text =
-    (answer && answer.value) ||
-    (transcript && transcript.textContent) ||
-    "";
-
-  displaySpeechAnalysis(text);
-}
-
-function testFillerDetector(){
-  const sample = "errr eaaaa emm hmmmmm erm... aaa";
-  const box = document.getElementById("transcript");
-  const answer = document.getElementById("answerBox");
-
-  if(box) box.textContent = sample;
-  if(answer) answer.value = sample;
-
-  displaySpeechAnalysis(sample);
-
-  const analysis = analyzeSpeech(sample);
-  alert(
-    "Detector test:\n\n" +
-    "Filler = " + analysis.fillerCount + "\n" +
-    "Detected = " +
-    Object.keys(analysis.fillers).join(", ")
-  );
-}
-
-/* =====================================================
-   AI ANALYSIS
-   The frontend sends the transcript + detector data to
-   the Apps Script backend. The backend should call the
-   selected AI provider securely (API key stays server-side).
-===================================================== */
-
-function buildAIAnalysisPayload(answerText){
-  const analysis = analyzeSpeech(answerText);
-
-  return {
-    action:"analyzeInterview",
-    email:USER_EMAIL,
-    interviewID:interviewID,
-    category:INTERVIEW_CATEGORY,
-    subcategory:INTERVIEW_SUBCATEGORY,
-    career:INTERVIEW_CAREER,
-    language:INTERVIEW_LANGUAGE,
-    question:questions[currentQuestion],
-    answer:answerText,
-    wordCount:analysis.wordCount,
-    fillerCount:analysis.fillerCount,
-    fillerRate:analysis.fillerRate,
-    fillers:analysis.fillers,
-    stutteringCount:analysis.stutteringCount,
-    stutterings:analysis.stutterings
-  };
-}
-
-async function requestAIAnalysis(answerText){
-  const box = document.getElementById("aiLiveAnalysis");
-  const status = document.getElementById("aiAnalysisStatus");
-  const content = document.getElementById("aiAnalysisContent");
-
-  if(!box || !status || !content) return;
-
-  if(!answerText.trim()){
-    box.style.display = "none";
-    return;
-  }
-
-  box.style.display = "block";
-  status.textContent = "🤖 AI sedang menganalisis jawapan...";
-  content.innerHTML = "";
-
-  try{
-    const response = await fetch(SCRIPT_URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
-      body:JSON.stringify(buildAIAnalysisPayload(answerText))
-    });
-
-    const data = await response.json();
-
-    if(data && data.success){
-      status.textContent = "✅ AI analysis siap.";
-
-      const result = data.analysis || {};
-
-      content.innerHTML =
-        "<strong>Content:</strong> " +
-        escapeHTML(String(result.content || "-")) + "<br>" +
-        "<strong>Relevance:</strong> " +
-        escapeHTML(String(result.relevance || "-")) + "<br>" +
-        "<strong>Structure:</strong> " +
-        escapeHTML(String(result.structure || "-")) + "<br>" +
-        "<strong>Communication:</strong> " +
-        escapeHTML(String(result.communication || "-")) + "<br><br>" +
-        "<strong>Feedback:</strong><br>" +
-        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>");
-
-      aiAnalysisResults[currentQuestion] = result;
-    }else{
-      status.textContent =
-        "⚠️ AI analysis belum tersedia.";
-      content.textContent =
-        (data && data.message) ||
-        "Pastikan Apps Script AI endpoint telah disediakan.";
-    }
-  }catch(error){
-    console.error("AI analysis error:",error);
-    status.textContent = "⚠️ AI analysis gagal.";
-    content.textContent =
-      "Transcript dan filler detection masih boleh digunakan. AI endpoint belum disambungkan.";
-  }
-}
-
-function resetAIAnalysis(){
-  const box = document.getElementById("aiLiveAnalysis");
-  const status = document.getElementById("aiAnalysisStatus");
-  const content = document.getElementById("aiAnalysisContent");
-
-  if(box) box.style.display = "none";
-  if(status) status.textContent = "Waiting for answer...";
-  if(content) content.innerHTML = "";
-}
-
-/* =====================================================
-   NEXT QUESTION
-   ===================================================== */
-
-function goNextQuestion(){
-
-  if(isTranscribing){
-    alert("Tunggu sehingga Speech-to-Text selesai.");
-    return;
-  }
-
-  stopAnswering();
-
-  const answer =
-    document.getElementById("answerBox").value.trim();
-
-  if(!answer){
-    alert("Tiada transcript. Sila jawab soalan dahulu.");
-    return;
-  }
-
-  const analysis =
-    analyzeSpeech(answer);
-
-  answers.push({
-
-    question:
-      questions[currentQuestion],
-
-    answer:
-      answer,
-
-    duration:
-      seconds,
-
-    fillerCount:
-      analysis.fillerCount,
-
-    fillerRate:
-      Number(analysis.fillerRate.toFixed(2)),
-
-    wordCount:
-      analysis.wordCount,
-
-    fillers:
-      Object.keys(analysis.fillers).map(function(name){
-        return {
-          word:name,
-          count:analysis.fillers[name]
-        };
-      }),
-
-    stutterCount:
-      analysis.stutteringCount,
-
-    stutterPatterns:
-      analysis.stutterings.map(function(item){
-        return item.text;
-      })
-
-  });
-
-  if(
-    currentQuestion <
-    questions.length - 1
-  ){
-
-    currentQuestion++;
-    showQuestion();
-
-  }
-  else{
-
-    finishInterview();
-
-  }
-
-}
-
-
-/* =====================================================
-   FINISH
-/* =====================================================
-   FINISH
-===================================================== */
-
-function finishInterview(){
-
-  stopAnswering();
-
-  stopStream();
-
-
-  showPage(
-    "finishPage"
-  );
-
-
-  const results =
-    document.getElementById(
-      "results"
-    );
-
-
-  results.innerHTML = "";
-
-
-  answers.forEach(
-    function(answer,index){
-
-      const div =
-        document.createElement(
-          "div"
         );
 
 
-      div.className =
-        "result-item";
+      /*
+       * Clear chunks immediately.
+       * Prevents the same audio from
+       * being reused.
+       */
+
+      audioChunks = [];
 
 
-      div.innerHTML =
-        "<strong>Question " +
-        (index + 1) +
-        "</strong><br>" +
+      if(!audioBlob.size){
 
-        escapeHTML(
-          answer.question
-        ) +
+        isTranscribing = false;
 
-        "<br><br>" +
+        mediaRecorder = null;
 
-        "<strong>Answer</strong><br>" +
+        document.getElementById(
+          "transcript"
+        ).textContent =
+          "⚠️ Tiada audio dirakam.";
 
-        escapeHTML(
-          answer.answer ||
-          "(No answer)"
-        ) +
+        document.getElementById(
+          "answerBox"
+        ).value = "";
 
-        "<br><br>" +
-         "<div style=\"font-size:13px;color:#667085;\">" +
-         "Speech analysis akan dipaparkan dalam laporan keseluruhan selepas interview." +
-         "</div>";
+        document.getElementById(
+          "startAnswer"
+        ).style.display =
+          "inline-block";
+
+        return;
+
+      }
 
 
-      results.appendChild(
-        div
+      /*
+       * Send exactly ONE recording
+       * to Speech-to-Text.
+       */
+
+      await transcribeAudio(
+        audioBlob
+      );
+
+    };
+
+
+  /* =========================
+     START RECORDING
+  ========================= */
+
+  try{
+
+    mediaRecorder.start();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    isListening = false;
+
+    mediaRecorder = null;
+
+    audioChunks = [];
+
+    alert(
+      "Tidak dapat memulakan rakaman audio."
+    );
+
+    document.getElementById(
+      "startAnswer"
+    ).style.display =
+      "inline-block";
+
+    document.getElementById(
+      "stopBtn"
+    ).style.display =
+      "none";
+
+    return;
+  }
+
+
+  /* =========================
+     TIMER
+  ========================= */
+
+  timerInterval =
+    setInterval(
+      function(){
+
+        seconds++;
+
+        updateTimer();
+
+      },
+      1000
+    );
+
+}
+
+
+
+/* =====================================================
+   STOP ANSWERING
+===================================================== */
+
+function stopAnswering(){
+
+  /* =========================
+     STOP TIMER
+  ========================= */
+
+  if(timerInterval){
+
+    clearInterval(
+      timerInterval
+    );
+
+    timerInterval = null;
+
+  }
+
+
+  /* =========================
+     STOP LISTENING
+  ========================= */
+
+  isListening = false;
+
+
+  /* =========================
+     HIDE STOP BUTTON
+  ========================= */
+
+  const stop =
+    document.getElementById(
+      "stopBtn"
+    );
+
+
+  if(stop){
+
+    stop.style.display =
+      "none";
+
+  }
+
+
+  /* =========================
+     STOP RECORDER ONLY ONCE
+  ========================= */
+
+  if(
+    mediaRecorder &&
+    mediaRecorder.state !== "inactive"
+  ){
+
+    try{
+
+      mediaRecorder.stop();
+
+    }
+    catch(error){
+
+      console.error(
+        "MediaRecorder stop error:",
+        error
       );
 
     }
-  );
 
-
-  saveInterview();
-
-  // Only now, after all questions are completed, generate the report.
-  generateOverallAIReport();
-
-}
-
-
-
-/* =====================================================
-   OVERALL AI REPORT
-===================================================== */
-
-async function generateOverallAIReport(){
-  const box = document.getElementById("finalAIAnalysis");
-  const content = document.getElementById("finalAIContent");
-
-  if(!box || !content) return;
-
-  box.style.display = "block";
-  content.textContent = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
-
-  try{
-    const payload = {
-      action:"analyzeInterviewOverall",
-      email:USER_EMAIL,
-      interviewID:interviewID,
-      category:INTERVIEW_CATEGORY,
-      subcategory:INTERVIEW_SUBCATEGORY,
-      career:INTERVIEW_CAREER,
-      language:INTERVIEW_LANGUAGE,
-      answers:answers
-    };
-
-    const response = await fetch(SCRIPT_URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
-      body:JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    if(data && data.success){
-      const result = data.analysis || {};
-
-      const metric = function(label, value){
-        return "<div style=\"display:flex;justify-content:space-between;gap:12px;" +
-          "padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;" +
-          "margin:7px 0;background:#fff\">" +
-          "<span>" + label + "</span>" +
-          "<strong>" + escapeHTML(String(value == null || value === "" ? "-" : value)) +
-          "</strong></div>";
-      };
-
-      content.innerHTML =
-        metric("Communication Confidence", result.confidenceScore) +
-        metric("Professionalism", result.professionalismScore) +
-        metric("Speech Fluency", result.fluencyScore) +
-        metric("Answer Quality", result.answerQualityScore) +
-        metric("Relevance", result.relevanceScore) +
-        metric("Answer Structure", result.structureScore) +
-        metric("Observable Body Language", result.bodyLanguageScore) +
-        metric("Filler Words", result.fillerCount) +
-        metric("Stuttering", result.stutteringCount) +
-        metric("⭐ Overall Rating", result.overallScore) +
-
-        "<br><strong>Strengths:</strong><br>" +
-        escapeHTML(String(result.strengths || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br><strong>Areas to Improve:</strong><br>" +
-        escapeHTML(String(result.improvements || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br><strong>Overall Feedback:</strong><br>" +
-        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br><small style=\"color:#667085\">" +
-        "Body language dinilai berdasarkan perkara yang boleh diperhatikan melalui kamera " +
-        "dan bukan emosi atau personaliti dalaman." +
-        "</small>";
-
-      }else{
-      content.textContent =
-        (data && data.message) ||
-        "Overall AI report belum tersedia.";
-    }
-  }catch(error){
-    console.error("Overall AI error:",error);
-    content.textContent =
-      "AI overall report belum dapat dijana. Sila sambungkan AI endpoint pada Apps Script.";
   }
-}
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(text){
-
-  const div =
-    document.createElement(
-      "div"
-    );
-
-
-  div.textContent =
-    text || "";
-
-
-  return div.innerHTML;
 
 }
 
 
+
 /* =====================================================
-   SAVE INTERVIEW
+   STOP + TRANSCRIBE
 ===================================================== */
 
-function saveInterview(){
+function stopAnsweringAndTranscribe(){
 
-  const status =
-    document.getElementById(
-      "saveStatus"
-    );
+  /* =========================
+     PREVENT DOUBLE CLICK
+  ========================= */
 
-
-  if(!USER_EMAIL){
-
-    status.textContent =
-      "❌ User email tidak dijumpai.";
-
-    status.className =
-      "error";
+  if(isTranscribing){
 
     return;
 
   }
 
 
-  const payload = {
+  /* =========================
+     CHECK RECORDER
+  ========================= */
 
-    action:
-      "saveInterview",
+  if(!mediaRecorder){
 
-    interviewID:
-      interviewID,
+    return;
 
-    email:
-      USER_EMAIL,
-
-    category:
-      INTERVIEW_CATEGORY,
-
-    subcategory:
-      INTERVIEW_SUBCATEGORY,
-
-    career:
-      INTERVIEW_CAREER,
-
-    language:
-      INTERVIEW_LANGUAGE,
-
-    answers:
-      answers
-
-  };
+  }
 
 
-  status.textContent =
-    "💾 Saving interview...";
+  if(
+    mediaRecorder.state ===
+    "inactive"
+  ){
 
-  status.className = "";
+    return;
 
-
-  fetch(
-    SCRIPT_URL,
-    {
-
-      method:"POST",
-
-      mode:"no-cors",
-
-      headers:{
-
-        "Content-Type":
-          "application/x-www-form-urlencoded"
-
-      },
-
-      body:
-        "payload=" +
-        encodeURIComponent(
-          JSON.stringify(payload)
-        )
-
-    }
-  )
-
-  .then(
-    function(){
-
-      status.textContent =
-        "✅ Interview berjaya disimpan!";
-
-      status.className =
-        "success";
-
-    }
-  )
-
-  .catch(
-    function(error){
-
-      console.error(error);
+  }
 
 
-      status.textContent =
-        "⚠️ Sila semak Google Sheets untuk pengesahan data.";
+  /* =========================
+     LOCK
+  ========================= */
 
-      status.className =
-        "error";
+  pendingTranscription =
+    true;
 
-    }
-  );
+  isTranscribing =
+    true;
+
+
+  /* =========================
+     STOP RECORDING
+  ========================= */
+
+  stopAnswering();
+
+
+  /* =========================
+     UI
+  ========================= */
+
+  document.getElementById(
+    "transcript"
+  ).textContent =
+    "☁️ Audio sedang dihantar untuk Speech-to-Text...";
+
+
+  document.getElementById(
+    "answerBox"
+  ).value =
+    "Transcribing...";
+
+
+  document.getElementById(
+    "nextQuestion"
+  ).style.display =
+    "none";
 
 }
-
-
-
-/* =====================================================
-   SPEECH ANALYSIS UI
-   Hidden during interview. Final report appears after
-   the last question.
-===================================================== */
-
-</script>
-
-
-</body>
-</html>

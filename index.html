@@ -753,6 +753,13 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwbIvErlPxLWD_Jp4ha5tZUmgsPgF7sF0yXFe-dASyZ9XkNeZAnE5rdBh_dBYy_7Fn8Gg/exec";
 
 /* =====================================================
+   SERVER STT URL
+   ===================================================== */
+
+const STT_URL =
+"https://ai-interview-45xhiqc95-ubk2.vercel.app/api/transcribe";
+
+/* =====================================================
    USER
 ===================================================== */
 
@@ -1500,7 +1507,7 @@ async function checkDevices(){
 
   camera.textContent = "📷 Camera: checking...";
   mic.textContent = "🎤 Microphone: checking...";
-  speech.textContent = "🗣️ Speech Recognition: checking...";
+  speech.textContent = "🗣️ Server STT: checking...";
 
   try{
 
@@ -1530,7 +1537,7 @@ async function checkDevices(){
     if(typeof MediaRecorder === "undefined"){
 
       speech.textContent =
-        "🗣️ Speech Recognition: tidak disokong.";
+        "🗣️ Server STT: MediaRecorder tidak disokong.";
 
       speech.className = "status failed";
       return;
@@ -1552,13 +1559,13 @@ async function checkDevices(){
     if(!hasSupportedType){
 
       speech.textContent =
-        "🗣️ Speech Recognition: tidak disokong.";
+        "🗣️ Server STT: Format audio tidak disokong.";
 
       speech.className = "status failed";
       return;
     }
 
-    speech.textContent = "🗣️ Speech Recognition: Ready";
+    speech.textContent = "🗣️ Server STT: Ready";
     speech.className = "status ready";
     btn.style.display = "inline-block";
 
@@ -1577,7 +1584,7 @@ async function checkDevices(){
     mic.className = "status failed";
 
     speech.textContent =
-      "🗣️ Speech Recognition: Cannot access microphone.";
+      "🗣️ Server STT: Cannot access microphone.";
     speech.className = "status failed";
   }
 }
@@ -1927,199 +1934,96 @@ function displaySpeechAnalysis(text){
 
 
 /* =====================================================
-   START ANSWER — BROWSER SPEECH RECOGNITION
-===================================================== */
+   START ANSWER — SERVER STT
+   ===================================================== */
 
-let recognition = null;
-let recognitionStarting = false;
+function chooseAudioMimeType(){
 
-function getSpeechRecognitionLanguage(){
-  return INTERVIEW_LANGUAGE === "Malay" ? "ms-MY" : "en-US";
-}
+  const types = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/aac"
+  ];
 
-function setupSpeechRecognition(){
+  for(const type of types){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+    if(typeof MediaRecorder === "undefined"){
+      return "";
+    }
 
-  if(!SpeechRecognition){
-    return false;
+    if(!MediaRecorder.isTypeSupported ||
+       MediaRecorder.isTypeSupported(type)){
+
+      return type;
+    }
   }
 
-  recognition = new SpeechRecognition();
-
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = getSpeechRecognitionLanguage();
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = function(){
-
-    recognitionStarting = false;
-    isListening = true;
-
-    document.getElementById("transcript").textContent =
-      finalTranscript || "🎤 Listening...";
-
-    document.getElementById("startAnswer").style.display =
-      "none";
-
-    document.getElementById("stopBtn").style.display =
-      "inline-block";
-  };
-
-  recognition.onresult = function(event){
-
-    let interimTranscript = "";
-
-    for(
-      let i = event.resultIndex;
-      i < event.results.length;
-      i++
-    ){
-
-      const text =
-        event.results[i][0].transcript;
-
-      if(event.results[i].isFinal){
-
-        finalTranscript +=
-          (finalTranscript ? " " : "") +
-          text.trim();
-      }
-      else{
-
-        interimTranscript +=
-          " " + text.trim();
-      }
-    }
-
-    const combined =
-      (finalTranscript + " " + interimTranscript)
-        .replace(/\s+/g, " ")
-        .trim();
-
-    document.getElementById("transcript").textContent =
-      combined || "🎤 Listening...";
-
-    document.getElementById("answerBox").value =
-      combined;
-  };
-
-  recognition.onerror = function(event){
-
-    console.error(
-      "Speech Recognition error:",
-      event.error
-    );
-
-    if(event.error === "not-allowed" ||
-       event.error === "service-not-allowed"){
-
-      isListening = false;
-
-      document.getElementById("transcript").textContent =
-        "⚠️ Microphone/Speech Recognition permission denied.";
-
-      document.getElementById("startAnswer").style.display =
-        "inline-block";
-
-      document.getElementById("stopBtn").style.display =
-        "none";
-    }
-
-    else if(event.error !== "no-speech"){
-
-      document.getElementById("transcript").textContent =
-        "⚠️ Speech Recognition error: " +
-        event.error;
-    }
-  };
-
-  recognition.onend = function(){
-
-    recognitionStarting = false;
-
-    /*
-      Chrome may end recognition automatically.
-      Restart only while the user is still answering.
-    */
-    if(isListening){
-
-      setTimeout(function(){
-
-        if(!isListening || !recognition) return;
-
-        try{
-          recognition.start();
-          recognitionStarting = true;
-        }
-        catch(error){
-          console.log(
-            "Recognition restart skipped:",
-            error
-          );
-        }
-
-      }, 150);
-    }
-  };
-
-  return true;
+  return "";
 }
 
-
-/* =====================================================
-   START ANSWER
-===================================================== */
 
 function startAnswering(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+  if(!stream){
+    alert("Microphone belum tersedia.");
+    return;
+  }
 
-  if(!SpeechRecognition){
+  if(typeof MediaRecorder === "undefined"){
+    alert("Browser ini tidak menyokong rakaman audio.");
+    return;
+  }
+
+  const audioTracks = stream.getAudioTracks();
+
+  if(!audioTracks.length){
+    alert("Microphone tidak tersedia.");
+    return;
+  }
+
+  if(isListening || isTranscribing){
+    return;
+  }
+
+  const audioStream =
+    new MediaStream(audioTracks);
+
+  const mimeType =
+    chooseAudioMimeType();
+
+  try{
+
+    mediaRecorder =
+      mimeType
+        ? new MediaRecorder(audioStream, {mimeType:mimeType})
+        : new MediaRecorder(audioStream);
+
+  }
+  catch(error){
+
+    console.error(error);
 
     alert(
-      "Speech Recognition tidak disokong. Sila gunakan Google Chrome."
+      "Tidak dapat memulakan rakaman audio pada browser ini."
     );
 
     return;
   }
 
-  if(isListening){
-    return;
-  }
-
-  /*
-    Create a fresh recognition instance
-    for every answer.
-  */
-  recognition = null;
-
-  if(!setupSpeechRecognition()){
-
-    alert(
-      "Speech Recognition tidak dapat dimulakan."
-    );
-
-    return;
-  }
-
+  audioChunks = [];
   finalTranscript = "";
-  seconds = 0;
-  isListening = false;
-  recognitionStarting = true;
+  pendingTranscription = false;
+  isListening = true;
+  isTranscribing = false;
 
+  seconds = 0;
   updateTimer();
 
   document.getElementById("transcript").textContent =
     "🎤 Listening...";
 
-  document.getElementById("answerBox").value =
-    "";
+  document.getElementById("answerBox").value = "";
 
   document.getElementById("startAnswer").style.display =
     "none";
@@ -2130,40 +2034,68 @@ function startAnswering(){
   document.getElementById("nextQuestion").style.display =
     "none";
 
-  if(timerInterval){
-    clearInterval(timerInterval);
-  }
+  mediaRecorder.ondataavailable =
+    function(event){
 
-  timerInterval = setInterval(function(){
+      if(event.data && event.data.size > 0){
+        audioChunks.push(event.data);
+      }
+    };
 
-    if(isListening || recognitionStarting){
+  mediaRecorder.onstop =
+    async function(){
 
-      seconds++;
-      updateTimer();
-    }
+      const shouldTranscribe =
+        pendingTranscription;
 
-  },1000);
+      pendingTranscription = false;
+
+      if(!shouldTranscribe){
+        return;
+      }
+
+      const recordedType =
+        mediaRecorder && mediaRecorder.mimeType
+          ? mediaRecorder.mimeType
+          : (mimeType || "audio/webm");
+
+      const audioBlob =
+        new Blob(
+          audioChunks,
+          {type:recordedType}
+        );
+
+      if(!audioBlob.size){
+
+        isTranscribing = false;
+
+        document.getElementById("transcript").textContent =
+          "⚠️ Tiada audio dirakam.";
+
+        document.getElementById("answerBox").value = "";
+
+        document.getElementById("startAnswer").style.display =
+          "inline-block";
+
+        return;
+      }
+
+      await transcribeAudio(audioBlob);
+    };
 
   try{
 
-    recognition.lang =
-      getSpeechRecognitionLanguage();
-
-    recognition.start();
+    mediaRecorder.start();
 
   }
   catch(error){
 
-    console.error(
-      "Speech Recognition start error:",
-      error
-    );
+    console.error(error);
 
-    recognitionStarting = false;
     isListening = false;
+    mediaRecorder = null;
 
-    clearInterval(timerInterval);
-    timerInterval = null;
+    alert("Tidak dapat memulakan rakaman audio.");
 
     document.getElementById("startAnswer").style.display =
       "inline-block";
@@ -2171,62 +2103,193 @@ function startAnswering(){
     document.getElementById("stopBtn").style.display =
       "none";
 
-    alert(
-      "Tidak dapat memulakan Speech Recognition."
-    );
+    return;
   }
+
+  timerInterval =
+    setInterval(
+      function(){
+        seconds++;
+        updateTimer();
+      },
+      1000
+    );
 }
 
 
 /* =====================================================
    STOP ANSWER
-===================================================== */
+   ===================================================== */
 
 function stopAnswering(){
 
   isListening = false;
-  recognitionStarting = false;
 
   if(timerInterval){
-
     clearInterval(timerInterval);
     timerInterval = null;
   }
 
-  if(recognition){
+  const stop =
+    document.getElementById("stopBtn");
+
+  if(stop){
+    stop.style.display = "none";
+  }
+
+  if(mediaRecorder &&
+     mediaRecorder.state !== "inactive"){
 
     try{
-      recognition.stop();
+      mediaRecorder.stop();
     }
     catch(error){
-      console.log(
-        "Recognition stop error:",
-        error
-      );
+      console.error(error);
+    }
+  }
+}
+
+
+function stopAnsweringAndTranscribe(){
+
+  if(isTranscribing){
+    return;
+  }
+
+  if(!mediaRecorder){
+
+    alert("Belum ada jawapan untuk dihantar.");
+    return;
+  }
+
+  pendingTranscription = true;
+  isTranscribing = true;
+
+  stopAnswering();
+
+  document.getElementById("transcript").textContent =
+    "☁️ Audio sedang dihantar untuk Speech-to-Text...";
+
+  document.getElementById("answerBox").value =
+    "Transcribing...";
+
+  document.getElementById("nextQuestion").style.display =
+    "none";
+}
+
+
+/* =====================================================
+   SEND AUDIO TO VERCEL STT
+   ===================================================== */
+
+function removeDuplicateTranscript(text){
+
+  const clean =
+    String(text || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if(!clean){
+    return "";
+  }
+
+  const words = clean.split(" ");
+
+  /*
+   * Remove only a transcript that is exactly
+   * the same complete text repeated twice.
+   */
+  if(words.length >= 4 && words.length % 2 === 0){
+
+    const half = words.length / 2;
+
+    const firstHalf =
+      words
+        .slice(0, half)
+        .join(" ")
+        .toLowerCase();
+
+    const secondHalf =
+      words
+        .slice(half)
+        .join(" ")
+        .toLowerCase();
+
+    if(firstHalf === secondHalf){
+      return words.slice(0, half).join(" ");
     }
   }
 
-  recognition = null;
+  return clean;
+}
 
-  const answer =
-    String(finalTranscript || "")
-      .replace(/\s+/g," ")
-      .trim();
 
-  document.getElementById("transcript").textContent =
-    answer || "⚠️ Tiada transcript dikesan.";
+async function transcribeAudio(audioBlob){
 
-  document.getElementById("answerBox").value =
-    answer;
+  try{
 
-  /*
-    Calculate filler/stuttering immediately.
-    The detailed panel remains hidden as before.
-  */
-  if(answer){
+    const formData = new FormData();
 
+    let extension = "webm";
+
+    if(audioBlob.type.includes("mp4")){
+      extension = "mp4";
+    }
+    else if(audioBlob.type.includes("aac")){
+      extension = "aac";
+    }
+
+    const file =
+      new File(
+        [audioBlob],
+        "interview-answer." + extension,
+        {
+          type:audioBlob.type || "audio/webm"
+        }
+      );
+
+    formData.append("file", file);
+
+    formData.append(
+      "language",
+      INTERVIEW_LANGUAGE === "Malay" ? "ms" : "en"
+    );
+
+    const response =
+      await fetch(
+        STT_URL,
+        {
+          method:"POST",
+          body:formData
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok ||
+       !data ||
+       !data.success){
+
+      throw new Error(
+        (data && data.message) ||
+        "STT gagal."
+      );
+    }
+
+    finalTranscript =
+      removeDuplicateTranscript(String(data.text || "").trim());
+
+    document.getElementById("transcript").textContent =
+      finalTranscript ||
+      "⚠️ Tiada transcript dikesan.";
+
+    document.getElementById("answerBox").value =
+      finalTranscript;
+
+    // Calculate filler/stuttering silently.
     const analysis =
-      analyzeSpeech(answer);
+      analyzeSpeech(finalTranscript);
 
     currentFillerAnalysis = {
       count:analysis.fillerCount,
@@ -2246,40 +2309,44 @@ function stopAnswering(){
         return item.text;
       })
     };
+
+    isTranscribing = false;
+    mediaRecorder = null;
+    audioChunks = [];
+
+    document.getElementById("startAnswer").style.display =
+      "none";
+
+    document.getElementById("stopBtn").style.display =
+      "none";
+
+    document.getElementById("nextQuestion").style.display =
+      "inline-block";
+
   }
+  catch(error){
 
-  document.getElementById("startAnswer").style.display =
-    "none";
+    console.error("STT error:", error);
 
-  document.getElementById("stopBtn").style.display =
-    "none";
+    isTranscribing = false;
+    mediaRecorder = null;
+    audioChunks = [];
 
-  document.getElementById("nextQuestion").style.display =
-    "inline-block";
-}
+    document.getElementById("transcript").textContent =
+      "⚠️ Speech-to-Text gagal: " +
+      (error.message || "Unknown error");
 
+    document.getElementById("answerBox").value = "";
 
-/* =====================================================
-   COMPATIBILITY
-   ===================================================== */
+    document.getElementById("startAnswer").style.display =
+      "inline-block";
 
-function stopAnsweringAndTranscribe(){
+    document.getElementById("stopBtn").style.display =
+      "none";
 
-  stopAnswering();
-}
-
-
-/* =====================================================
-   OLD SERVER STT FUNCTION
-   No longer used.
-   Transcript now comes directly from the browser.
-===================================================== */
-
-async function transcribeAudio(){
-
-  console.log(
-    "Server STT disabled. Browser Speech Recognition is being used."
-  );
+    document.getElementById("nextQuestion").style.display =
+      "none";
+  }
 }
 
 
@@ -2921,7 +2988,6 @@ async function generateOverallAIReport(){
         metric("Answer Quality", result.answerQualityScore) +
         metric("Relevance", result.relevanceScore) +
         metric("Answer Structure", result.structureScore) +
-        metric("Observable Body Language", result.bodyLanguageScore) +
         metric("Filler Words", result.fillerCount) +
         metric("Stuttering", result.stutteringCount) +
         metric("⭐ Overall Rating", result.overallScore) +
@@ -2935,10 +3001,7 @@ async function generateOverallAIReport(){
         "<br><br><strong>Overall Feedback:</strong><br>" +
         escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>") +
 
-        "<br><br><small style=\"color:#667085\">" +
-        "Body language dinilai berdasarkan perkara yang boleh diperhatikan melalui kamera " +
-        "dan bukan emosi atau personaliti dalaman." +
-        "</small>";
+        "<br><br>";
 
       }else{
       content.textContent =

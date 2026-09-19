@@ -2874,7 +2874,6 @@ async function generateOverallAIReport(){
         metric("Answer Quality", result.answerQualityScore) +
         metric("Relevance", result.relevanceScore) +
         metric("Answer Structure", result.structureScore) +
-        metric("Observable Body Language", result.bodyLanguageScore) +
         metric("Filler Words", result.fillerCount) +
         metric("Stuttering", result.stutteringCount) +
         metric("⭐ Overall Rating", result.overallScore) +
@@ -2888,10 +2887,7 @@ async function generateOverallAIReport(){
         "<br><br><strong>Overall Feedback:</strong><br>" +
         escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>") +
 
-        "<br><br><small style=\"color:#667085\">" +
-        "Body language dinilai berdasarkan perkara yang boleh diperhatikan melalui kamera " +
-        "dan bukan emosi atau personaliti dalaman." +
-        "</small>";
+        "<br><br>";
 
       }else{
       content.textContent =

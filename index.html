@@ -662,11 +662,19 @@ video{
   </div>
 
 
-  <div id="fillerAnalysis" style="display:none !important;" class="analysis-box" style="display:none;">
-    <div class="analysis-title" style="display:none !important;">Speech Analysis</div>
-    <div class="metric-row"><span>Filler Words</span><span id="fillerCount" style="display:none !important;" class="metric-value">0</span></div>
-    <div class="metric-row"><span>Stuttering</span><span id="stutterCount" style="display:none !important;" class="metric-value">0</span></div>
-    <div id="speechPatterns" style="display:none !important;" style="margin-top:6px;color:#667085;">Belum ada transcript.</div>
+  <div id="fillerAnalysis" class="analysis-box" style="display:none;">
+    <div class="analysis-title">Speech Analysis</div>
+    <div class="metric-row">
+      <span>Filler Words</span>
+      <span id="fillerCount" class="metric-value">0</span>
+    </div>
+    <div class="metric-row">
+      <span>Stuttering</span>
+      <span id="stutterCount" class="metric-value">0</span>
+    </div>
+    <div id="speechPatterns" style="margin-top:6px;color:#667085;">
+      Belum ada transcript.
+    </div>
   </div>
 
 
@@ -2096,6 +2104,11 @@ function startAnswering(){
       answerBox.value = combined;
     }
 
+    // Analyse the transcript continuously while the user is speaking.
+    // This updates filler/stuttering counts as soon as the browser
+    // includes those sounds/words in the transcript.
+    displaySpeechAnalysis(combined);
+
   };
 
 
@@ -2240,6 +2253,12 @@ function stopAnswering(){
       "inline-block";
 
   }
+
+  // Final pass using the complete transcript currently stored in answerBox.
+  const finalAnswerBox = document.getElementById("answerBox");
+  const finalSpeechText = finalAnswerBox ? finalAnswerBox.value.trim() : "";
+
+  displaySpeechAnalysis(finalSpeechText);
 
 }
 
@@ -2452,83 +2471,82 @@ function analyzeSpeech(text){
 function displaySpeechAnalysis(text){
   const raw = String(text || "").trim();
 
-  // Support both the original UI IDs and the fixed IDs.
-  const panel =
-    document.getElementById("speechAnalysis") ||
-    document.getElementById("speechPatterns");
+  const panel = document.getElementById("fillerAnalysis");
+  const fillerCountEl = document.getElementById("fillerCount");
+  const stutterCountEl = document.getElementById("stutterCount");
+  const patternsEl = document.getElementById("speechPatterns");
 
-  const fillerBox =
-    document.getElementById("fillerAnalysis") ||
-    document.getElementById("fillerCount");
+  if(!panel) return;
 
-  const stutterBox =
-    document.getElementById("stutterAnalysis") ||
-    document.getElementById("stutterCount");
-
-  if(!panel){
-    console.warn("Speech analysis panel not found.");
-    return;
-  }
+  panel.style.display = "block";
 
   if(!raw){
-    panel.style.display = "block";
+    if(fillerCountEl) fillerCountEl.textContent = "0";
+    if(stutterCountEl) stutterCountEl.textContent = "0";
+    if(patternsEl) patternsEl.innerHTML = "Belum ada transcript.";
 
-    if(fillerBox){
-      fillerBox.innerHTML =
-        "Filler Words: 0<br><small>Belum ada transcript.</small>";
-    }
-
-    if(stutterBox){
-      stutterBox.innerHTML =
-        "Stuttering: 0<br><small>Belum ada transcript.</small>";
-    }
-
+    window.latestSpeechAnalysis = {
+      wordCount:0,
+      fillerCount:0,
+      fillerRate:0,
+      fillers:{},
+      stutteringCount:0,
+      stutterings:[]
+    };
     return;
   }
 
   const analysis = analyzeSpeech(raw);
-  panel.style.display = "block";
 
-  let fillerText =
-    "Filler Words: " + analysis.fillerCount +
-    " (" + analysis.fillerRate.toFixed(1) + "%)";
+  if(fillerCountEl){
+    fillerCountEl.textContent = String(analysis.fillerCount);
+  }
 
-  const fillerNames = Object.keys(analysis.fillers);
+  if(stutterCountEl){
+    stutterCountEl.textContent = String(analysis.stutteringCount);
+  }
 
+  let details = [];
+
+  const fillerNames = Object.keys(analysis.fillers || {});
   if(fillerNames.length){
-    fillerText += "<br><small>Detected: " +
+    details.push(
+      "<strong>Filler detected:</strong> " +
       escapeHTML(
         fillerNames.map(function(name){
           return name + " ×" + analysis.fillers[name];
         }).join(", ")
-      ) + "</small>";
+      )
+    );
   }else{
-    fillerText += "<br><small>Tiada filler word yang jelas.</small>";
+    details.push(
+      "<strong>Filler detected:</strong> Tiada filler yang muncul dalam transcript."
+    );
   }
-
-  if(fillerBox){
-    fillerBox.innerHTML = fillerText;
-  }
-
-  let stutterText =
-    "Stuttering: " + analysis.stutteringCount;
 
   if(analysis.stutteringCount){
-    stutterText += "<br><small>Detected: " +
+    details.push(
+      "<strong>Speech repetitions:</strong> " +
       escapeHTML(
         analysis.stutterings.map(function(item){
           return item.text;
         }).join(", ")
-      ) + "</small>";
-  }else{
-    stutterText += "<br><small>Tiada corak stuttering yang jelas.</small>";
+      )
+    );
   }
 
-  if(stutterBox){
-    stutterBox.innerHTML = stutterText;
+  details.push(
+    "<small>Filler rate: " +
+    analysis.fillerRate.toFixed(1) +
+    "% • " +
+    analysis.wordCount +
+    " transcript words</small>"
+  );
+
+  if(patternsEl){
+    patternsEl.innerHTML = details.join("<br>");
   }
 
-  // Also expose the latest analysis to the rest of the app.
   window.latestSpeechAnalysis = analysis;
 }
 

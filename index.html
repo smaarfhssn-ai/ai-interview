@@ -675,7 +675,7 @@ video{
   </div>
 
 
-  <div id="fillerAnalysis" class="analysis-box" style="display:none;">
+  <div id="fillerAnalysis" class="analysis-box" style="display:none !important;">
     <div class="analysis-title">Speech Analysis</div>
     <div class="metric-row">
       <span>Filler Words</span>
@@ -2520,7 +2520,8 @@ function displaySpeechAnalysis(text){
 
   if(!panel) return;
 
-  panel.style.display = "block";
+  // Keep per-question analysis hidden; results are shown only in the final report.
+  panel.style.setProperty("display", "none", "important");
 
   if(!raw){
     if(fillerCountEl) fillerCountEl.textContent = "0";
@@ -2734,6 +2735,17 @@ function resetAIAnalysis(){
 
 function goNextQuestion(){
 
+  // Final hidden speech analysis for this answer.
+  const currentAnswerBoxForAnalysis = document.getElementById("answerBox");
+  const currentSpeechTextForAnalysis =
+    currentAnswerBoxForAnalysis
+      ? currentAnswerBoxForAnalysis.value.trim()
+      : "";
+
+  displaySpeechAnalysis(currentSpeechTextForAnalysis);
+
+
+
   stopAnswering();
 
 
@@ -2893,7 +2905,24 @@ async function generateOverallAIReport(){
   box.style.display = "block";
   content.innerHTML = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
 
-  const payload = {
+  
+    const totalFillerWords = answers.reduce(function(total, item){
+      return total + Number(
+        item.fillerCount ||
+        (item.speechAnalysis && item.speechAnalysis.fillerCount) ||
+        0
+      );
+    }, 0);
+
+    const totalStuttering = answers.reduce(function(total, item){
+      return total + Number(
+        item.stutteringCount ||
+        (item.speechAnalysis && item.speechAnalysis.stutteringCount) ||
+        0
+      );
+    }, 0);
+
+    const payload = {
     action:"analyzeInterviewOverall",
     email:USER_EMAIL,
       name:USER_NAME,
@@ -2902,8 +2931,10 @@ async function generateOverallAIReport(){
     subcategory:INTERVIEW_SUBCATEGORY,
     career:INTERVIEW_CAREER,
     language:INTERVIEW_LANGUAGE,
-    answers:answers
-  };
+    answers:answers,
+      fillerCount:totalFillerWords,
+      stutteringCount:totalStuttering
+    };
 
   const MAX_RETRIES = 3;
   const RETRY_DELAY = 2500;

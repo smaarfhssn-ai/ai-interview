@@ -410,6 +410,19 @@ video{
 </div>
 
 
+
+<!-- ========================= NAME ========================= -->
+<div class="container page" id="namePage">
+  <div style="font-size:58px">👋</div>
+  <h1>Welcome!</h1>
+  <p class="subtitle">Masukkan nama anda sebelum meneruskan interview.</p>
+  <div class="career-box">
+    <input id="fullNameInput" type="text" autocomplete="name" placeholder="Full Name">
+    <button onclick="continueWithName()">Continue</button>
+    <div id="nameMessage" class="message"></div>
+  </div>
+</div>
+
 <!-- ========================= SETUP ========================= -->
 
 <div
@@ -682,7 +695,8 @@ video{
     id="answerBox"
     class="answer-box"
     placeholder="Transcript akan muncul di sini."
-    readonly readonly>
+    
+    readonly>
   </textarea>
 
 
@@ -766,6 +780,36 @@ const SCRIPT_URL =
 
 let USER_EMAIL = "";
 let USER_ID = "";
+let USER_NAME = "";
+
+
+
+/* =====================================================
+   USER NAME
+===================================================== */
+
+function continueWithName(){
+  const input = document.getElementById("fullNameInput");
+  const message = document.getElementById("nameMessage");
+  const name = input ? input.value.trim() : "";
+
+  if(!name){
+    if(message){
+      message.textContent = "Sila masukkan nama anda.";
+      message.className = "message error";
+    }
+    return;
+  }
+
+  USER_NAME = name;
+
+  if(message){
+    message.textContent = "";
+    message.className = "message";
+  }
+
+  showPage("setupPage");
+}
 
 
 /* =====================================================
@@ -1061,9 +1105,7 @@ function login(){
         setTimeout(
           function(){
 
-            showPage(
-              "setupPage"
-            );
+            showPage("namePage");
 
           },
           400
@@ -2854,6 +2896,7 @@ async function generateOverallAIReport(){
   const payload = {
     action:"analyzeInterviewOverall",
     email:USER_EMAIL,
+      name:USER_NAME,
     interviewID:interviewID,
     category:INTERVIEW_CATEGORY,
     subcategory:INTERVIEW_SUBCATEGORY,
@@ -3042,6 +3085,9 @@ function saveInterview(){
 
     email:
       USER_EMAIL,
+
+    name:
+      USER_NAME,
 
     category:
       INTERVIEW_CATEGORY,

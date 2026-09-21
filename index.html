@@ -2831,73 +2831,140 @@ async function generateOverallAIReport(){
   if(!box || !content) return;
 
   box.style.display = "block";
-  content.textContent = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
+  content.innerHTML = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
 
-  try{
-    const payload = {
-      action:"analyzeInterviewOverall",
-      email:USER_EMAIL,
-      interviewID:interviewID,
-      category:INTERVIEW_CATEGORY,
-      subcategory:INTERVIEW_SUBCATEGORY,
-      career:INTERVIEW_CAREER,
-      language:INTERVIEW_LANGUAGE,
-      answers:answers
-    };
+  const payload = {
+    action:"analyzeInterviewOverall",
+    email:USER_EMAIL,
+    interviewID:interviewID,
+    category:INTERVIEW_CATEGORY,
+    subcategory:INTERVIEW_SUBCATEGORY,
+    career:INTERVIEW_CAREER,
+    language:INTERVIEW_LANGUAGE,
+    answers:answers
+  };
 
-    const response = await fetch(SCRIPT_URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
-      body:JSON.stringify(payload)
-    });
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2500;
 
-    const data = await response.json();
+  for(let attempt = 1; attempt <= MAX_RETRIES; attempt++){
+    try{
+      if(attempt > 1){
+        content.innerHTML =
+          "🤖 AI sedang sibuk. Mencuba semula..." +
+          "<br><small>Percubaan " + attempt + " / " + MAX_RETRIES + "</small>";
+      }
 
-    if(data && data.success){
-      const result = data.analysis || {};
+      const response = await fetch(SCRIPT_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"text/plain;charset=utf-8"
+        },
+        body:JSON.stringify(payload)
+      });
 
-      const metric = function(label, value){
-        return "<div style=\"display:flex;justify-content:space-between;gap:12px;" +
-          "padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;" +
-          "margin:7px 0;background:#fff\">" +
-          "<span>" + label + "</span>" +
-          "<strong>" + escapeHTML(String(value == null || value === "" ? "-" : value)) +
-          "</strong></div>";
-      };
+      if(!response.ok){
+        throw new Error("HTTP " + response.status);
+      }
+
+      const data = await response.json();
+
+      if(data && data.success){
+        const result = data.analysis || {};
+
+        const metric = function(label, value){
+          return "<div style=\"display:flex;justify-content:space-between;gap:12px;" +
+            "padding:12px 14px;border:1px solid #e5e7eb;border-radius:12px;" +
+            "margin:7px 0;background:#fff\">" +
+            "<span>" + label + "</span>" +
+            "<strong>" + escapeHTML(String(value == null || value === "" ? "-" : value)) +
+            "</strong></div>";
+        };
+
+        const overall = Number(result.overallScore || 0);
+        let ratingText = "";
+
+        if(overall >= 80){
+          ratingText = "Sangat Baik";
+        }else if(overall >= 70){
+          ratingText = "Baik";
+        }else if(overall >= 50){
+          ratingText = "Sederhana";
+        }else if(overall >= 30){
+          ratingText = "Perlu Penambahbaikan";
+        }else{
+          ratingText = "Tidak Memuaskan";
+        }
+
+        content.innerHTML =
+          metric("Communication Confidence", result.confidenceScore) +
+          metric("Professionalism", result.professionalismScore) +
+          metric("Speech Fluency", result.fluencyScore) +
+          metric("Answer Quality", result.answerQualityScore) +
+          metric("Relevance", result.relevanceScore) +
+          metric("Answer Structure", result.structureScore) +
+          metric("Filler Words", result.fillerCount) +
+          metric("Stuttering", result.stutteringCount) +
+
+          "<div style=\"padding:16px;border:2px solid #1769aa;border-radius:14px;" +
+          "margin-top:12px;background:#eef6ff\">" +
+            "<div style=\"display:flex;justify-content:space-between;align-items:center;gap:10px\">" +
+              "<strong>⭐ Overall Rating</strong>" +
+              "<strong style=\"font-size:22px;color:#123b63\">" +
+                escapeHTML(String(overall)) + "/100" +
+              "</strong>" +
+            "</div>" +
+            "<div style=\"margin-top:10px;font-weight:bold;color:#1769aa;font-size:17px\">" +
+              escapeHTML(ratingText) +
+            "</div>" +
+          "</div>" +
+
+          "<br><strong>Strengths:</strong><br>" +
+          escapeHTML(String(result.strengths || "-")).replace(/\\n/g,"<br>") +
+
+          "<br><br><strong>Areas to Improve:</strong><br>" +
+          escapeHTML(String(result.improvements || "-")).replace(/\\n/g,"<br>") +
+
+          "<br><br><strong>Overall Feedback:</strong><br>" +
+          escapeHTML(String(result.feedback || "-")).replace(/\\n/g,"<br>");
+
+        return;
+      }
+
+      throw new Error(
+        (data && data.message) || "AI analysis failed."
+      );
+
+    }catch(error){
+      console.error("Overall AI attempt " + attempt + " failed:", error);
+
+      if(attempt < MAX_RETRIES){
+        content.innerHTML =
+          "⏳ AI sedang sibuk.<br>Mencuba semula secara automatik...";
+
+        await new Promise(function(resolve){
+          setTimeout(resolve, RETRY_DELAY);
+        });
+
+        continue;
+      }
 
       content.innerHTML =
-        metric("Communication Confidence", result.confidenceScore) +
-        metric("Professionalism", result.professionalismScore) +
-        metric("Speech Fluency", result.fluencyScore) +
-        metric("Answer Quality", result.answerQualityScore) +
-        metric("Relevance", result.relevanceScore) +
-        metric("Answer Structure", result.structureScore) +
-        metric("Filler Words", result.fillerCount) +
-        metric("Stuttering", result.stutteringCount) +
-        metric("⭐ Overall Rating", result.overallScore) +
-
-        "<br><strong>Strengths:</strong><br>" +
-        escapeHTML(String(result.strengths || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br><strong>Areas to Improve:</strong><br>" +
-        escapeHTML(String(result.improvements || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br><strong>Overall Feedback:</strong><br>" +
-        escapeHTML(String(result.feedback || "-")).replace(/\n/g,"<br>") +
-
-        "<br><br>";
-
-      }else{
-      content.textContent =
-        (data && data.message) ||
-        "Overall AI report belum tersedia.";
+        "<div style=\"text-align:center;padding:18px;background:#fff7ed;" +
+        "border:1px solid #fed7aa;border-radius:12px\">" +
+          "<strong style=\"font-size:17px;color:#9a3412\">" +
+            "AI analysis is temporarily busy." +
+          "</strong>" +
+          "<br><br>" +
+          "<span>Jawapan interview anda masih disimpan. Anda tidak perlu mengulang interview.</span>" +
+          "<br><br>" +
+          "<button onclick=\"generateOverallAIReport()\" " +
+          "style=\"background:#1769aa;color:white;border:none;padding:12px 20px;" +
+          "border-radius:10px;cursor:pointer;font-size:15px\">" +
+            "🔄 Try Again" +
+          "</button>" +
+        "</div>";
     }
-  }catch(error){
-    console.error("Overall AI error:",error);
-    content.textContent =
-      "AI overall report belum dapat dijana. Sila sambungkan AI endpoint pada Apps Script.";
   }
 }
 

@@ -548,6 +548,21 @@ video{
 </div>
 
 
+
+<!-- ========================= AI QUESTION GENERATION ========================= -->
+<div class="container page" id="questionLoadingPage">
+  <div style="font-size:58px">🤖</div>
+  <h1>Preparing Your Interview</h1>
+  <p class="subtitle" id="questionLoadingText">
+    AI is preparing questions for you...
+  </p>
+  <div class="info" style="text-align:center">
+    Questions are generated based on your interview type, selected language,
+    career (if applicable), and candidate name for natural personalization.
+  </div>
+</div>
+
+
 <!-- ========================= DEVICE ========================= -->
 
 <div
@@ -1341,36 +1356,97 @@ function chooseCareer(){
    CHOOSE INTERVIEW
 ===================================================== */
 
-function chooseInterview(
+async function chooseInterview(
   category,
   subcategory,
   career
 ){
 
-  INTERVIEW_CATEGORY =
-    category;
-
-  INTERVIEW_SUBCATEGORY =
-    subcategory;
-
-  INTERVIEW_CAREER =
-    career;
-
-
-  questions =
-    generateQuestionsForCategory();
-
+  INTERVIEW_CATEGORY = category;
+  INTERVIEW_SUBCATEGORY = subcategory;
+  INTERVIEW_CAREER = career;
 
   currentQuestion = 0;
-
   answers = [];
 
+  // Keep the old question bank only as an emergency fallback.
+  const fallbackQuestions = generateQuestionsForCategory();
 
-  showPage(
-    "devicePage"
-  );
+  showPage("questionLoadingPage");
 
+  const loadingText =
+    document.getElementById("questionLoadingText");
 
+  if(loadingText){
+    loadingText.textContent =
+      INTERVIEW_LANGUAGE === "Malay"
+        ? "AI sedang menyediakan soalan interview untuk " +
+          (USER_NAME || "anda") + "..."
+        : "AI is preparing interview questions for " +
+          (USER_NAME || "you") + "...";
+  }
+
+  try{
+
+    const payload = {
+      action:"generateInterviewQuestions",
+      email:USER_EMAIL,
+      name:USER_NAME,
+      category:INTERVIEW_CATEGORY,
+      subcategory:INTERVIEW_SUBCATEGORY,
+      career:INTERVIEW_CAREER,
+      language:INTERVIEW_LANGUAGE,
+      numberOfQuestions:5
+    };
+
+    const response = await fetch(SCRIPT_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"text/plain;charset=utf-8"
+      },
+      body:JSON.stringify(payload)
+    });
+
+    if(!response.ok){
+      throw new Error("HTTP " + response.status);
+    }
+
+    const data = await response.json();
+
+    if(
+      data &&
+      data.success &&
+      Array.isArray(data.questions) &&
+      data.questions.length >= 3
+    ){
+      questions = data.questions
+        .map(function(question){
+          return String(question || "").trim();
+        })
+        .filter(Boolean)
+        .slice(0,5);
+    }
+    else{
+      throw new Error(
+        (data && data.message) ||
+        "AI did not return valid questions."
+      );
+    }
+
+  }
+  catch(error){
+
+    console.warn(
+      "AI question generation unavailable. Using fallback questions.",
+      error
+    );
+
+    // Interview still works if Gemini is temporarily busy.
+    questions = fallbackQuestions;
+
+  }
+
+  showPage("devicePage");
   checkDevices();
 
 }

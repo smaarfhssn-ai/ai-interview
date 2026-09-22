@@ -845,6 +845,17 @@ let finalTranscript = "";
 let currentFillerAnalysis = {count:0, rate:0, wordCount:0, fillers:[]};
 let currentStutterAnalysis = {count:0, patterns:[]};
 
+/* Speech Delivery timing evidence.
+   This does NOT guess emotions or personality.
+   It only records observable timing gaps while Speech Recognition is active. */
+let deliveryLastSpeechResultAt = 0;
+let deliveryPauseCount = 0;
+let deliveryLongestPauseMs = 0;
+let deliveryTotalPauseMs = 0;
+let deliveryStarted = false;
+
+const LONG_PAUSE_MS = 2200;
+
 
 /* =====================================================
    INTERVIEW ID
@@ -1872,7 +1883,7 @@ function updateTimer(){
 
 
 /* =====================================================
-   SPEECH ANALYSIS - FILLER WORDS + STUTTERING
+   SPEECH DELIVERY - INTERNAL TRANSCRIPT SIGNALS
 ===================================================== */
 
 function normalizeFillerToken(token){
@@ -2010,6 +2021,14 @@ function displaySpeechAnalysis(text){
 
 function startAnswering(){
 
+  // Reset Speech Delivery evidence for this answer.
+  deliveryLastSpeechResultAt = 0;
+  deliveryPauseCount = 0;
+  deliveryLongestPauseMs = 0;
+  deliveryTotalPauseMs = 0;
+  deliveryStarted = false;
+
+
   /* =====================================================
      BROWSER SPEECH RECOGNITION ONLY
      No Vercel STT / MediaRecorder / server transcription.
@@ -2104,6 +2123,26 @@ function startAnswering(){
 
 
   recognition.onresult = function(event){
+
+    const deliveryNow = Date.now();
+
+    if(deliveryStarted && deliveryLastSpeechResultAt){
+      const deliveryGap = deliveryNow - deliveryLastSpeechResultAt;
+
+      // Only count a clearly noticeable gap.
+      // This is an estimate based on browser recognition timing,
+      // not a medical/clinical stuttering measurement.
+      if(deliveryGap >= LONG_PAUSE_MS){
+        deliveryPauseCount++;
+        deliveryTotalPauseMs += deliveryGap;
+        deliveryLongestPauseMs =
+          Math.max(deliveryLongestPauseMs, deliveryGap);
+      }
+    }
+
+    deliveryStarted = true;
+    deliveryLastSpeechResultAt = deliveryNow;
+
 
     let interim = "";
 
@@ -2735,31 +2774,44 @@ function resetAIAnalysis(){
 
 function goNextQuestion(){
 
-  // Final hidden speech analysis for this answer.
-  const currentAnswerBoxForAnalysis = document.getElementById("answerBox");
-  const currentSpeechTextForAnalysis =
-    currentAnswerBoxForAnalysis
-      ? currentAnswerBoxForAnalysis.value.trim()
-      : "";
-
-  displaySpeechAnalysis(currentSpeechTextForAnalysis);
-
-
-
   stopAnswering();
-
 
   const answer =
     document
-      .getElementById(
-        "answerBox"
-      )
+      .getElementById("answerBox")
       .value
       .trim();
 
+  const speechAnalysis = analyzeSpeech(answer);
 
-  const fillerAnalysis = analyzeFillerWords(answer);
-  const stutterAnalysis = analyzeStuttering(answer);
+  /*
+    Keep raw detector evidence hidden from the user.
+    Gemini can use these signals together with the transcript,
+    while the final UI presents one combined "Speech Delivery" metric.
+  */
+  const deliveryEvidence = {
+    longPauseCount: deliveryPauseCount,
+    longestPauseSeconds:
+      Number((deliveryLongestPauseMs / 1000).toFixed(1)),
+    totalLongPauseSeconds:
+      Number((deliveryTotalPauseMs / 1000).toFixed(1)),
+    repeatedSpeechPatterns:
+      speechAnalysis.stutterings.map(function(item){
+        return item.text;
+      }),
+    hesitationSignals:
+      Object.keys(speechAnalysis.fillers).map(function(name){
+        return {
+          signal:name,
+          count:speechAnalysis.fillers[name]
+        };
+      }),
+    guidance:
+      "Use these only as observable delivery evidence. " +
+      "Do not assume a medical stutter. Evaluate whether pauses, repetitions, " +
+      "hesitation language, unnecessary filler language, or broken phrasing " +
+      "actually affected the clarity and flow of the answer."
+  };
 
   answers.push({
 
@@ -2772,26 +2824,13 @@ function goNextQuestion(){
     duration:
       seconds,
 
-    fillerCount:
-      fillerAnalysis.count,
-
-    fillerRate:
-      Number(fillerAnalysis.rate.toFixed(2)),
-
     wordCount:
-      fillerAnalysis.wordCount,
+      speechAnalysis.wordCount,
 
-    fillers:
-      fillerAnalysis.fillers,
-
-    stutterCount:
-      stutterAnalysis.count,
-
-    stutterPatterns:
-      stutterAnalysis.patterns
+    speechDelivery:
+      deliveryEvidence
 
   });
-
 
   if(
     currentQuestion <
@@ -2799,11 +2838,9 @@ function goNextQuestion(){
   ){
 
     currentQuestion++;
-
     showQuestion();
 
   }
-
   else{
 
     finishInterview();
@@ -2871,7 +2908,7 @@ function finishInterview(){
 
         "<br><br>" +
          "<div style=\"font-size:13px;color:#667085;\">" +
-         "Speech analysis akan dipaparkan dalam laporan keseluruhan selepas interview." +
+         "Speech Delivery akan dinilai bersama laporan keseluruhan selepas interview." +
          "</div>";
 
 
@@ -2906,21 +2943,30 @@ async function generateOverallAIReport(){
   content.innerHTML = "🤖 AI sedang menyediakan ringkasan keseluruhan...";
 
   
-    const totalFillerWords = answers.reduce(function(total, item){
-      return total + Number(
-        item.fillerCount ||
-        (item.speechAnalysis && item.speechAnalysis.fillerCount) ||
-        0
-      );
-    }, 0);
+    const speechDeliverySummary = {
+      totalLongPauses: answers.reduce(function(total,item){
+        return total + Number(
+          item.speechDelivery && item.speechDelivery.longPauseCount || 0
+        );
+      },0),
 
-    const totalStuttering = answers.reduce(function(total, item){
-      return total + Number(
-        item.stutteringCount ||
-        (item.speechAnalysis && item.speechAnalysis.stutteringCount) ||
-        0
-      );
-    }, 0);
+      longestPauseSeconds: answers.reduce(function(longest,item){
+        return Math.max(
+          longest,
+          Number(
+            item.speechDelivery &&
+            item.speechDelivery.longestPauseSeconds || 0
+          )
+        );
+      },0),
+
+      instruction:
+        "Assess Speech Delivery naturally from the transcript and the observable " +
+        "timing evidence inside each answer. Consider noticeable long pauses, " +
+        "repeated/broken phrasing, hesitation, and unnecessary words used only " +
+        "to fill space. Do not require exact filler keywords. Do not claim a " +
+        "medical stutter or anything not supported by the available evidence."
+    };
 
     const payload = {
     action:"analyzeInterviewOverall",
@@ -2932,8 +2978,7 @@ async function generateOverallAIReport(){
     career:INTERVIEW_CAREER,
     language:INTERVIEW_LANGUAGE,
     answers:answers,
-      fillerCount:totalFillerWords,
-      stutteringCount:totalStuttering
+      speechDeliverySummary:speechDeliverySummary
     };
 
   const MAX_RETRIES = 3;
@@ -2995,8 +3040,12 @@ async function generateOverallAIReport(){
           metric("Answer Quality", result.answerQualityScore) +
           metric("Relevance", result.relevanceScore) +
           metric("Answer Structure", result.structureScore) +
-          metric("Filler Words", result.fillerCount) +
-          metric("Stuttering", result.stutteringCount) +
+          metric(
+            "🗣️ Speech Delivery",
+            result.speechDeliveryScore != null
+              ? result.speechDeliveryScore
+              : result.fluencyScore
+          ) +
 
           "<div style=\"padding:16px;border:2px solid #1769aa;border-radius:14px;" +
           "margin-top:12px;background:#eef6ff\">" +
@@ -3010,6 +3059,11 @@ async function generateOverallAIReport(){
               escapeHTML(ratingText) +
             "</div>" +
           "</div>" +
+
+          (result.speechDeliveryFeedback
+            ? "<br><br><strong>🗣️ Speech Delivery Feedback:</strong><br>" +
+              escapeHTML(String(result.speechDeliveryFeedback)).replace(/\\n/g,"<br>")
+            : "") +
 
           "<br><strong>Strengths:</strong><br>" +
           escapeHTML(String(result.strengths || "-")).replace(/\\n/g,"<br>") +

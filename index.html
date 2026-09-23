@@ -1353,6 +1353,26 @@ function chooseCareer(){
 
 
 /* =====================================================
+   FETCH WITH TIMEOUT
+===================================================== */
+
+async function fetchWithTimeout(url, options, timeoutMs){
+  const controller = new AbortController();
+  const timer = setTimeout(function(){
+    controller.abort();
+  }, timeoutMs);
+
+  try{
+    const mergedOptions = Object.assign({}, options || {}, {
+      signal: controller.signal
+    });
+    return await fetch(url, mergedOptions);
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+/* =====================================================
    CHOOSE INTERVIEW
 ===================================================== */
 
@@ -1399,13 +1419,16 @@ async function chooseInterview(
       numberOfQuestions:5
     };
 
-    const response = await fetch(SCRIPT_URL,{
+    // Do not keep the user waiting too long for question generation.
+    // If Gemini does not answer within 30 seconds, the app automatically
+    // continues using the emergency fallback question bank.
+    const response = await fetchWithTimeout(SCRIPT_URL,{
       method:"POST",
       headers:{
         "Content-Type":"text/plain;charset=utf-8"
       },
       body:JSON.stringify(payload)
-    });
+    }, 30000);
 
     if(!response.ok){
       throw new Error("HTTP " + response.status);
@@ -3057,8 +3080,11 @@ async function generateOverallAIReport(){
       speechDeliverySummary:speechDeliverySummary
     };
 
-  const MAX_RETRIES = 3;
-  const RETRY_DELAY = 2500;
+  // Final analysis gets a longer window because it evaluates all answers.
+  // We intentionally avoid automatic repeated Gemini requests here: one
+  // request gets up to 60 seconds, then the user can manually Try Again.
+  const MAX_RETRIES = 1;
+  const FINAL_ANALYSIS_TIMEOUT = 60000;
 
   for(let attempt = 1; attempt <= MAX_RETRIES; attempt++){
     try{
@@ -3068,13 +3094,13 @@ async function generateOverallAIReport(){
           "<br><small>Percubaan " + attempt + " / " + MAX_RETRIES + "</small>";
       }
 
-      const response = await fetch(SCRIPT_URL,{
+      const response = await fetchWithTimeout(SCRIPT_URL,{
         method:"POST",
         headers:{
           "Content-Type":"text/plain;charset=utf-8"
         },
         body:JSON.stringify(payload)
-      });
+      }, FINAL_ANALYSIS_TIMEOUT);
 
       if(!response.ok){
         throw new Error("HTTP " + response.status);
@@ -3160,25 +3186,14 @@ async function generateOverallAIReport(){
     }catch(error){
       console.error("Overall AI attempt " + attempt + " failed:", error);
 
-      if(attempt < MAX_RETRIES){
-        content.innerHTML =
-          "⏳ AI sedang sibuk.<br>Mencuba semula secara automatik...";
-
-        await new Promise(function(resolve){
-          setTimeout(resolve, RETRY_DELAY);
-        });
-
-        continue;
-      }
-
       content.innerHTML =
         "<div style=\"text-align:center;padding:18px;background:#fff7ed;" +
         "border:1px solid #fed7aa;border-radius:12px\">" +
           "<strong style=\"font-size:17px;color:#9a3412\">" +
-            "AI analysis is temporarily busy." +
+            "AI analysis mengambil masa terlalu lama." +
           "</strong>" +
           "<br><br>" +
-          "<span>Jawapan interview anda masih disimpan. Anda tidak perlu mengulang interview.</span>" +
+          "<span>Had menunggu 60 saat telah dicapai atau AI sedang sibuk. Jawapan interview anda masih disimpan dan anda tidak perlu mengulang interview.</span>" +
           "<br><br>" +
           "<button onclick=\"generateOverallAIReport()\" " +
           "style=\"background:#1769aa;color:white;border:none;padding:12px 20px;" +

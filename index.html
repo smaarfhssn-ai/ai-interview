@@ -3121,6 +3121,26 @@ async function generateOverallAIReport(){
         };
 
         const overall = Number(result.overallScore || 0);
+
+        const speechDeliveryScore = Number(
+          result.speechDeliveryScore != null
+            ? result.speechDeliveryScore
+            : result.fluencyScore || 0
+        );
+
+        let speechDeliveryLabel = "";
+        if(speechDeliveryScore >= 80){
+          speechDeliveryLabel = "Excellent Delivery";
+        }else if(speechDeliveryScore >= 70){
+          speechDeliveryLabel = "Good Delivery";
+        }else if(speechDeliveryScore >= 50){
+          speechDeliveryLabel = "Moderate Delivery";
+        }else if(speechDeliveryScore >= 30){
+          speechDeliveryLabel = "Needs Improvement";
+        }else{
+          speechDeliveryLabel = "Poor Delivery";
+        }
+
         let ratingText = "";
 
         if(overall >= 80){
@@ -3143,10 +3163,10 @@ async function generateOverallAIReport(){
           metric("Relevance", result.relevanceScore) +
           metric("Answer Structure", result.structureScore) +
           metric(
-            "🗣️ Speech Delivery",
-            result.speechDeliveryScore != null
-              ? result.speechDeliveryScore
-              : result.fluencyScore
+            "🗣️ Speech Delivery<br><span style=\"font-size:13px;color:#1769aa;font-weight:bold\">" +
+              escapeHTML(speechDeliveryLabel) +
+            "</span>",
+            speechDeliveryScore + "/100"
           ) +
 
           "<div style=\"padding:16px;border:2px solid #1769aa;border-radius:14px;" +
